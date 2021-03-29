@@ -1,5 +1,5 @@
 defmodule ExcmsCoreWeb.Authorizer.Authorization do
-  alias ExcmsCoreWeb.Authorizer.Resource
+  alias ExcmsCoreWeb.Authorizer.Warehouse
 
   defstruct is_administrator: false, permissions: []
 
@@ -39,13 +39,11 @@ defmodule ExcmsCoreWeb.Authorizer.Authorization do
   def do?(%__MODULE__{permissions: permissions}, "/"<>_ = path, action)
       when action in @allowed_actions do
     path
-    |> Resource.get_permissions(action)
+    |> Warehouse.get_permissions(action)
     |> Enum.map(&serialize_req_permission/1)
     |> MapSet.new()
     |> MapSet.subset?(permissions)
   end
 
-  defp serialize_req_permission({action, resource}), do: {action, get_resource_table(resource)}
-
-  defp get_resource_table(resource), do: resource.__schema__(:source)
+  defp serialize_req_permission({action, resource}), do: {action, resource.resource_name()}
 end

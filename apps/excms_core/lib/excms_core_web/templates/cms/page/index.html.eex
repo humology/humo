@@ -1,5 +1,1 @@
 <h3>CMS</h3>
-
-<!-- %= rlink @conn, "Users", to: routes().cms_user_path(@conn, :index) %--><br/>
-<!-- %= rlink @conn, "Roles", to: routes().cms_role_path(@conn, :index) %--><br/>
-<!-- %= rlink @conn, "Users Roles", to: routes().cms_user_role_path(@conn, :index) %-->

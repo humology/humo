@@ -19,3 +19,9 @@ config :excms_core, :plugins,
       # %{title: "Users", route: :cms_logout_path, action: :delete, args: []}
     ]
   }
+
+config :excms_core, ExcmsCoreWeb.PluginsRouter,
+  excms_core: %{
+    routers: [],
+    cms_routers: [ExcmsCoreWeb.Routers.Cms]
+  }

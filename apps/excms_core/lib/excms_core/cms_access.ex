@@ -2,6 +2,7 @@ defmodule ExcmsCore.CmsAccess do
   @moduledoc """
   Allows access to cms
   """
+  use ExcmsCore.Resource
 
-  def __schema__(:source), do: "cms"
+  def resource_name(), do: "cms"
 end

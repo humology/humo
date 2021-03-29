@@ -1,6 +1,5 @@
 defmodule ExcmsServer.Router do
   use ExcmsCoreWeb, :router
-  use ExcmsCoreWeb.Phoenix.Router
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -26,11 +25,7 @@ defmodule ExcmsServer.Router do
   scope "/" do
     pipe_through :browser
 
-    excms_core_routes()
-
-    scope "/cms", as: :cms do
-      excms_core_cms_routes()
-    end
+    use ExcmsCoreWeb.PluginsRouter # excms insert
   end
 
   # Other scopes may use custom stacks.

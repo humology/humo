@@ -1,6 +1,6 @@
 defmodule ExcmsCoreWeb.Authorizer do
   alias ExcmsCoreWeb.Authorizer.Authorization
-  alias ExcmsCoreWeb.Authorizer.Resource
+  alias ExcmsCoreWeb.Authorizer.Warehouse
 
   @doc """
   Does authorization has enough permissions
@@ -10,5 +10,5 @@ defmodule ExcmsCoreWeb.Authorizer do
   @doc """
   Returns all tables names
   """
-  def list_resources(), do: Resource.list_resources()
+  def list_resources(), do: Warehouse.list_resources()
 end

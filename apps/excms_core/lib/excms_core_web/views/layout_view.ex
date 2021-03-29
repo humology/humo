@@ -1,6 +1,5 @@
 defmodule ExcmsCoreWeb.LayoutView do
   use ExcmsCoreWeb, :view
-  import ExcmsCore.RouterHelpers
 
   def cms_plugins_menu() do
     Application.fetch_env!(:excms_core, :plugins)

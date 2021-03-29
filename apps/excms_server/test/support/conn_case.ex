@@ -24,7 +24,7 @@ defmodule ExcmsServer.ConnCase do
       import Phoenix.ConnTest
       import ExcmsServer.ConnCase
 
-      import ExcmsCore.RouterHelpers
+      import ExcmsCoreWeb.RouterHelpers
 
       # The default endpoint for testing
       @endpoint ExcmsServer.Endpoint

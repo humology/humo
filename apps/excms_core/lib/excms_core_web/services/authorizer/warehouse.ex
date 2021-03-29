@@ -1,4 +1,4 @@
-defmodule ExcmsCoreWeb.Authorizer.Resource do
+defmodule ExcmsCoreWeb.Authorizer.Warehouse do
   alias ExcmsCore.CmsAccess
 
   @actions_methods %{
@@ -32,7 +32,7 @@ defmodule ExcmsCoreWeb.Authorizer.Resource do
   end
 
   @doc """
-  Returns controller permissions by action
+  Returns controller permissions by path and action
   """
   def get_permissions(path, action) do
     type = permission_type(action)
