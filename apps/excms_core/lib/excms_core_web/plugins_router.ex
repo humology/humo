@@ -5,13 +5,17 @@ defmodule ExcmsCoreWeb.PluginsRouter do
 
   defmacro __using__(_opts) do
     quote do
-      unquote do
-        quote_routers(:routers)
-      end
+      scope "/" do
+        pipe_through :browser
 
-      scope "/cms", as: :cms do
         unquote do
-          quote_routers(:cms_routers)
+          quote_routers(:routers)
+        end
+
+        scope "/cms", as: :cms do
+          unquote do
+            quote_routers(:cms_routers)
+          end
         end
       end
     end
