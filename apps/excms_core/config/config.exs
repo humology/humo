@@ -4,6 +4,9 @@ use Mix.Config
 config :excms_core,
   ecto_repos: [ExcmsCore.Repo]
 
+config :excms_core, ExcmsCore.Repo,
+  migration_timestamps: [type: :utc_datetime_usec]
+
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 

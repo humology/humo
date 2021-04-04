@@ -12,7 +12,7 @@ use Mix.Config
 deps_dir = Path.join(__DIR__, "../deps/excms_deps/") |> Path.expand()
 if File.exists?(deps_dir) do
   Path.join(deps_dir, "lib/excms_deps.ex") |> Code.require_file()
-  for config <- ExcmsDeps.config_dirs(), do: import_config config
+  for config <- ExcmsDeps.configs(), do: import_config config
 end
 
 config :excms_server,
