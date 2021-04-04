@@ -5,6 +5,10 @@ defmodule ExcmsCoreWeb.PluginsRouter do
 
   defmacro __using__(_opts) do
     quote do
+      pipeline :excms_core_layout do
+        plug :put_layout, {ExcmsCoreWeb.LayoutView, "cms.html"}
+      end
+
       scope "/" do
         pipe_through :browser
 
@@ -13,6 +17,8 @@ defmodule ExcmsCoreWeb.PluginsRouter do
         end
 
         scope "/cms", as: :cms do
+          pipe_through :excms_cms
+
           unquote do
             quote_routers(:cms_routers)
           end
