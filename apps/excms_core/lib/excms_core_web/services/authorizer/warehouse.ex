@@ -26,7 +26,7 @@ defmodule ExcmsCoreWeb.Authorizer.Warehouse do
   """
   def list_resources() do
     list_controllers()
-    |> Enum.flat_map(&get_controller_tables/1)
+    |> Enum.flat_map(&get_controller_resources/1)
     |> Enum.sort()
     |> Enum.uniq()
   end
@@ -68,18 +68,18 @@ defmodule ExcmsCoreWeb.Authorizer.Warehouse do
     end
   end
 
-  defp get_controller_tables(controller) do
+  defp get_controller_resources(controller) do
     [:create, :read, :update, :delete]
     |> Enum.flat_map(&(get_controller_permissions(controller, &1)))
     |> Enum.map(&get_permission_resource/1)
     |> Enum.concat([CmsAccess])
     |> Enum.uniq()
-    |> Enum.map(&get_resource_table/1)
+    |> Enum.map(&get_resource_name/1)
   end
 
   defp get_permission_resource({_type, resource}), do: resource
 
-  defp get_resource_table(resource), do: resource.__schema__(:source)
+  defp get_resource_name(resource), do: resource.resource_name()
 
   defp get_controller(path, action) do
     path = String.split(path, "?") |> hd()
