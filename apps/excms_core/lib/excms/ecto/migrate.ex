@@ -14,9 +14,9 @@ defmodule Mix.Tasks.Excms.Ecto.Migrate do
   end
 
   def migrate() do
-    {:ok, _, _} = Migrator.with_repo(ExcmsCore.Repo, fn repo ->
-      for dir <- ExcmsDeps.migration_dirs(), do:
-        Migrator.run(repo, dir, :up, all: true)
-    end)
+    {:ok, _, _} =
+      Migrator.with_repo(ExcmsCore.Repo, fn repo ->
+        for dir <- ExcmsDeps.migration_dirs(), do: Migrator.run(repo, dir, :up, all: true)
+      end)
   end
 end

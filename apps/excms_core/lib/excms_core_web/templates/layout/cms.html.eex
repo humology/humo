@@ -27,12 +27,8 @@
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
               <%= for link <- plugin.links do %>
-                <%= if can_access?(@conn, link.url, link.action) do %>
-                  <%= if link.action == :delete do %>
-                    <li><%= link link.title, to: link.url, method: :delete, class: "dropdown-item" %></li>
-                  <% else %>
-                    <li><%= link link.title, to: link.url, class: "dropdown-item" %></li>
-                  <% end %>
+                <%= if permitted?(@conn, link.path, link.method) do %>
+                  <li><%= link link.title, to: link.path, method: link.method, class: "dropdown-item" %></li>
                 <% end %>
               <% end %>
             </ul>
@@ -46,12 +42,8 @@
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             <%= for link <- account_links() do %>
-              <%= if can_access?(@conn, link.url, link.action) do %>
-                <%= if link.action == :delete do %>
-                  <li><%= link link.title, to: link.url, method: :delete, class: "dropdown-item" %></li>
-                <% else %>
-                  <li><%= link link.title, to: link.url, class: "dropdown-item" %></li>
-                <% end %>
+              <%= if permitted?(@conn, link.path, link.method) do %>
+                <li><%= link link.title, to: link.path, method: link.method, class: "dropdown-item" %></li>
               <% end %>
             <% end %>
           </ul>

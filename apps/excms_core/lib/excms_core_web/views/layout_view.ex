@@ -5,10 +5,17 @@ defmodule ExcmsCoreWeb.LayoutView do
     Application.fetch_env!(:excms_core, :plugins)
     |> Enum.reject(fn {_, data} -> Map.get(data, :cms_links, []) == [] end)
     |> Enum.map(fn {_, data} ->
-      links = for link <- data.cms_links do
-        link_args = [ExcmsServer.Endpoint, link.action | Map.get(link, :args, [])]
-        %{title: link.title, url: apply(routes(), link.route, link_args), action: link.action}
-      end
+      links =
+        for link <- data.cms_links do
+          link_opts = [ExcmsServer.Endpoint, link.action | Map.get(link, :opts, [])]
+
+          %{
+            title: link.title,
+            path: apply(routes(), link.route, link_opts),
+            method: Map.get(link, :method, "GET")
+          }
+        end
+
       %{title: data.title, links: links}
     end)
   end
@@ -18,8 +25,13 @@ defmodule ExcmsCoreWeb.LayoutView do
     |> Enum.reject(fn {_, data} -> Map.get(data, :account_links, []) == [] end)
     |> Enum.flat_map(fn {_, data} ->
       for link <- data.account_links do
-        link_args = [ExcmsServer.Endpoint, link.action | Map.get(link, :args, [])]
-        %{title: link.title, url: apply(routes(), link.route, link_args), action: link.action}
+        link_opts = [ExcmsServer.Endpoint, link.action | Map.get(link, :opts, [])]
+
+        %{
+          title: link.title,
+          path: apply(routes(), link.route, link_opts),
+          method: Map.get(link, :method, "GET")
+        }
       end
     end)
   end

@@ -1,7 +1,8 @@
 defmodule ExcmsCoreWeb.LocalePlug do
   import Plug.Conn
 
-  @locales Gettext.known_locales(ExcmsCoreWeb.Gettext) # TODO fix
+  # TODO fix
+  @locales Gettext.known_locales(ExcmsCoreWeb.Gettext)
   @default_locale "en"
 
   def init(params), do: params
@@ -12,14 +13,17 @@ defmodule ExcmsCoreWeb.LocalePlug do
 
     conn = assign(conn, :known_locales, @locales)
 
-    locale = cond do
-      approved_locale(params_locale) ->
-        params_locale
-      approved_locale(accept_locale) ->
-        accept_locale
-      true ->
-        @default_locale
-    end
+    locale =
+      cond do
+        approved_locale(params_locale) ->
+          params_locale
+
+        approved_locale(accept_locale) ->
+          accept_locale
+
+        true ->
+          @default_locale
+      end
 
     assign_locale(conn, locale)
   end
@@ -42,14 +46,16 @@ defmodule ExcmsCoreWeb.LocalePlug do
         |> Enum.reject(&is_nil/1)
         |> ensure_language_fallbacks()
         |> Enum.find(nil, &approved_locale/1)
+
       _ ->
         nil
     end
   end
 
   defp parse_language_option(string) do
-    captures = ~r/^\s?(?<tag>[\w\-]+)(?:;q=(?<quality>[\d\.]+))?$/i
-    |> Regex.named_captures(string)
+    captures =
+      ~r/^\s?(?<tag>[\w\-]+)(?:;q=(?<quality>[\d\.]+))?$/i
+      |> Regex.named_captures(string)
 
     quality =
       case Float.parse(captures["quality"] || "1.0") do

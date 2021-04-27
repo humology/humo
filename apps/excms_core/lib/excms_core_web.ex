@@ -23,7 +23,10 @@ defmodule ExcmsCoreWeb do
 
       import Plug.Conn
       import ExcmsCoreWeb.Gettext
-      use ExcmsCoreWeb.Authorizer.Controller # excms insert
+      # excms insert
+      use ExcmsCoreWeb.AccessController
+      # excms insert
+      alias ExcmsCore.Permission
     end
   end
 
@@ -68,8 +71,10 @@ defmodule ExcmsCoreWeb do
 
       import ExcmsCoreWeb.ErrorHelpers
       import ExcmsCoreWeb.Gettext
-      import ExcmsCoreWeb.RouterHelpers # excms insert
-      import ExcmsCoreWeb.AuthorizerViewHelpers # excms insert
+      # excms insert
+      import ExcmsCoreWeb.RouterHelpers
+      # excms insert
+      import ExcmsCoreWeb.AccessViewHelpers
     end
   end
 
