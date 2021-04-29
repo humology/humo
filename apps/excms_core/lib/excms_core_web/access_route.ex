@@ -5,14 +5,14 @@ defmodule ExcmsCoreWeb.AccessRoute do
   Does authorization has enough permissions
   """
   def permitted?(authorization, "/" <> _ = path, method) do
-    required_permissions = route_permissions(path, method)
+    required_permissions = path_permissions(path, method)
     Authorization.permitted?(authorization, required_permissions)
   end
 
   @doc """
   Returns controller permissions by path and action
   """
-  def route_permissions(path, method) do
+  def path_permissions(path, method) do
     route_info(path, method)
     |> route_permissions()
   end
