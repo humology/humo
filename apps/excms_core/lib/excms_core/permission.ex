@@ -13,7 +13,7 @@ defmodule ExcmsCore.Permission do
   def new(resource, action, access_level \\ nil)
       when is_atom(resource) and resource != nil and is_binary(action) and
              (is_binary(access_level) or access_level == nil) do
-    helpers = Warehouse.to_resource_helpers(resource)
+    helpers = Warehouse.resource_to_helpers(resource)
 
     access_level = access_level || get_minimal_access_level(helpers, action)
 

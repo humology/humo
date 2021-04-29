@@ -4,21 +4,15 @@ defmodule ExcmsCore.Warehouse do
                plugin_resources
              end)
 
-  @names_resources @resources
-                   |> Enum.map(fn x ->
-                     {String.to_existing_atom("#{x}.Helpers").name(), x}
-                   end)
-                   |> Map.new()
-
-  if Enum.count(@resources) != Enum.count(@names_resources),
-    do: raise("Duplicate annotation of resource #{@resources -- Map.values(@names_resources)}")
-
   @doc """
   Returns all resources
   """
   def resources(), do: @resources
 
-  def to_resource_helpers(resource) do
+  @doc """
+  Returns resource helpers module
+  """
+  def resource_to_helpers(resource) do
     try do
       Module.safe_concat([resource, "Helpers"])
     rescue
@@ -26,7 +20,22 @@ defmodule ExcmsCore.Warehouse do
     end
   end
 
-  def name_to_resource!(name), do: Map.fetch!(@names_resources, name)
+  @doc """
+  Returns map of names to resources
+  """
+  def names_resources() do
+    names_to_resources =
+      @resources
+      |> Enum.map(fn x ->
+        {resource_to_helpers(x).name(), x}
+      end)
+      |> Map.new()
 
-  def name_to_resource(name), do: Map.get(@names_resources, name)
+    if Enum.count(@resources) != Enum.count(names_to_resources) do
+      duplicates = @resources -- Map.values(names_to_resources)
+      raise "Duplicate annotation of resource #{inspect(duplicates)}"
+    end
+
+    names_to_resources
+  end
 end
