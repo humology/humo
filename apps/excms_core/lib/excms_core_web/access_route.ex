@@ -5,6 +5,7 @@ defmodule ExcmsCoreWeb.AccessRoute do
   Does authorization has enough permissions
   """
   def permitted?(authorization, "/" <> _ = path, method) do
+    method = Plug.Router.Utils.normalize_method(method)
     required_permissions = path_permissions(path, method)
     Authorization.permitted?(authorization, required_permissions)
   end
