@@ -75,7 +75,10 @@ defmodule ExcmsCore.Permission do
   Validates whether has administrator permission
   """
   def is_administrator?(permissions) do
-    Enum.any?(permissions, &match?(%__MODULE__{resource: GlobalAccess, action: "administrator", access_level: "all"}, &1))
+    permissions
+    |> Enum.any?(fn x ->
+      match?(%__MODULE__{resource: GlobalAccess, action: "administrator", access_level: "all"}, x)
+    end)
   end
 
   @doc """

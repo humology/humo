@@ -157,12 +157,17 @@ defmodule ExcmsCore.PermissionTest do
 
   describe "permitted?" do
     test "is_administrator" do
-      assert Permission.permitted?([
-        Permission.new(Page, "publish", "team"),
-        Permission.new(Page, "update", "all")
-      ], [Permission.new(Page, "publish", "team"), Permission.new(GlobalAccess, "administrator", "all")])
+      assert Permission.permitted?(
+               [
+                 Permission.new(Page, "publish", "team"),
+                 Permission.new(Page, "update", "all")
+               ],
+               [
+                 Permission.new(Page, "publish", "team"),
+                 Permission.new(GlobalAccess, "administrator", "all")
+               ]
+             )
     end
-
 
     test "success single required permission" do
       assert Permission.permitted?(
