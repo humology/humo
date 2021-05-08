@@ -1,6 +1,7 @@
 defmodule ExcmsCore.Permission do
   @moduledoc false
   alias ExcmsCore.Warehouse
+  alias ExcmsCore.GlobalAccess
   require Logger
 
   @default_no_access_level "no"
@@ -67,11 +68,25 @@ defmodule ExcmsCore.Permission do
 
       Enum.max_by(permissions, fn x -> Map.fetch!(access_levels, x.access_level) end)
     end)
+    |> Enum.reject(fn x -> x.access_level == @default_no_access_level end)
   end
 
-  def subset?(required_permissions, permissions) do
+  @doc """
+  Validates whether has administrator permission
+  """
+  def is_administrator?(permissions) do
+    Enum.any?(permissions, &match?(%__MODULE__{resource: GlobalAccess, action: "administrator", access_level: "all"}, &1))
+  end
+
+  @doc """
+  Validates whether has enough permissions
+  """
+  def permitted?(required_permissions, permissions) do
+    is_administrator?(permissions) or subset?(required_permissions, permissions)
+  end
+
+  defp subset?(required_permissions, permissions) do
     required_permissions
-    |> Enum.reject(fn x -> x.access_level == @default_no_access_level end)
     |> Enum.all?(fn required_permission ->
       permission =
         Enum.find(permissions, fn x ->

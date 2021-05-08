@@ -1,6 +1,7 @@
 defmodule ExcmsCore.PermissionTest do
   use ExUnit.Case
   alias ExcmsCore.Permission
+  alias ExcmsCore.GlobalAccess
   doctest Permission
 
   defmodule Page do
@@ -154,9 +155,17 @@ defmodule ExcmsCore.PermissionTest do
     end
   end
 
-  describe "subset?" do
+  describe "permitted?" do
+    test "is_administrator" do
+      assert Permission.permitted?([
+        Permission.new(Page, "publish", "team"),
+        Permission.new(Page, "update", "all")
+      ], [Permission.new(Page, "publish", "team"), Permission.new(GlobalAccess, "administrator", "all")])
+    end
+
+
     test "success single required permission" do
-      assert Permission.subset?(
+      assert Permission.permitted?(
                [
                  Permission.new(Page, "update", "all")
                ],
@@ -170,7 +179,7 @@ defmodule ExcmsCore.PermissionTest do
     end
 
     test "success single required permission with lower access level" do
-      assert Permission.subset?(
+      assert Permission.permitted?(
                [
                  Permission.new(Page, "publish", "own")
                ],
@@ -183,7 +192,7 @@ defmodule ExcmsCore.PermissionTest do
     end
 
     test "success multiple required permissions" do
-      assert Permission.subset?(
+      assert Permission.permitted?(
                [
                  Permission.new(Page, "publish", "team"),
                  Permission.new(Page, "create", "all"),
@@ -200,7 +209,7 @@ defmodule ExcmsCore.PermissionTest do
     end
 
     test "fails single required permission" do
-      refute Permission.subset?(
+      refute Permission.permitted?(
                [
                  Permission.new(Page, "update", "all")
                ],
@@ -213,7 +222,7 @@ defmodule ExcmsCore.PermissionTest do
     end
 
     test "fails single required permission with higher access level" do
-      refute Permission.subset?(
+      refute Permission.permitted?(
                [
                  Permission.new(Page, "publish", "team")
                ],
@@ -226,7 +235,7 @@ defmodule ExcmsCore.PermissionTest do
     end
 
     test "fails multiple required permissions" do
-      refute Permission.subset?(
+      refute Permission.permitted?(
                [
                  Permission.new(Page, "publish", "team"),
                  Permission.new(Page, "create", "all"),

@@ -17,5 +17,5 @@ defmodule ExcmsCoreWeb.AccessViewHelpers do
   end
 
   def permitted?(conn, path, method \\ "GET"),
-    do: AccessRoute.permitted?(conn.assigns.authorization, path, method)
+    do: AccessRoute.permitted?(conn.assigns.permissions, path, method)
 end

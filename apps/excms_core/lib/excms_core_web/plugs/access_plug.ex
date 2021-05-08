@@ -5,8 +5,8 @@ defmodule ExcmsCoreWeb.AccessPlug do
 
   def init(opts), do: opts
 
-  def call(%{assigns: %{authorization: authorization}} = conn, _opts) do
-    if AccessRoute.permitted?(authorization, conn.request_path, conn.method) do
+  def call(%{assigns: %{permissions: permissions}} = conn, _opts) do
+    if AccessRoute.permitted?(permissions, conn.request_path, conn.method) do
       conn
     else
       conn

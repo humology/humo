@@ -1,13 +1,13 @@
 defmodule ExcmsCoreWeb.AccessRoute do
-  alias ExcmsCore.Authorization
+  alias ExcmsCore.Permission
 
   @doc """
-  Does authorization has enough permissions
+  Has enough permissions?
   """
-  def permitted?(authorization, "/" <> _ = path, method) do
+  def permitted?(permissions, "/" <> _ = path, method) do
     method = Plug.Router.Utils.normalize_method(method)
     required_permissions = path_permissions(path, method)
-    Authorization.permitted?(authorization, required_permissions)
+    Permission.permitted?(required_permissions, permissions)
   end
 
   @doc """

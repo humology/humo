@@ -1,16 +1,15 @@
 defmodule ExcmsCoreWeb.CmsAccessPlug do
   import Plug.Conn
   import Phoenix.Controller
-  alias ExcmsCore.Authorization
   alias ExcmsCore.GlobalAccess
   alias ExcmsCore.Permission
 
   def init(opts), do: opts
 
-  def call(%{assigns: %{authorization: authorization}} = conn, _opts) do
+  def call(%{assigns: %{permissions: permissions}} = conn, _opts) do
     required_permissions = [Permission.new(GlobalAccess, "cms")]
 
-    if Authorization.permitted?(authorization, required_permissions) do
+    if Permission.permitted?(required_permissions, permissions) do
       conn
     else
       conn
