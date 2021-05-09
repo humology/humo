@@ -12,7 +12,7 @@ defmodule ExcmsCore.Permission do
             access_level: nil
 
   def new(resource, action, access_level \\ nil)
-      when is_atom(resource) and resource != nil and is_binary(action) and
+      when is_atom(resource) and is_binary(action) and
              (is_binary(access_level) or access_level == nil) do
     helpers = Warehouse.resource_to_helpers(resource)
 
@@ -28,6 +28,16 @@ defmodule ExcmsCore.Permission do
     :ok = validate(res)
 
     res
+  end
+
+  def unsafe_new(resource, action, access_level)
+      when is_atom(resource) and is_binary(action) and is_binary(access_level) do
+    %__MODULE__{
+      resource: resource,
+      helpers: Warehouse.resource_to_helpers(resource),
+      action: action,
+      access_level: access_level
+    }
   end
 
   defp get_minimal_access_level(nil, _action), do: nil
