@@ -31,9 +31,9 @@ defmodule ExcmsCoreWeb.PluginsRouter do
   defp quote_routers(key) do
     @routers
     |> Enum.flat_map(fn {_, data} -> data[key] || [] end)
-    |> Enum.map(fn routers ->
+    |> Enum.map(fn router ->
       quote do
-        use unquote(routers)
+        use unquote(router)
       end
     end)
   end
