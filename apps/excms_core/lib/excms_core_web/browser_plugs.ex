@@ -6,7 +6,8 @@ defmodule ExcmsCoreWeb.BrowserPlugs do
   defmacro __using__(_opts) do
     @plugs
     |> Enum.flat_map(fn {_, data} -> data end)
-    |> Enum.map(fn plug ->
+    |> Enum.filter(fn {_, enabled} -> enabled end)
+    |> Enum.map(fn {plug, _} ->
       quote do
         plug unquote(plug)
       end
