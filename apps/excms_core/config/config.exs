@@ -31,6 +31,6 @@ config :excms_core, ExcmsCoreWeb.PluginsRouter,
   }
 
 config :excms_core, ExcmsCoreWeb.BrowserPlugs,
-  [{ExcmsCoreWeb.LocalePlug, true}, {ExcmsCoreWeb.SetAdministratorPlug, true}]
+  excms_core: [{ExcmsCoreWeb.LocalePlug, true}, {ExcmsCoreWeb.SetAdministratorPlug, true}]
 
 config :excms_core, ExcmsCore.Warehouse, excms_core: [ExcmsCore.GlobalAccess]
