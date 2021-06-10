@@ -26,7 +26,7 @@ config :excms_server, ExcmsServer.Endpoint,
       "--mode",
       "development",
       "--watch-stdin",
-      cd: Path.expand("../apps/excms_core/assets", __DIR__)
+      cd: Path.expand("../apps/excms_server/assets", __DIR__)
     ]
   ]
 

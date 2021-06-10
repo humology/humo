@@ -22,7 +22,7 @@ defmodule ExcmsServer.Endpoint do
   # when deploying your static files in production.
   plug Plug.Static,
     at: "/",
-    from: :excms_core,
+    from: :excms_server,
     gzip: false,
     only: ~w(css fonts images js favicon.ico robots.txt)
 
