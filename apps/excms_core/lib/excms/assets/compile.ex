@@ -70,7 +70,11 @@ defmodule Mix.Tasks.Excms.Assets.Compile do
 
   defp create_app_js() do
     umbrella_prefix = ExcmsDeps.get_umbrella_root_prefix()
-    deps_assets = ExcmsDeps.deps_assets()
+    deps_assets =
+      ExcmsDeps.deps_assets("/package.json")
+      |> Enum.map(fn {app, path} ->
+        {app, String.replace_suffix(path, "/package.json", "")}
+      end)
 
     filepath = "#{umbrella_prefix}apps/excms_server/assets/js/app.js"
 
