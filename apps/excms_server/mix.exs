@@ -47,8 +47,8 @@ defmodule ExcmsServer.MixProject do
     [
       setup: [
         "deps.get",
-        "excms.assets.compile",
         "cmd python3 ../../deps/excms_deps/lib/copy_deps_assets.py",
+        "excms.assets.compile",
         "cmd npm install --prefix assets"
       ],
       test: ["ecto.create --quiet", "excms.ecto.migrate", "test"]

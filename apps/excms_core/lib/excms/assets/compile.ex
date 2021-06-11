@@ -42,7 +42,11 @@ defmodule Mix.Tasks.Excms.Assets.Compile do
 
   defp update_package_json() do
     umbrella_prefix = ExcmsDeps.get_umbrella_root_prefix()
-    deps_assets = ExcmsDeps.deps_assets() |> IO.inspect(label: "deps_assets")
+    deps_assets =
+      ExcmsDeps.deps_assets("/package.json")
+      |> Enum.map(fn {app, path} ->
+        {app, String.replace_suffix(path, "/package.json", "")}
+      end)
 
     filepath = "#{umbrella_prefix}apps/excms_server/assets/package.json"
 
