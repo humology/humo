@@ -16,5 +16,3 @@ import "phoenix_html"
 
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
-console.log("excms_account")
