@@ -6,6 +6,7 @@ defmodule Mix.Tasks.Excms.Assets.Compile do
   @impl true
   def run(_args) do
     compile_deps()
+    create_assets_symlinks()
     create_copy_assets()
     update_package_json()
     create_app_js()
@@ -13,6 +14,18 @@ defmodule Mix.Tasks.Excms.Assets.Compile do
 
   defp compile_deps() do
     Mix.Task.run("app.start", ["--no-start"])
+  end
+
+  defp create_assets_symlinks() do
+    Path.wildcard("../../deps/*/apps/*/assets")
+    |> Enum.map(fn source ->
+      dest_expand = Path.expand("#{source}/../../../")
+      symlink_source = Path.relative_to(Path.expand(source), dest_expand)
+      symlink_dest = dest_expand<>"/assets"
+      if !File.exists?(symlink_dest) do
+        File.ln_s!(symlink_source, symlink_dest)
+      end
+    end)
   end
 
   defp create_copy_assets() do
