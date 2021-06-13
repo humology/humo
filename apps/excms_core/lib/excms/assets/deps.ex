@@ -26,6 +26,8 @@ defmodule Mix.Tasks.Excms.Assets.Deps do
       dest = "#{source}/../../../assets"
       if File.exists?(dest), do: File.rm_rf!(dest)
       File.cp_r!(source, dest)
+
+      System.cmd("npm", ["install", "--prefix", dest, "--production"])
     end)
   end
 end
