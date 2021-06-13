@@ -6,8 +6,8 @@ defmodule Mix.Tasks.Excms.Assets.Compile do
   @impl true
   def run(_args) do
     compile_deps()
-    create_assets_symlinks()
-    create_copy_assets()
+    copy_deps_assets()
+    create_copy_static_assets()
     update_package_json()
     create_app_js()
   end
@@ -16,19 +16,30 @@ defmodule Mix.Tasks.Excms.Assets.Compile do
     Mix.Task.run("app.start", ["--no-start"])
   end
 
-  defp create_assets_symlinks() do
-    Path.wildcard("../../deps/*/apps/*/assets")
-    |> Enum.map(fn source ->
-      dest_expand = Path.expand("#{source}/../../../")
-      symlink_source = Path.relative_to(Path.expand(source), dest_expand)
-      symlink_dest = dest_expand<>"/assets"
-      if !File.exists?(symlink_dest) do
-        File.ln_s!(symlink_source, symlink_dest)
-      end
+  @doc """
+  Solves problem with package.json dependencies relative path
+  from directory apps/app2/assets
+  ../../../deps/app1/apps/app1/assets
+  from directory deps/app2/apps/app2/assets
+  ../../../../../deps/app1/apps/app1/assets - relative path is different
+
+  Solution - put assets in root folder of dependency
+  pwd = apps/app2/assets
+  ../../../deps/app1/assets
+  pwd = deps/app2/assets
+  ../../../deps/app1/assets - relative path is equal
+
+  Symlink unfortunately doesn't work, because another symlinks are used inside
+  """
+  defp copy_deps_assets() do
+    Path.wildcard("../../deps/*/apps/*/assets") |> Enum.map(fn source ->
+      dest = "#{source}/../../../assets"
+      if File.exists?(dest), do: File.rm_rf!(dest)
+      File.cp_r!(source, dest)
     end)
   end
 
-  defp create_copy_assets() do
+  defp create_copy_static_assets() do
     dirs =
       ExcmsDeps.deps_assets("/static")
       |> Enum.map(fn {_app, dir} -> dir end)
@@ -48,7 +59,7 @@ defmodule Mix.Tasks.Excms.Assets.Compile do
 
     umbrella_prefix = ExcmsDeps.get_umbrella_root_prefix()
 
-    filepath = "#{umbrella_prefix}apps/excms_server/assets/copy-assets.json"
+    filepath = "#{umbrella_prefix}apps/excms_server/assets/copy-static-assets.json"
 
     File.write!(filepath, json_config)
   end

@@ -46,7 +46,7 @@ module.exports = (env, options) => {
     plugins: [
       new MiniCssExtractPlugin({ filename: '../css/app.css' }),
       new CopyWebpackPlugin({
-        patterns: require('./copy-assets.json')
+        patterns: require('./copy-static-assets.json')
       })
     ]
   }
