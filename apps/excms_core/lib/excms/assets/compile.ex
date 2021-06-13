@@ -1,12 +1,10 @@
 defmodule Mix.Tasks.Excms.Assets.Compile do
   use Mix.Task
   alias ExcmsDeps
-  alias Ecto.Migrator
 
   @impl true
   def run(_args) do
     compile_deps()
-    copy_deps_assets()
     create_copy_static_assets()
     update_package_json()
     create_app_js()
@@ -14,29 +12,6 @@ defmodule Mix.Tasks.Excms.Assets.Compile do
 
   defp compile_deps() do
     Mix.Task.run("app.start", ["--no-start"])
-  end
-
-  @doc """
-  Solves problem with package.json dependencies relative path
-  from directory apps/app2/assets
-  ../../../deps/app1/apps/app1/assets
-  from directory deps/app2/apps/app2/assets
-  ../../../../../deps/app1/apps/app1/assets - relative path is different
-
-  Solution - put assets in root folder of dependency
-  pwd = apps/app2/assets
-  ../../../deps/app1/assets
-  pwd = deps/app2/assets
-  ../../../deps/app1/assets - relative path is equal
-
-  Symlink unfortunately doesn't work, because another symlinks are used inside
-  """
-  defp copy_deps_assets() do
-    Path.wildcard("../../deps/*/apps/*/assets") |> Enum.map(fn source ->
-      dest = "#{source}/../../../assets"
-      if File.exists?(dest), do: File.rm_rf!(dest)
-      File.cp_r!(source, dest)
-    end)
   end
 
   defp create_copy_static_assets() do
