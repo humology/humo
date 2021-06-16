@@ -1,11 +1,6 @@
 defmodule Mix.Tasks.Excms.Assets.Deps do
   use Mix.Task
 
-  @impl true
-  def run(_args) do
-    copy_deps_assets()
-  end
-
   @doc """
   Solves problem with package.json dependencies relative path
   from directory apps/app2/assets
@@ -21,6 +16,11 @@ defmodule Mix.Tasks.Excms.Assets.Deps do
 
   Symlink unfortunately doesn't work, because another symlinks are used inside
   """
+  @impl true
+  def run(_args) do
+    copy_deps_assets()
+  end
+
   defp copy_deps_assets() do
     Path.wildcard("../../deps/*/apps/*/assets") |> Enum.map(fn source ->
       dest = "#{source}/../../../assets"
