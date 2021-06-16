@@ -9,10 +9,10 @@
 # move said applications out of the umbrella.
 use Mix.Config
 
-deps_dir = Path.join(__DIR__, "../deps/excms_deps/") |> Path.expand()
+excms_deps = Path.expand("../apps/excms_core/lib/excms_deps.ex", __DIR__)
 
-if File.exists?(deps_dir) do
-  Path.join(deps_dir, "lib/excms_deps.ex") |> Code.require_file()
+if File.exists?(excms_deps) do
+  Code.require_file(excms_deps)
   for config <- ExcmsDeps.configs(), do: import_config(config)
 end
 
