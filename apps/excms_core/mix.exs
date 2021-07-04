@@ -54,7 +54,8 @@ defmodule ExcmsCore.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get", "ecto.setup", "excms.assets.deps", "cmd npm install --prefix assets"],
+      "setup.deps": ["deps.get"],
+      setup: ["ecto.setup", "excms.assets.setup"],
       "ecto.setup": ["ecto.create", "excms.ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "excms.ecto.migrate", "test"]

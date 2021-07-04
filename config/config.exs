@@ -9,12 +9,8 @@
 # move said applications out of the umbrella.
 use Mix.Config
 
-excms_deps = Path.expand("../apps/excms_core/lib/excms_deps.ex", __DIR__)
-
-if File.exists?(excms_deps) do
-  Code.require_file(excms_deps)
-  for config <- ExcmsDeps.configs(), do: import_config(config)
-end
+if Path.expand("#{Mix.env()}_deps.exs", __DIR__) |> File.exists?() , do:
+  import_config "#{Mix.env()}_deps.exs"
 
 config :excms_server,
   ecto_repos: [ExcmsCore.Repo]
