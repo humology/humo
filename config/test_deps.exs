@@ -32,4 +32,5 @@ config :excms_server, Excms.Deps,
     :excms_server
   ]
 
-import_config "../apps/excms_core/config/config.exs"
+if Path.expand("../apps/excms_core/config/config.exs", __DIR__) |> File.exists?(), do:
+  import_config "../apps/excms_core/config/config.exs"

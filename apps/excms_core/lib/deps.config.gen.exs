@@ -49,9 +49,14 @@ defmodule Deps.Config.Gen do
     deps_imports =
       config_files
       |> Enum.map(fn x ->
-        "import_config #{inspect("../"<>x)}"
+        config_path = inspect("../"<>x)
+        """
+        if Path.expand(#{config_path}, __DIR__) |> File.exists?(), do:
+          import_config #{config_path}
+        """
       end)
       |> Enum.join("\n")
+      |> String.trim()
 
     """
     import Config
