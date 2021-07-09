@@ -54,7 +54,7 @@ defmodule Deps.Config.Gen do
       |> Enum.join("\n")
 
     """
-    use Mix.Config
+    import Config
 
     #{deps_config}
 

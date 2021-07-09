@@ -7,7 +7,7 @@
 # all use the same configuration file. If you want different
 # configurations or dependencies per app, it is best to
 # move said applications out of the umbrella.
-use Mix.Config
+import Config
 
 if Path.expand("#{Mix.env()}_deps.exs", __DIR__) |> File.exists?() , do:
   import_config "#{Mix.env()}_deps.exs"

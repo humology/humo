@@ -1,4 +1,4 @@
-use Mix.Config
+import Config
 
 # Configure Mix tasks and generators
 config :excms_core,

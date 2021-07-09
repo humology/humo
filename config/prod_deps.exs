@@ -1,4 +1,4 @@
-use Mix.Config
+import Config
 
 config :excms_core, Excms.Deps,
   deps: [
