@@ -12,7 +12,7 @@ config :phoenix, :json_library, Jason
 config :excms_core, :plugins,
   excms_core: %{
     title: "Core",
-    cms_links: [
+    dashboard_links: [
       # Example
       # minimal %{title: "Users", route: :cms_user_path, action: :index}
       # %{title: "Users", route: :cms_user_path, action: :delete, method: "DELETE", opts: []}
@@ -27,7 +27,7 @@ config :excms_core, :plugins,
 config :excms_core, ExcmsCoreWeb.PluginsRouter,
   excms_core: %{
     routers: [],
-    cms_routers: [ExcmsCoreWeb.Routers.Cms]
+    dashboard_routers: [ExcmsCoreWeb.Routers.Dashboard]
   }
 
 config :excms_core, ExcmsCoreWeb.BrowserPlugs,

@@ -5,9 +5,9 @@ defmodule ExcmsCoreWeb.PluginsRouter do
 
   defmacro __using__(_opts) do
     quote do
-      pipeline :excms_core_cms do
-        plug ExcmsCoreWeb.CmsAccessPlug
-        plug :put_layout, {ExcmsCoreWeb.LayoutView, "cms.html"}
+      pipeline :excms_core_dashboard do
+        plug ExcmsCoreWeb.DashboardAccessPlug
+        plug :put_layout, {ExcmsCoreWeb.LayoutView, "dashboard.html"}
       end
 
       scope "/" do
@@ -17,11 +17,11 @@ defmodule ExcmsCoreWeb.PluginsRouter do
           quote_routers(:routers)
         end
 
-        scope "/cms", as: :cms do
-          pipe_through :excms_core_cms
+        scope "/humo", as: :dashboard do
+          pipe_through :excms_core_dashboard
 
           unquote do
-            quote_routers(:cms_routers)
+            quote_routers(:dashboard_routers)
           end
         end
       end

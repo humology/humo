@@ -11,13 +11,13 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-md">
-    <%= link "CMS", to: routes().cms_page_path(@conn, :index), class: "navbar-brand" %>
+    <%= link "Dashboard", to: routes().dashboard_page_path(@conn, :index), class: "navbar-brand" %>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <%= for plugin <- cms_plugins_menu() do %>
+        <%= for plugin <- dashboard_plugins_menu() do %>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               <%= plugin.title %>

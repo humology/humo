@@ -8,6 +8,6 @@ defmodule ExcmsCore.GlobalAccess do
 
     def name(), do: "global_access"
 
-    def actions(), do: ["administrator", "cms"]
+    def actions(), do: ["administrator", "dashboard"]
   end
 end

@@ -1,12 +1,12 @@
 defmodule ExcmsCoreWeb.LayoutView do
   use ExcmsCoreWeb, :view
 
-  def cms_plugins_menu() do
+  def dashboard_plugins_menu() do
     Application.fetch_env!(:excms_core, :plugins)
-    |> Enum.reject(fn {_, data} -> Map.get(data, :cms_links, []) == [] end)
+    |> Enum.reject(fn {_, data} -> Map.get(data, :dashboard_links, []) == [] end)
     |> Enum.map(fn {_, data} ->
       links =
-        for link <- data.cms_links do
+        for link <- data.dashboard_links do
           link_opts = [ExcmsServer.Endpoint, link.action | Map.get(link, :opts, [])]
 
           %{
