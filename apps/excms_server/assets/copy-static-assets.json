@@ -1,8 +1,0 @@
-[
-  {
-    "force": false,
-    "from": "../../../apps/excms_core/assets/static",
-    "priority": 0,
-    "to": "../"
-  }
-]

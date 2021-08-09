@@ -7,16 +7,19 @@
 # General application configuration
 import Config
 
-config :excms_core,
+if Path.expand("#{Mix.env()}_deps.exs", __DIR__) |> File.exists?(), do:
+  import_config "#{Mix.env()}_deps.exs"
+
+config :excms_server,
   ecto_repos: [ExcmsCore.Repo]
 
 # Configures the endpoint
-config :excms_core, ExcmsCoreWeb.Endpoint,
+config :excms_server, ExcmsServer.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "c+boGnirC8mZVaio5WRXQZ41gmZmVZq/+WneQEA9CwcjdzFhQ52UwBQ/EUiktEGN",
-  render_errors: [view: ExcmsCoreWeb.ErrorView, accepts: ~w(html json), layout: false],
-  pubsub_server: ExcmsCore.PubSub,
-  live_view: [signing_salt: "7rShgZ7d"]
+  secret_key_base: "jgjMNNV0mMjjqQVqsndA68SDM01N9gp1LwwV/pYZqrxECS7tbpj1ar8O9wifgh8O",
+  render_errors: [view: ExcmsServer.ErrorView, accepts: ~w(html json), layout: false],
+  pubsub_server: ExcmsServer.PubSub,
+  live_view: [signing_salt: "YsbwsVkA"]
 
 # Configures Elixir's Logger
 config :logger, :console,

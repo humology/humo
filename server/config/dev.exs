@@ -4,7 +4,7 @@ import Config
 config :excms_core, ExcmsCore.Repo,
   username: "postgres",
   password: "postgres",
-  database: "excms_core_dev",
+  database: "excms_server_dev",
   hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
@@ -15,7 +15,7 @@ config :excms_core, ExcmsCore.Repo,
 # The watchers configuration can be used to run external
 # watchers to your application. For example, we use it
 # with webpack to recompile .js and .css sources.
-config :excms_core, ExcmsCoreWeb.Endpoint,
+config :excms_server, ExcmsServer.Endpoint,
   http: [port: 4000],
   debug_errors: true,
   code_reloader: true,
@@ -55,13 +55,13 @@ config :excms_core, ExcmsCoreWeb.Endpoint,
 # different ports.
 
 # Watch static and templates for browser reloading.
-config :excms_core, ExcmsCoreWeb.Endpoint,
+config :excms_server, ExcmsServer.Endpoint,
   live_reload: [
     patterns: [
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/excms_core_web/(live|views)/.*(ex)$",
-      ~r"lib/excms_core_web/templates/.*(eex)$"
+      ~r"lib/excms_server_web/(live|views)/.*(ex)$",
+      ~r"lib/excms_server_web/templates/.*(eex)$"
     ]
   ]
 

@@ -1,19 +1,8 @@
 {
-  "name": "excms_core",
-  "main": "js/app.js",
-  "repository": {},
-  "description": " ",
-  "license": "MIT",
-  "scripts": {
-    "deploy": "webpack --mode production",
-    "watch": "webpack --mode development --watch"
-  },
   "dependencies": {
-    "@popperjs/core": "^2.9.2",
-    "bootstrap": "^5.0.1",
-    "phoenix": "file:../../../deps/phoenix",
-    "phoenix_html": "file:../../../deps/phoenix_html"
+    "excms_core": "file:../../assets"
   },
+  "description": " ",
   "devDependencies": {
     "@babel/core": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
@@ -27,5 +16,11 @@
     "terser-webpack-plugin": "^2.3.2",
     "webpack": "5.37.1",
     "webpack-cli": "^3.3.2"
+  },
+  "license": "MIT",
+  "repository": {},
+  "scripts": {
+    "deploy": "webpack --mode production",
+    "watch": "webpack --mode development --watch"
   }
 }

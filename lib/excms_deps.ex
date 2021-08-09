@@ -20,7 +20,7 @@ defmodule Excms.Deps do
 
   defp migration_dirs() do
     dirs = ordered_apps()
-    |> Enum.flat_map(&[Application.app_dir(&1, ["priv", "repo", "migrations"])])
+    |> Enum.flat_map(&[Application.app_dir(&1.app, ["priv", "repo", "migrations"])])
     |> Enum.filter(&File.dir?/1)
 
     Logger.debug("Migration dirs #{inspect(dirs, pretty: true, width: 0, limit: :infinity)}")
@@ -37,6 +37,7 @@ defmodule Excms.Deps do
 
   defp get_otp_app() do
     if Code.ensure_loaded?(Mix.Project) do
+      # TODO try get from Mix.Project.config()
       get_app_from_mix("mix.exs", @server_otp_app)
     else
       @server_otp_app

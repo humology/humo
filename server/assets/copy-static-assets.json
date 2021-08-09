@@ -1,0 +1,8 @@
+[
+  {
+    "force": true,
+    "from": "../../assets/static",
+    "priority": 0,
+    "to": "../"
+  }
+]

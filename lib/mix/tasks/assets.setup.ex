@@ -40,13 +40,9 @@ defmodule Mix.Tasks.Excms.Assets.Setup do
   defp setup_deps_assets() do
     Path.wildcard("../../deps/*/apps/*/assets") |> Enum.map(fn source ->
       dest = "#{source}/../../../assets"
-      if File.exists?(dest), do: File.rm_rf!(dest)
-      copy_assets(source, dest)
       npm_install(dest)
     end)
   end
-
-  defp copy_assets(source, dest), do: File.cp_r!(source, dest)
 
   defp npm_install(dest), do: System.cmd("npm", ["install", "--prefix", dest, "--production"])
 end
