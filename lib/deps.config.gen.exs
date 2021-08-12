@@ -51,11 +51,13 @@ defmodule Deps.Config.Gen do
   end
 
   defp ordered_apps(env) do
-    otp_app = fetch_app_from_mix!("./")
+    mix_project = get_mix_fun_body("./", :project)
+    otp_app = Keyword.fetch!(mix_project, :app)
+    otp_deps_path = Keyword.fetch!(mix_project, :deps_path)
 
     apps =
       Stream.resource(
-        fn -> {collect_apps_deps({otp_app, "./"}, env), MapSet.new()} end,
+        fn -> {collect_apps_deps({otp_app, "./"}, env, otp_deps_path), MapSet.new()} end,
         fn {apps_deps, known_apps} ->
           unlocked_apps =
             apps_deps
@@ -93,12 +95,12 @@ defmodule Deps.Config.Gen do
     {otp_app, apps}
   end
 
-  defp collect_apps_deps(otp_app, env) do
+  defp collect_apps_deps(otp_app, env, otp_deps_path) do
     Stream.resource(
       fn -> {[otp_app], MapSet.new()} end,
       fn
         {[app | rest], known_apps} ->
-          deps = get_app_deps(app, env)
+          deps = get_app_deps(app, env, otp_deps_path)
           unknown_apps = Enum.reject(deps, &(&1 in known_apps))
           new_known_apps = MapSet.new([app | unknown_apps]) |> MapSet.union(known_apps)
           {[{app, MapSet.new(deps)}], {unknown_apps ++ rest, new_known_apps}}
@@ -111,18 +113,13 @@ defmodule Deps.Config.Gen do
     |> Enum.to_list()
   end
 
-  defp get_app_deps({_, app_path}, env) do
+  defp get_app_deps({_, app_path}, env, otp_deps_path) do
     if Path.join(app_path, "mix.exs") |> File.exists?() do
-      get_deps_from_mix(app_path, env)
+      get_deps_from_mix(app_path, env, otp_deps_path)
     else
       # ignore dependencies without mix.exs
       []
     end
-  end
-
-  defp fetch_app_from_mix!(app_path) do
-    get_mix_fun_body(app_path, :project)
-    |> Keyword.fetch!(:app)
   end
 
   defp is_humo_plugin?(app_path) do
@@ -135,7 +132,7 @@ defmodule Deps.Config.Gen do
     end
   end
 
-  defp get_deps_from_mix(app_path, env) do
+  defp get_deps_from_mix(app_path, env, otp_deps_path) do
     get_mix_fun_body(app_path, :deps)
     |> Enum.map(fn x ->
       {app, params} =
@@ -150,7 +147,7 @@ defmodule Deps.Config.Gen do
 
       app_path =
         params
-        |> Keyword.get(:path, "deps/#{app}/")
+        |> Keyword.get(:path, Path.join(otp_deps_path, "#{app}"))
 
       allowlist_envs =
         params
