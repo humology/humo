@@ -35,9 +35,10 @@ defmodule ExcmsServer.MixProject do
   defp deps do
     [
       {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:phoenix_live_dashboard, "~> 0.2.0"},
-      {:telemetry_metrics, "~> 0.4"},
-      {:telemetry_poller, "~> 0.4"},
+      {:phoenix_live_dashboard, "~> 0.5"},
+      {:telemetry_metrics, "~> 0.6"},
+      {:telemetry_poller, "~> 1.0"},
+      {:esbuild, "~> 0.3", runtime: Mix.env() == :dev},
       {:excms_core, path: "../"}
     ]
   end
@@ -50,11 +51,12 @@ defmodule ExcmsServer.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
+      setup: ["cmd mix setup.deps", "ecto.setup", "excms.assets.gen", "excms.npm.install"],
       "setup.deps": ["deps.get", "cmd elixir ../lib/deps.config.gen.exs"],
-      setup: ["cmd mix setup.deps", "ecto.setup", "cmd npm install --prefix assets"], #, "excms.assets.setup -g"],
       "ecto.setup": ["ecto.create", "ecto.migrate"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
-      test: ["ecto.create --quiet", "excms.ecto.migrate", "test"]
+      test: ["ecto.create --quiet", "excms.ecto.migrate", "test"],
+      "assets.deploy": ["esbuild default --minify", "phx.digest"]
     ]
   end
 end

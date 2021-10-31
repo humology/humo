@@ -1,5 +1,6 @@
 defmodule Mix.Tasks.Excms.Assets.Gen do
   use Mix.Task
+  alias Excms.Deps
 
   @server_otp_app :excms_server
 
@@ -11,16 +12,14 @@ defmodule Mix.Tasks.Excms.Assets.Gen do
   end
 
   defp create_copy_static_assets() do
-    dirs =
-      deps_assets("/static")
-      |> Enum.map(fn {_app, dir} -> dir end)
+    dirs = deps_assets("assets/static")
 
     json_config =
       dirs
       |> Enum.with_index()
-      |> Enum.map(fn {dir, index} ->
+      |> Enum.map(fn {%{path: path}, index} ->
         %{
-          from: dir,
+          from: path,
           to: "../",
           priority: index,
           force: index != 0
@@ -28,19 +27,17 @@ defmodule Mix.Tasks.Excms.Assets.Gen do
       end)
       |> Jason.encode!(pretty: true)
 
-    filepath = "../../apps/#{@server_otp_app}/assets/copy-static-assets.json"
-
-    File.write!(filepath, json_config)
+    File.write!("assets/copy-static-assets.json", json_config)
   end
 
   defp update_package_json() do
     assets =
-      deps_assets("/package.json")
-      |> Enum.map(fn {app, path} ->
-        {app, String.replace_suffix(path, "/package.json", "")}
+      deps_assets("package.json")
+      |> Enum.map(fn %{path: path} = config ->
+        %{config | path: String.replace_suffix(path, "package.json", "")}
       end)
 
-    filepath = "../../apps/#{@server_otp_app}/assets/package.json"
+    filepath = "package.json"
 
     package =
       File.read!(filepath)
@@ -48,8 +45,8 @@ defmodule Mix.Tasks.Excms.Assets.Gen do
 
     dependencies =
       assets
-      |> Enum.reduce(%{}, fn {app, dir}, acc ->
-        Map.put(acc, "#{app}", "file:#{dir}")
+      |> Enum.reduce(%{}, fn %{app: app, path: path}, acc ->
+        Map.put(acc, "#{app}", "file:#{path}")
       end)
 
     res =
@@ -61,37 +58,24 @@ defmodule Mix.Tasks.Excms.Assets.Gen do
   end
 
   defp create_app_js() do
-    assets =
-      deps_assets("/package.json")
-      |> Enum.map(fn {app, path} ->
-        {app, String.replace_suffix(path, "/package.json", "")}
-      end)
-
-    filepath = "../../apps/#{@server_otp_app}/assets/js/app.js"
-
     res =
-      assets
-      |> Enum.map(fn {app, _} -> "import \"#{app}\"\n" end)
+      deps_assets("package.json")
+      |> Enum.map(fn %{app: app} -> "import \"#{app}\"\n" end)
       |> Enum.join("")
 
-    File.write!(filepath, res)
+    File.write!("assets/js/app.js", res)
   end
 
   def deps_assets(subpath) do
-    deps = Excms.Deps.ordered_apps(@server_otp_app) -- [@server_otp_app]
+    deps =
+      Deps.ordered_apps(@server_otp_app)
+      |> Enum.reject(fn x -> x.app == @server_otp_app end)
 
     deps
-    |> Enum.map(fn app ->
-      # deps assets must be copied to root
-      path =
-        [
-          "deps/#{app}/assets#{subpath}",
-          "apps/#{app}/assets#{subpath}"
-        ]
-        |> Enum.find(fn x -> File.exists?("../../"<>x) end)
-      {app, path}
+    |> Enum.map(fn %{path: path} = config ->
+      assets_path = Path.join([path, subpath])
+      %{config | path: assets_path}
     end)
-    |> Enum.reject(fn {_, path} -> is_nil(path) end)
-    |> Enum.map(fn {app, path} -> {app, "../../../#{path}"} end)
+    |> Enum.filter(fn %{path: path} -> File.exists?(path) end)
   end
 end

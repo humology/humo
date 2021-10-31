@@ -1,7 +1,7 @@
 [
   {
-    "force": true,
-    "from": "../../assets/static",
+    "force": false,
+    "from": "../assets/static",
     "priority": 0,
     "to": "../"
   }

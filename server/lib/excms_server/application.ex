@@ -7,6 +7,8 @@ defmodule ExcmsServer.Application do
 
   def start(_type, _args) do
     children = [
+      # Start the PubSub system
+      {Phoenix.PubSub, name: ExcmsServer.PubSub},
       # Start the Telemetry supervisor
       ExcmsServer.Telemetry,
       # Start the Endpoint (http/https)

@@ -1,0 +1,17 @@
+{
+  "name": "excms_core",
+  "main": "assets/js/app.js",
+  "repository": {},
+  "description": " ",
+  "license": "Apache-2.0",
+  "licenses": [
+    {
+      "type": "Apache-2.0",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0"
+    }
+  ],
+  "dependencies": {
+    "@popperjs/core": "^2.9.2",
+    "bootstrap": "^5.0.1"
+  }
+}
