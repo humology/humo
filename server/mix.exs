@@ -51,8 +51,10 @@ defmodule ExcmsServer.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["cmd mix setup.deps", "ecto.setup", "excms.assets.gen", "excms.npm.install"],
-      "setup.deps": ["deps.get", "cmd elixir ../lib/deps.config.gen.exs"],
+      setup: ["cmd mix deps.setup", "cmd mix rest.setup"],
+      "deps.setup": ["deps.get", "cmd elixir ../lib/deps.config.gen.exs"],
+      "rest.setup": ["ecto.setup", "assets.setup"],
+      "assets.setup": ["excms.assets.gen", "excms.npm.install"],
       "ecto.setup": ["ecto.create", "excms.ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "excms.ecto.migrate", "test"],
