@@ -7,12 +7,11 @@ defmodule Mix.Tasks.Excms.Assets.Gen do
   @impl true
   def run(_args) do
     create_copy_static_assets()
-    update_package_json()
     create_app_js()
   end
 
   defp create_copy_static_assets() do
-    dirs = deps_assets("assets/static")
+    dirs = deps_assets("assets/static", true)
 
     json_config =
       dirs
@@ -30,33 +29,6 @@ defmodule Mix.Tasks.Excms.Assets.Gen do
     File.write!("assets/copy-static-assets.json", json_config)
   end
 
-  defp update_package_json() do
-    assets =
-      deps_assets("package.json")
-      |> Enum.map(fn %{path: path} = config ->
-        %{config | path: String.replace_suffix(path, "package.json", "")}
-      end)
-
-    filepath = "package.json"
-
-    package =
-      File.read!(filepath)
-      |> Jason.decode!()
-
-    dependencies =
-      assets
-      |> Enum.reduce(%{}, fn %{app: app, path: path}, acc ->
-        Map.put(acc, "#{app}", "file:#{path}")
-      end)
-
-    res =
-      package
-      |> Map.put("dependencies", dependencies)
-      |> Jason.encode!(pretty: true)
-
-    File.write!(filepath, res)
-  end
-
   defp create_app_js() do
     res =
       deps_assets("package.json")
@@ -66,16 +38,22 @@ defmodule Mix.Tasks.Excms.Assets.Gen do
     File.write!("assets/js/app.js", res)
   end
 
-  def deps_assets(subpath) do
+  def deps_assets(subpath, keep_subpath \\ false) do
     deps =
       Deps.ordered_apps(@server_otp_app)
       |> Enum.reject(fn x -> x.app == @server_otp_app end)
+      |> Enum.filter(fn %{path: path} ->
+        [path, subpath]
+        |> Path.join()
+        |> File.exists?()
+      end)
 
-    deps
-    |> Enum.map(fn %{path: path} = config ->
-      assets_path = Path.join([path, subpath])
-      %{config | path: assets_path}
-    end)
-    |> Enum.filter(fn %{path: path} -> File.exists?(path) end)
+    if keep_subpath do
+      for %{path: path} = config <- deps do
+        %{config | path: Path.join([path, subpath])}
+      end
+    else
+      deps
+    end
   end
 end

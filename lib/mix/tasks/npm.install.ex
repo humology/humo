@@ -4,9 +4,6 @@ defmodule Mix.Tasks.Excms.Npm.Install do
   @impl true
   def run(_args) do
     Mix.Tasks.Excms.Assets.Gen.deps_assets("package.json")
-    |> Enum.map(fn %{path: path} = config ->
-      %{config | path: String.replace_suffix(path, "/package.json", "")}
-    end)
     |> Enum.map(fn %{path: path} -> npm_install(path) end)
 
     npm_install("./")

@@ -1,7 +1,7 @@
 {
-  "dependencies": {
-    "excms_core": "file:../"
-  },
+  "name": "excms_server",
+  "main": "assets/js/app.js",
+  "repository": {},
   "description": " ",
   "license": "Apache-2.0",
   "licenses": [
@@ -10,7 +10,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0"
     }
   ],
-  "main": "assets/js/app.js",
-  "name": "excms_server",
-  "repository": {}
+  "dependencies": {
+    "excms_core": "file:../"
+  }
 }
