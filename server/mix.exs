@@ -34,12 +34,12 @@ defmodule ExcmsServer.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:excms_core, path: "../"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:phoenix_live_dashboard, "~> 0.5"},
+      {:phoenix_live_dashboard, "~> 0.6"},
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_poller, "~> 1.0"},
-      {:esbuild, "~> 0.3", runtime: Mix.env() == :dev},
-      {:excms_core, path: "../"}
+      {:esbuild, "~> 0.3", runtime: Mix.env() == :dev}
     ]
   end
 
