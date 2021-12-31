@@ -1,5 +1,5 @@
-defmodule ExcmsServer.Endpoint do
-  use Phoenix.Endpoint, otp_app: :excms_server
+defmodule ExcmsCore.Endpoint do
+  use Phoenix.Endpoint, otp_app: :excms_core
 
   # The session will be stored in the cookie and signed,
   # this means its contents can be read but not tampered with.
@@ -22,7 +22,7 @@ defmodule ExcmsServer.Endpoint do
   # when deploying your static files in production.
   plug Plug.Static,
     at: "/",
-    from: :excms_server,
+    from: :excms_core,
     gzip: false,
     only: ~w(assets fonts images favicon.ico robots.txt)
 
@@ -32,7 +32,7 @@ defmodule ExcmsServer.Endpoint do
     socket "/phoenix/live_reload/socket", Phoenix.LiveReloader.Socket
     plug Phoenix.LiveReloader
     plug Phoenix.CodeReloader
-    plug Phoenix.Ecto.CheckRepoStatus, otp_app: :excms_server
+    plug Phoenix.Ecto.CheckRepoStatus, otp_app: :excms_core
   end
 
   plug Phoenix.LiveDashboard.RequestLogger,
@@ -50,5 +50,5 @@ defmodule ExcmsServer.Endpoint do
   plug Plug.MethodOverride
   plug Plug.Head
   plug Plug.Session, @session_options
-  plug ExcmsServer.Router
+  plug ExcmsCore.Router
 end

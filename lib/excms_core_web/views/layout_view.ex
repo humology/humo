@@ -7,7 +7,7 @@ defmodule ExcmsCoreWeb.LayoutView do
     |> Enum.map(fn {_, data} ->
       links =
         for link <- data.dashboard_links do
-          link_opts = [ExcmsServer.Endpoint, link.action | Map.get(link, :opts, [])]
+          link_opts = [ExcmsCore.endpoint(), link.action | Map.get(link, :opts, [])]
 
           %{
             title: link.title,
@@ -25,7 +25,7 @@ defmodule ExcmsCoreWeb.LayoutView do
     |> Enum.reject(fn {_, data} -> Map.get(data, :account_links, []) == [] end)
     |> Enum.flat_map(fn {_, data} ->
       for link <- data.account_links do
-        link_opts = [ExcmsServer.Endpoint, link.action | Map.get(link, :opts, [])]
+        link_opts = [ExcmsCore.endpoint(), link.action | Map.get(link, :opts, [])]
 
         %{
           title: link.title,

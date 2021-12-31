@@ -1,5 +1,5 @@
 defmodule ExcmsCoreWeb.ErrorViewTest do
-  use ExcmsServer.ConnCase, async: true
+  use ExcmsCore.ConnCase, async: true
 
   # Bring render/3 and render_to_string/3 for testing custom views
   import Phoenix.View

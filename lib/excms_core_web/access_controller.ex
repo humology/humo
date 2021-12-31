@@ -1,7 +1,7 @@
 defmodule ExcmsCoreWeb.AccessController do
   defmacro __using__(_opts) do
     quote do
-      import ExcmsCoreWeb.RouterHelpers
+      import ExcmsCore.RouterHelpers
       plug ExcmsCoreWeb.AccessPlug
 
       @type rest_action :: String.t()

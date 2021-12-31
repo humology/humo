@@ -3,14 +3,17 @@ defmodule Deps.Config.Gen do
     environments = [:test, :dev, :prod]
 
     for env <- environments do
-      {_, all_deps} = apps_deps = ordered_apps(env)
+      {otp_app, all_deps} = apps_deps = ordered_apps(env)
 
       config_files =
         all_deps
-        |> Enum.map(fn {_, app_path} ->
-          Path.join(app_path, "config/plugin.exs")
+        |> Enum.map(fn
+          {^otp_app, path} ->
+            Path.join(path, "plugin.exs")
+
+          {_, path} ->
+            Path.join(path, "config/plugin.exs")
         end)
-        |> Enum.filter(&File.exists?/1)
 
       res = render(apps_deps, config_files)
 
@@ -24,14 +27,15 @@ defmodule Deps.Config.Gen do
       |> Enum.map(fn {app, path} -> "    #{inspect(%{app: app, path: path})}" end)
       |> Enum.join(",\n")
       |> case do
-           "" -> "[]"
-           deps_string -> "[\n#{deps_string}\n  ]"
-         end
+        "" -> "[]"
+        deps_string -> "[\n#{deps_string}\n  ]"
+      end
 
     deps_imports =
       config_files
       |> Enum.map(fn x ->
-        config_path = inspect("../#{x}")
+        config_path = inspect("#{x}")
+
         """
         if Path.expand(#{config_path}, __DIR__) |> File.exists?(), do:
           import_config #{config_path}
@@ -43,8 +47,9 @@ defmodule Deps.Config.Gen do
     """
     import Config
 
-    config #{inspect(otp_app)}, Excms.Deps,
-      deps: #{formatted_deps}
+    config :excms_core, ExcmsCore,
+      deps: #{formatted_deps},
+      server_app: #{inspect(otp_app)}
 
     #{deps_imports}
     """
@@ -53,7 +58,7 @@ defmodule Deps.Config.Gen do
   defp ordered_apps(env) do
     mix_project = get_mix_fun_body("./", :project)
     otp_app = Keyword.fetch!(mix_project, :app)
-    otp_deps_path = Keyword.fetch!(mix_project, :deps_path)
+    otp_deps_path = Keyword.get(mix_project, :deps_path, "deps")
 
     apps =
       Stream.resource(
@@ -139,8 +144,10 @@ defmodule Deps.Config.Gen do
         case x do
           {:{}, _, [app, _, params]} ->
             {app, params}
+
           {app, params} when is_list(params) ->
             {app, params}
+
           {app, _} ->
             {app, []}
         end
@@ -167,6 +174,7 @@ defmodule Deps.Config.Gen do
 
   defp get_mix_fun_body(app_path, fun_name) do
     mix_path = Path.join(app_path, "mix.exs")
+
     {:ok, {_, _, [_, [do: {_, _, functions}]]}} =
       File.read!(mix_path)
       |> Code.string_to_quoted()

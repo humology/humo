@@ -1,6 +1,6 @@
 {
   "name": "excms_core",
-  "main": "assets/js/app.js",
+  "main": "assets/js/plugin.js",
   "repository": {},
   "description": " ",
   "license": "Apache-2.0",

@@ -4,7 +4,7 @@ defmodule Mix.Tasks.Excms.Ecto.Migrate do
   @impl true
   def run(_args) do
     compile_deps()
-    Excms.Deps.migrate()
+    ExcmsCore.migrate()
   end
 
   defp compile_deps() do

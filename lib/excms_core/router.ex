@@ -1,4 +1,4 @@
-defmodule ExcmsServer.Router do
+defmodule ExcmsCore.Router do
   use ExcmsCoreWeb, :router
 
   pipeline :browser do
@@ -8,7 +8,6 @@ defmodule ExcmsServer.Router do
     plug :protect_from_forgery
     plug :put_secure_browser_headers
 
-    # excms insert
     use ExcmsCoreWeb.BrowserPlugs
   end
 
@@ -22,7 +21,6 @@ defmodule ExcmsServer.Router do
     get "/", PageController, :index
   end
 
-  # excms insert
   use ExcmsCoreWeb.PluginsRouter
 
   # Other scopes may use custom stacks.
@@ -42,7 +40,7 @@ defmodule ExcmsServer.Router do
 
     scope "/" do
       pipe_through :browser
-      live_dashboard "/dashboard", metrics: ExcmsServer.Telemetry
+      live_dashboard "/dashboard", metrics: ExcmsCore.Telemetry
     end
   end
 end

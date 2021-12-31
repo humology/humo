@@ -1,8 +1,5 @@
 defmodule Mix.Tasks.Excms.Assets.Gen do
   use Mix.Task
-  alias Excms.Deps
-
-  @server_otp_app :excms_server
 
   @impl true
   def run(_args) do
@@ -35,13 +32,17 @@ defmodule Mix.Tasks.Excms.Assets.Gen do
       |> Enum.map(fn %{app: app} -> "import \"#{app}\"\n" end)
       |> Enum.join("")
 
+    res = ~s(import "./plugin"\n#{res})
+
     File.write!("assets/js/app.js", res)
   end
 
   def deps_assets(subpath, keep_subpath \\ false) do
+    server_app = ExcmsCore.server_app()
+
     deps =
-      Deps.ordered_apps(@server_otp_app)
-      |> Enum.reject(fn x -> x.app == @server_otp_app end)
+      ExcmsCore.ordered_apps()
+      |> Enum.reject(fn x -> x.app == server_app end)
       |> Enum.filter(fn %{path: path} ->
         [path, subpath]
         |> Path.join()
