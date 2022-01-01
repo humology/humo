@@ -14,18 +14,22 @@ defmodule ExcmsCore do
   @config Application.compile_env!(:excms_core, __MODULE__)
   @server_app Keyword.fetch!(@config, :server_app)
   @ordered_apps Keyword.fetch!(@config, :deps)
-  @server_app_namespace "Elixir.#{Macro.camelize(to_string(@server_app))}"
-  @router :"#{@server_app_namespace}.Router"
-  @router_helpers :"#{@server_app_namespace}.Router.Helpers"
-  @endpoint :"#{@server_app_namespace}.Endpoint"
+  @server_app_namespace Macro.camelize(to_string(@server_app))
+  @router Module.concat([@server_app_namespace, "Router"])
+  @router_helpers Module.concat([@server_app_namespace, "Router", "Helpers"])
+  @endpoint Module.concat([@server_app_namespace, "Endpoint"])
 
   def server_app(), do: @server_app
+
+  def is_server_app_module(module) when is_atom(module) do
+    Module.split(module) |> hd() != @server_app_namespace
+  end
 
   def ordered_apps(), do: @ordered_apps
 
   def router(), do: @router
 
-  def router_helpers(), do: @router_helpers
+  def routes(), do: @router_helpers
 
   def endpoint(), do: @endpoint
 

@@ -69,7 +69,7 @@ defmodule ExcmsCoreWeb do
 
       import ExcmsCoreWeb.ErrorHelpers
       import ExcmsCoreWeb.Gettext
-      import ExcmsCore.RouterHelpers
+      import ExcmsCore, only: [routes: 0]
       import ExcmsCoreWeb.AccessViewHelpers
     end
   end
