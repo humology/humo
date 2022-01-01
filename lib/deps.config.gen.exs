@@ -3,16 +3,13 @@ defmodule Deps.Config.Gen do
     environments = [:test, :dev, :prod]
 
     for env <- environments do
-      {otp_app, all_deps} = apps_deps = ordered_apps(env)
+      {_otp_app, all_deps} = apps_deps = ordered_apps(env)
 
       config_files =
         all_deps
         |> Enum.map(fn
-          {^otp_app, path} ->
-            Path.join(path, "plugin.exs")
-
-          {_, path} ->
-            Path.join(path, "config/plugin.exs")
+          {_app, "./"} -> "config/plugin.exs"
+          {_app, path} -> Path.join(path, "config/plugin.exs")
         end)
 
       res = render(apps_deps, config_files)
@@ -34,7 +31,7 @@ defmodule Deps.Config.Gen do
     deps_imports =
       config_files
       |> Enum.map(fn x ->
-        config_path = inspect("#{x}")
+        config_path = inspect("../#{x}")
 
         """
         if Path.expand(#{config_path}, __DIR__) |> File.exists?(), do:
@@ -118,9 +115,9 @@ defmodule Deps.Config.Gen do
     |> Enum.to_list()
   end
 
-  defp get_app_deps({_, app_path}, env, otp_deps_path) do
-    if Path.join(app_path, "mix.exs") |> File.exists?() do
-      get_deps_from_mix(app_path, env, otp_deps_path)
+  defp get_app_deps({_app, path}, env, otp_deps_path) do
+    if Path.join(path, "mix.exs") |> File.exists?() do
+      get_deps_from_mix(path, env, otp_deps_path)
     else
       # ignore dependencies without mix.exs
       []
@@ -152,7 +149,7 @@ defmodule Deps.Config.Gen do
             {app, []}
         end
 
-      app_path =
+      path =
         params
         |> Keyword.get(:path, Path.join(otp_deps_path, "#{app}"))
 
@@ -162,13 +159,13 @@ defmodule Deps.Config.Gen do
         |> List.wrap()
 
       if env in allowlist_envs do
-        {app, app_path}
+        {app, path}
       else
         nil
       end
     end)
     |> Enum.reject(&is_nil/1)
-    |> Enum.filter(fn {_, app_path} -> is_humo_plugin?(app_path) end)
+    |> Enum.filter(fn {_app, path} -> is_humo_plugin?(path) end)
     |> MapSet.new()
   end
 

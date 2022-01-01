@@ -6,5 +6,5 @@ config :excms_core, ExcmsCore,
   ],
   server_app: :excms_core
 
-if Path.expand("./plugin.exs", __DIR__) |> File.exists?(), do:
-  import_config "./plugin.exs"
+if Path.expand("../config/plugin.exs", __DIR__) |> File.exists?(), do:
+  import_config "../config/plugin.exs"
