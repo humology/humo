@@ -8,7 +8,7 @@ defmodule ExcmsCore.Router do
     plug :protect_from_forgery
     plug :put_secure_browser_headers
 
-    use ExcmsCoreWeb.BrowserPlugs
+    use ExcmsCoreWeb.BrowserPlugs, otp_app: :excms_core
   end
 
   pipeline :api do
@@ -21,7 +21,7 @@ defmodule ExcmsCore.Router do
     get "/", PageController, :index
   end
 
-  use ExcmsCoreWeb.PluginsRouter
+  use ExcmsCoreWeb.PluginsRouter, otp_app: :excms_core
 
   # Other scopes may use custom stacks.
   # scope "/api", ExcmsCoreWeb do
