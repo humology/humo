@@ -27,7 +27,7 @@ defmodule ExcmsCore.ConnCase do
       import ExcmsCore, only: [routes: 0]
 
       # The default endpoint for testing
-      @endpoint ExcmsCore.Endpoint
+      @endpoint ExcmsCoreWeb.Endpoint
     end
   end
 

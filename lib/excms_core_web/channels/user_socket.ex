@@ -27,7 +27,7 @@ defmodule ExcmsCoreWeb.UserSocket do
   # Would allow you to broadcast a "disconnect" event and terminate
   # all active sockets and channels for a given user:
   #
-  #     ExcmsCore.Endpoint.broadcast("user_socket:#{user.id}", "disconnect", %{})
+  #     ExcmsCoreWeb.Endpoint.broadcast("user_socket:#{user.id}", "disconnect", %{})
   #
   # Returning `nil` makes this socket anonymous.
   @impl true

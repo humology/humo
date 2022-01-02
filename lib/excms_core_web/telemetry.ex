@@ -1,4 +1,4 @@
-defmodule ExcmsCore.Telemetry do
+defmodule ExcmsCoreWeb.Telemetry do
   use Supervisor
   import Telemetry.Metrics
 

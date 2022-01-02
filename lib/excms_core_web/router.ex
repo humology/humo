@@ -1,4 +1,4 @@
-defmodule ExcmsCore.Router do
+defmodule ExcmsCoreWeb.Router do
   use ExcmsCoreWeb, :router
 
   pipeline :browser do
@@ -40,7 +40,7 @@ defmodule ExcmsCore.Router do
 
     scope "/" do
       pipe_through :browser
-      live_dashboard "/dashboard", metrics: ExcmsCore.Telemetry
+      live_dashboard "/dashboard", metrics: ExcmsCoreWeb.Telemetry
     end
   end
 end
