@@ -21,6 +21,10 @@ defmodule ExcmsCore do
 
   def server_app(), do: @server_app
 
+  def is_server_app_module(module) when is_atom(module) do
+    Module.split(module) |> hd() == @server_app_namespace
+  end
+
   def ordered_apps(), do: @ordered_apps
 
   def router(), do: @router

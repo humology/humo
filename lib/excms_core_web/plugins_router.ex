@@ -30,7 +30,13 @@ defmodule ExcmsCoreWeb.PluginsRouter do
   end
 
   defmacro __using__(_opts) do
-    :ok
+    quote do
+      if ExcmsCore.is_server_app_module(__MODULE__), do:
+        raise """
+        Please set correct otp_app
+        use ExcmsCoreWeb.PluginsRouter, otp_app: :#{ExcmsCore.server_app()}
+        """
+    end
   end
 
   defp quote_routers(key) do

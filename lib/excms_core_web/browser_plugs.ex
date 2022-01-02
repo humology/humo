@@ -16,6 +16,12 @@ defmodule ExcmsCoreWeb.BrowserPlugs do
   end
 
   defmacro __using__(_opts) do
-    :ok
+    quote do
+      if ExcmsCore.is_server_app_module(__MODULE__), do:
+        raise """
+        Please set correct otp_app
+        use ExcmsCoreWeb.BrowserPlugs, otp_app: :#{ExcmsCore.server_app()}
+        """
+    end
   end
 end

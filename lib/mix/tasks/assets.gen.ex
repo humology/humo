@@ -32,7 +32,7 @@ defmodule Mix.Tasks.Excms.Assets.Gen do
       |> Enum.map(fn %{app: app} -> "import \"#{app}\"\n" end)
       |> Enum.join("")
 
-    res = ~s(import "./plugin"\n#{res})
+    res = ~s(#{res}import "./plugin"\n)
 
     File.write!("assets/js/app.js", res)
   end
