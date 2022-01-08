@@ -6,6 +6,14 @@ defmodule ExcmsCoreWeb.PluginsRouter do
 
   defmacro __using__(otp_app: @server_app) do
     quote do
+      if __MODULE__ != ExcmsCoreWeb.router(), do:
+        raise """
+        Please set router name to #{ExcmsCoreWeb.router()}
+
+        defmodule #{ExcmsCoreWeb.router()} do
+        ...
+        """
+
       pipeline :excms_core_dashboard do
         plug ExcmsCoreWeb.DashboardAccessPlug
         plug :put_layout, {ExcmsCoreWeb.LayoutView, "dashboard.html"}
@@ -31,7 +39,7 @@ defmodule ExcmsCoreWeb.PluginsRouter do
 
   defmacro __using__(_opts) do
     quote do
-      if ExcmsCore.is_server_app_module(__MODULE__), do:
+      if ExcmsCoreWeb.is_server_app_web_module(__MODULE__), do:
         raise """
         Please set correct otp_app
         use ExcmsCoreWeb.PluginsRouter, otp_app: :#{ExcmsCore.server_app()}

@@ -15,24 +15,14 @@ defmodule ExcmsCore do
   @server_app Keyword.fetch!(@config, :server_app)
   @ordered_apps Keyword.fetch!(@config, :deps)
   @server_app_namespace Macro.camelize(to_string(@server_app))
-  @server_app_web_namespace "#{@server_app_namespace}Web"
-  @router Module.concat([@server_app_web_namespace, "Router"])
-  @router_helpers Module.concat([@server_app_web_namespace, "Router", "Helpers"])
-  @endpoint Module.concat([@server_app_web_namespace, "Endpoint"])
 
   def server_app(), do: @server_app
 
   def is_server_app_module(module) when is_atom(module) do
-    hd(Module.split(module)) in [@server_app_namespace, @server_app_web_namespace]
+    hd(Module.split(module)) == @server_app_namespace
   end
 
   def ordered_apps(), do: @ordered_apps
-
-  def router(), do: @router
-
-  def routes(), do: @router_helpers
-
-  def endpoint(), do: @endpoint
 
   def migrate() do
     {:ok, _, _} =

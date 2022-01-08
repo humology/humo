@@ -1,3 +1,3 @@
 defmodule ExcmsCoreWeb.PageViewTest do
-  use ExcmsCore.ConnCase, async: true
+  use ExcmsCoreWeb.ConnCase, async: true
 end

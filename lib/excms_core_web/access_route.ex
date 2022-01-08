@@ -21,7 +21,7 @@ defmodule ExcmsCoreWeb.AccessRoute do
   defp route_info(path, method) do
     [path | _] = String.split(path, "?")
 
-    Phoenix.Router.route_info(ExcmsCore.router(), method, path, "")
+    Phoenix.Router.route_info(ExcmsCoreWeb.router(), method, path, "")
   end
 
   defp route_permissions(%{plug: controller, plug_opts: phoenix_action}) do

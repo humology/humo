@@ -16,8 +16,23 @@ defmodule ExcmsCoreWeb do
   below. Instead, define any helper function in modules
   and import those modules here.
   """
+  @server_app ExcmsCore.server_app()
+  @server_app_web_namespace "#{Macro.camelize(to_string(@server_app))}Web"
+  @router Module.concat([@server_app_web_namespace, "Router"])
+  @router_helpers Module.concat([@server_app_web_namespace, "Router", "Helpers"])
+  @endpoint Module.concat([@server_app_web_namespace, "Endpoint"])
 
-  def controller do
+  def router(), do: @router
+
+  def routes(), do: @router_helpers
+
+  def endpoint(), do: @endpoint
+
+  def is_server_app_web_module(module) when is_atom(module) do
+    hd(Module.split(module)) == @server_app_web_namespace
+  end
+
+  def controller_macro do
     quote do
       use Phoenix.Controller, namespace: ExcmsCoreWeb
 
@@ -28,7 +43,7 @@ defmodule ExcmsCoreWeb do
     end
   end
 
-  def view do
+  def view_macro do
     quote do
       use Phoenix.View,
         root: "lib/excms_core_web/templates",
@@ -39,11 +54,11 @@ defmodule ExcmsCoreWeb do
         only: [get_flash: 1, get_flash: 2, view_module: 1, view_template: 1]
 
       # Include shared imports and aliases for views
-      unquote(view_helpers())
+      unquote(view_helpers_macro())
     end
   end
 
-  def router do
+  def router_macro do
     quote do
       use Phoenix.Router
 
@@ -52,14 +67,14 @@ defmodule ExcmsCoreWeb do
     end
   end
 
-  def channel do
+  def channel_macro do
     quote do
       use Phoenix.Channel
       import ExcmsCoreWeb.Gettext
     end
   end
 
-  defp view_helpers do
+  defp view_helpers_macro do
     quote do
       # Use all HTML functionality (forms, tags, etc)
       use Phoenix.HTML
@@ -69,7 +84,7 @@ defmodule ExcmsCoreWeb do
 
       import ExcmsCoreWeb.ErrorHelpers
       import ExcmsCoreWeb.Gettext
-      import ExcmsCore, only: [routes: 0]
+      import ExcmsCoreWeb, only: [routes: 0]
       import ExcmsCoreWeb.AccessViewHelpers
     end
   end
@@ -78,6 +93,6 @@ defmodule ExcmsCoreWeb do
   When used, dispatch to the appropriate controller/view/etc.
   """
   defmacro __using__(which) when is_atom(which) do
-    apply(__MODULE__, which, [])
+    apply(__MODULE__, :"#{which}_macro", [])
   end
 end
