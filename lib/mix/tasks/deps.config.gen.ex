@@ -1,5 +1,8 @@
-defmodule Deps.Config.Gen do
-  def generate() do
+defmodule Mix.Tasks.Excms.Deps.Config.Gen do
+  use Mix.Task
+
+  @impl true
+  def run(_args) do
     environments = [:test, :dev, :prod]
 
     for env <- environments do
@@ -24,9 +27,9 @@ defmodule Deps.Config.Gen do
       |> Enum.map(fn {app, path} -> "    #{inspect(%{app: app, path: path})}" end)
       |> Enum.join(",\n")
       |> case do
-        "" -> "[]"
-        deps_string -> "[\n#{deps_string}\n  ]"
-      end
+           "" -> "[]"
+           deps_string -> "[\n#{deps_string}\n  ]"
+         end
 
     deps_imports =
       config_files
@@ -64,7 +67,7 @@ defmodule Deps.Config.Gen do
           unlocked_apps =
             apps_deps
             |> Enum.filter(fn {_, deps} ->
-              MapSet.subset?(deps, known_apps)
+                              MapSet.subset?(deps, known_apps)
             end)
             |> Enum.map(fn {application, _} -> application end)
 
@@ -79,7 +82,7 @@ defmodule Deps.Config.Gen do
               new_apps_deps =
                 apps_deps
                 |> Enum.reject(fn {application, _} ->
-                  application in unlocked_apps
+                                  application in unlocked_apps
                 end)
 
               new_known_apps =
@@ -182,5 +185,3 @@ defmodule Deps.Config.Gen do
     quoted_body
   end
 end
-
-Deps.Config.Gen.generate()

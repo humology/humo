@@ -7,8 +7,14 @@
 # General application configuration
 import Config
 
-if Path.expand("#{Mix.env()}_deps.exs", __DIR__) |> File.exists?(),
-  do: import_config("#{Mix.env()}_deps.exs")
+config :excms_core, ExcmsCore,
+  deps: [
+    %{app: :excms_core, path: "./"}
+  ],
+  server_app: :excms_core
+
+if Path.expand("../config/plugin.exs", __DIR__) |> File.exists?(), do:
+  import_config "../config/plugin.exs"
 
 # Configures the endpoint
 config :excms_core, ExcmsCoreWeb.Endpoint,
