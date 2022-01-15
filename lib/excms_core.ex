@@ -11,18 +11,15 @@ defmodule ExcmsCore do
 
   require Logger
 
-  @config Application.compile_env!(:excms_core, __MODULE__)
-  @server_app Keyword.fetch!(@config, :server_app)
-  @ordered_apps Keyword.fetch!(@config, :deps)
-  @server_app_namespace Macro.camelize(to_string(@server_app))
-
-  def server_app(), do: @server_app
+  def server_app(), do:
+    Keyword.fetch!(config(), :server_app)
 
   def is_server_app_module(module) when is_atom(module) do
-    hd(Module.split(module)) == @server_app_namespace
+    hd(Module.split(module)) == Macro.camelize(to_string(server_app()))
   end
 
-  def ordered_apps(), do: @ordered_apps
+  def ordered_apps(), do:
+    Keyword.fetch!(config(), :deps)
 
   def migrate() do
     {:ok, _, _} =
@@ -33,12 +30,16 @@ defmodule ExcmsCore do
   end
 
   defp migration_dirs() do
-    dirs = ordered_apps()
-           |> Enum.flat_map(&[Application.app_dir(&1.app, ["priv", "repo", "migrations"])])
-           |> Enum.filter(&File.dir?/1)
+    dirs =
+      ordered_apps()
+      |> Enum.flat_map(&[Application.app_dir(&1.app, ["priv", "repo", "migrations"])])
+      |> Enum.filter(&File.dir?/1)
 
     Logger.debug("Migration dirs #{inspect(dirs, pretty: true, width: 0, limit: :infinity)}")
 
     dirs
   end
+
+  defp config(), do:
+    Application.fetch_env!(:excms_core, __MODULE__)
 end

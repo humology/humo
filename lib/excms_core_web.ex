@@ -16,20 +16,25 @@ defmodule ExcmsCoreWeb do
   below. Instead, define any helper function in modules
   and import those modules here.
   """
-  @server_app ExcmsCore.server_app()
-  @server_app_web_namespace "#{Macro.camelize(to_string(@server_app))}Web"
-  @router Module.concat([@server_app_web_namespace, "Router"])
-  @router_helpers Module.concat([@server_app_web_namespace, "Router", "Helpers"])
-  @endpoint Module.concat([@server_app_web_namespace, "Endpoint"])
 
-  def router(), do: @router
+  def router(), do:
+    Module.concat([server_app_web_namespace(), "Router"])
 
-  def routes(), do: @router_helpers
+  def routes(), do:
+    Module.concat([server_app_web_namespace(), "Router", "Helpers"])
 
-  def endpoint(), do: @endpoint
+  def endpoint(), do:
+    Module.concat([server_app_web_namespace(), "Endpoint"])
 
   def is_server_app_web_module(module) when is_atom(module) do
-    hd(Module.split(module)) == @server_app_web_namespace
+    hd(Module.split(module)) == server_app_web_namespace()
+  end
+
+  defp server_app_web_namespace() do
+    ExcmsCore.server_app()
+    |> to_string()
+    |> Macro.camelize()
+    |> then(&("#{&1}Web"))
   end
 
   def controller_macro do
