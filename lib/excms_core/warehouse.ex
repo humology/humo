@@ -12,12 +12,8 @@ defmodule ExcmsCore.Warehouse do
   @doc """
   Returns resource helpers module
   """
-  def resource_to_helpers(resource) do
-    try do
-      Module.safe_concat([resource, "Helpers"])
-    rescue
-      ArgumentError -> nil
-    end
+  def resource_to_helpers(resource_module) when is_atom(resource_module) do
+    Module.safe_concat([resource_module, "Helpers"])
   end
 
   @doc """

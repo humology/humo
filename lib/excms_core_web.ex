@@ -43,8 +43,7 @@ defmodule ExcmsCoreWeb do
 
       import Plug.Conn
       import ExcmsCoreWeb.Gettext
-      use ExcmsCoreWeb.AccessController
-      alias ExcmsCore.Permission
+      alias ExcmsCoreWeb.UserExtractor
     end
   end
 
@@ -90,7 +89,7 @@ defmodule ExcmsCoreWeb do
       import ExcmsCoreWeb.ErrorHelpers
       import ExcmsCoreWeb.Gettext
       import ExcmsCoreWeb, only: [routes: 0]
-      import ExcmsCoreWeb.AccessViewHelpers
+      import ExcmsCoreWeb.RouteAuthorizer
     end
   end
 

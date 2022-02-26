@@ -31,6 +31,10 @@ config :excms_core, ExcmsCoreWeb.PluginsRouter,
   }
 
 config :excms_core, ExcmsCoreWeb.BrowserPlugs,
-  excms_core: [{ExcmsCoreWeb.SetAdministratorPlug, true}]
+  excms_core: []
 
-config :excms_core, ExcmsCore.Warehouse, excms_core: [ExcmsCore.GlobalAccess]
+config :excms_core, ExcmsCore.Warehouse,
+  excms_core: []
+
+config :excms_core, ExcmsCore.Authorizer,
+  authorizer: ExcmsCore.Authorizer.NoAccess

@@ -24,7 +24,7 @@
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
               <%= for link <- plugin.links do %>
-                <%= if permitted?(@conn, link.path, link.method) do %>
+                <%= if can_path?(@conn, link.path, method: link.method) do %>
                   <li>
                     <%= if link.method in [:get, "GET", "get"] do %>
                       <%= link link.title, to: link.path, class: "dropdown-item" %>
@@ -45,7 +45,7 @@
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             <%= for link <- account_links() do %>
-              <%= if permitted?(@conn, link.path, link.method) do %>
+              <%= if can_path?(@conn, link.path, method: link.method) do %>
                 <li>
                   <%= if link.method in [:get, "GET", "get"] do %>
                     <%= link link.title, to: link.path, class: "dropdown-item" %>

@@ -1,8 +1,9 @@
 defmodule ExcmsCore.ResourceHelpers do
   defmacro __using__(_opts) do
     quote do
+      @behaviour ExcmsCore.ResourceHelpers
+
       @type action() :: String.t()
-      @type access_level() :: String.t()
 
       @doc """
       Returns resource name.
@@ -30,19 +31,29 @@ defmodule ExcmsCore.ResourceHelpers do
       @spec actions() :: nonempty_list(action())
       def actions(), do: ["create", "read", "update", "delete"]
 
-      @doc """
-      Returns access levels by action
-      List must be sorted from least to most
-
-      ## Examples
-
-          iex> access_levels("update")
-          ["no", "own", "all"]
-      """
-      @spec access_levels(action()) :: nonempty_list(access_level())
-      def access_levels(_action), do: ["no", "all"]
-
-      defoverridable name: 0, title: 0, description: 0, actions: 0, access_levels: 1
+      defoverridable name: 0, title: 0, description: 0, actions: 0
     end
   end
+
+  @type action() :: String.t()
+
+  @doc """
+  Returns resource name.
+  """
+  @callback name() :: String.t()
+
+  @doc """
+  Returns localized title.
+  """
+  @callback title() :: String.t()
+
+  @doc """
+  Returns localized description.
+  """
+  @callback description() :: String.t()
+
+  @doc """
+  Returns list of actions
+  """
+  @callback actions() :: nonempty_list(action())
 end

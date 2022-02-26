@@ -15,7 +15,6 @@ defmodule ExcmsCoreWeb.PluginsRouter do
         """
 
       pipeline :excms_core_dashboard do
-        plug ExcmsCoreWeb.DashboardAccessPlug
         plug :put_layout, {ExcmsCoreWeb.LayoutView, "dashboard.html"}
       end
 
