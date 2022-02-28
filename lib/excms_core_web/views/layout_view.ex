@@ -12,7 +12,7 @@ defmodule ExcmsCoreWeb.LayoutView do
           %{
             title: link.title,
             path: apply(routes(), link.route, link_opts),
-            method: Map.get(link, :method, "GET")
+            method: Map.get(link, :method, :get)
           }
         end
 
@@ -30,7 +30,7 @@ defmodule ExcmsCoreWeb.LayoutView do
         %{
           title: link.title,
           path: apply(routes(), link.route, link_opts),
-          method: Map.get(link, :method, "GET")
+          method: Map.get(link, :method, :get)
         }
       end
     end)

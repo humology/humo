@@ -1,0 +1,70 @@
+defmodule ExcmsCoreWeb.RouteAuthorizerBase do
+  defmacro __using__(opts) do
+    lazy_web_router =
+      opts[:lazy_web_router] ||
+      raise ":lazy_web_router is expected to be given"
+    user_extractor =
+      opts[:user_extractor] ||
+      raise ":user_extractor is expected to be given"
+
+    quote do
+      def can_conn?(conn, params \\ []) do
+        params = Keyword.put(params, :method, conn.method)
+        can_path?(conn, conn.request_path, params)
+      end
+
+      def can_path?(conn, path, params \\ []) do
+        method =
+          Keyword.get(params, :method, :get)
+          |> Plug.Router.Utils.normalize_method()
+
+        user = extract_user(conn)
+        router = get_router()
+
+        reverse_controller(path, method, router)
+        |> controller_can?(user, params)
+        |> case do
+          {:ok, can?} -> can?
+          :error -> raise no_route_error(conn, path, method, router)
+        end
+      end
+
+      defp no_route_error(conn, path, method, router) do
+        [
+          conn: %{conn | path_info: split_path(path), method: method},
+          router: router
+        ] |> Phoenix.Router.NoRouteError.exception()
+      end
+
+      defp split_path(path) do
+        for x <- String.split(path, "/"), x != "", do: x
+      end
+
+      defp extract_user(conn) do
+        apply(unquote(user_extractor), :extract, [conn])
+      end
+
+      defp reverse_controller(path, method, router) do
+        [path | _] = String.split(path, "?")
+
+        Phoenix.Router.route_info(router, method, path, "")
+      end
+
+      defp get_router() do
+        unquote(lazy_web_router).()
+      end
+
+      defp controller_can?(%{plug: controller, plug_opts: phoenix_action}, user, params) do
+        params_map =
+          Keyword.drop(params, [:method])
+          |> Map.new()
+
+        {:ok, apply(controller, :can?, [user, phoenix_action, params_map])}
+      end
+
+      defp controller_can?(_error, _user, _params) do
+        :error
+      end
+    end
+  end
+end

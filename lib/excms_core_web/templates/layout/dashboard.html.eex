@@ -26,7 +26,7 @@
               <%= for link <- plugin.links do %>
                 <%= if can_path?(@conn, link.path, method: link.method) do %>
                   <li>
-                    <%= if link.method in [:get, "GET", "get"] do %>
+                    <%= if link.method == :get do %>
                       <%= link link.title, to: link.path, class: "dropdown-item" %>
                     <% else %>
                       <%= link link.title, to: link.path, method: link.method, class: "dropdown-item" %>
@@ -47,7 +47,7 @@
             <%= for link <- account_links() do %>
               <%= if can_path?(@conn, link.path, method: link.method) do %>
                 <li>
-                  <%= if link.method in [:get, "GET", "get"] do %>
+                  <%= if link.method == :get do %>
                     <%= link link.title, to: link.path, class: "dropdown-item" %>
                   <% else %>
                     <%= link link.title, to: link.path, method: link.method, class: "dropdown-item" %>

@@ -90,6 +90,7 @@ defmodule ExcmsCoreWeb do
       import ExcmsCoreWeb.Gettext
       import ExcmsCoreWeb, only: [routes: 0]
       import ExcmsCoreWeb.RouteAuthorizer
+      import ExcmsCoreWeb.AuthorizeViewHelpers
     end
   end
 
