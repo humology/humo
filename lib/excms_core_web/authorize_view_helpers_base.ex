@@ -4,7 +4,6 @@ defmodule ExcmsCoreWeb.AuthorizeViewHelpersBase do
       opts[:lazy_can_path] || raise ":lazy_can_path is expected to be given"
 
     quote do
-      alias ExcmsCoreWeb.RouteAuthorizer
       use Phoenix.HTML
 
       def can_link(conn, opts, do: contents) when is_list(opts),

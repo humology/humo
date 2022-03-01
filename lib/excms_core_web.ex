@@ -43,7 +43,6 @@ defmodule ExcmsCoreWeb do
 
       import Plug.Conn
       import ExcmsCoreWeb.Gettext
-      alias ExcmsCoreWeb.UserExtractor
     end
   end
 
