@@ -17,7 +17,7 @@ defmodule ExcmsCoreWeb.ConnCase do
 
   use ExUnit.CaseTemplate
 
-  using opts do
+  using do
     quote do
       # Import conveniences for testing with connections
       import Plug.Conn
@@ -27,7 +27,7 @@ defmodule ExcmsCoreWeb.ConnCase do
       import ExcmsCoreWeb, only: [routes: 0]
 
       # The default endpoint for testing
-      @endpoint unquote(opts[:endpoint] || ExcmsCoreWeb.Endpoint)
+      @endpoint ExcmsCoreWeb.Endpoint
     end
   end
 

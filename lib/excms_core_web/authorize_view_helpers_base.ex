@@ -1,7 +1,7 @@
 defmodule ExcmsCoreWeb.AuthorizeViewHelpersBase do
   defmacro __using__(opts) do
-    lazy_can_path =
-      opts[:lazy_can_path] || raise ":lazy_can_path is expected to be given"
+    route_authorizer =
+      opts[:route_authorizer] || raise ":route_authorizer is expected to be given"
 
     quote do
       use Phoenix.HTML
@@ -15,15 +15,11 @@ defmodule ExcmsCoreWeb.AuthorizeViewHelpersBase do
 
         can_params = Keyword.merge(can_params, Keyword.take(opts, [:method]))
 
-        if can_path?(conn, path, can_params) do
+        if unquote(route_authorizer).can_path?(conn, path, can_params) do
           link(text, opts)
         else
           ""
         end
-      end
-
-      defp can_path?(conn, path, can_params) do
-        apply(unquote(lazy_can_path), [conn, path, can_params])
       end
     end
   end

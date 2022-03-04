@@ -1,6 +1,5 @@
 defmodule ExcmsCoreWeb.RouteAuthorizerBaseTest do
-  use ExcmsCoreWeb.ConnCase,
-    endpoint: ExcmsCoreWeb.RouteAuthorizerTest.TestWebEndpoint
+  use ExcmsCoreWeb.ConnCase
 
   defmodule User do
     defstruct [is_admin: false]
@@ -30,7 +29,7 @@ defmodule ExcmsCoreWeb.RouteAuthorizerBaseTest do
     def can_actions(_user, _page), do: []
   end
 
-  defmodule TestWebPageController do
+  defmodule PageController do
     def can?(user, phoenix_action, params) do
       case phoenix_action do
         :index -> SimpleAdminAuthorizer.can?(user, "read", Page)
@@ -39,7 +38,7 @@ defmodule ExcmsCoreWeb.RouteAuthorizerBaseTest do
     end
   end
 
-  defmodule TestWebPageDeleteController do
+  defmodule PageDeleteController do
     def can?(user, phoenix_action, params) do
       case phoenix_action do
         :delete -> SimpleAdminAuthorizer.can?(user, "delete", params.page)
@@ -49,8 +48,8 @@ defmodule ExcmsCoreWeb.RouteAuthorizerBaseTest do
 
   defmodule TestWebRouter do
     use Phoenix.Router
-    resources "/pages", TestWebPageController, only: [:index, :show]
-    resources "/pages-del", TestWebPageDeleteController, only: [:delete]
+    resources "/pages", PageController, only: [:index, :show]
+    resources "/pages-del", PageDeleteController, only: [:delete]
   end
 
   defmodule TestWebEndpoint do
@@ -73,62 +72,6 @@ defmodule ExcmsCoreWeb.RouteAuthorizerBaseTest do
       admin_conn: assign(conn, :active_user, %User{is_admin: true}),
       user_conn: assign(conn, :active_user, %User{})
     }
-  end
-
-  describe "can_conn?/2" do
-    test "admin user can read Page module", %{admin_conn: conn} do
-      conn = Map.put(conn, :request_path, "/pages")
-      assert TestRouteAuthorizer.can_conn?(conn)
-    end
-
-    test "regular user can read Page module", %{user_conn: conn} do
-      conn = Map.put(conn, :request_path, "/pages")
-      assert TestRouteAuthorizer.can_conn?(conn)
-    end
-
-    test "nil user cannot read Page module", %{conn: conn} do
-      conn = Map.put(conn, :request_path, "/pages")
-      refute TestRouteAuthorizer.can_conn?(conn)
-    end
-
-    test "admin user can read Page record", %{admin_conn: conn} do
-      conn = Map.put(conn, :request_path, "/pages/3")
-      assert TestRouteAuthorizer.can_conn?(conn, page: %Page{})
-    end
-
-    test "regular user can read Page record", %{user_conn: conn} do
-      conn = Map.put(conn, :request_path, "/pages/3")
-      refute TestRouteAuthorizer.can_conn?(conn, page: %Page{})
-    end
-
-    test "nil user cannot read Page record", %{conn: conn} do
-      conn = Map.put(conn, :request_path, "/pages/3")
-      refute TestRouteAuthorizer.can_conn?(conn, page: %Page{})
-    end
-
-    test "admin user can delete Page record", %{admin_conn: conn} do
-      conn = Map.merge(conn, %{request_path: "/pages-del/3", method: :delete})
-      assert TestRouteAuthorizer.can_conn?(conn, [page: %Page{}])
-    end
-
-    test "regular user cannot delete Page record", %{user_conn: conn} do
-      conn = Map.merge(conn, %{request_path: "/pages-del/3", method: :delete})
-      refute TestRouteAuthorizer.can_conn?(conn, [page: %Page{}])
-    end
-
-    test "nil user cannot delete Page record", %{conn: conn} do
-      conn = Map.merge(conn, %{request_path: "/pages-del/3", method: :delete})
-      refute TestRouteAuthorizer.can_conn?(conn, [page: %Page{}])
-    end
-
-    test "not existing link raises NoRouteError", %{conn: conn} do
-      expected_message =
-        "no route found for DELETE /not-exists (#{inspect TestWebRouter})"
-      assert_raise Phoenix.Router.NoRouteError, expected_message, fn ->
-        %{conn | request_path: "/not-exists", method: :delete}
-        |> TestRouteAuthorizer.can_conn?()
-      end
-    end
   end
 
   describe "can_path?/3" do
@@ -176,25 +119,6 @@ defmodule ExcmsCoreWeb.RouteAuthorizerBaseTest do
         "no route found for DELETE /not-exists (#{inspect TestWebRouter})"
       assert_raise Phoenix.Router.NoRouteError, expected_message, fn ->
         TestRouteAuthorizer.can_path?(conn, "/not-exists", method: :delete)
-      end
-    end
-  end
-
-  describe "Base use" do
-    test "requires lazy_web_router" do
-      assert_raise RuntimeError, ":lazy_web_router is expected to be given", fn ->
-        defmodule TestRouteAuthorizer2 do
-          use ExcmsCoreWeb.RouteAuthorizerBase
-        end
-      end
-    end
-
-    test "requires user_extractor" do
-      assert_raise RuntimeError, ":user_extractor is expected to be given", fn ->
-        defmodule TestRouteAuthorizer2 do
-          use ExcmsCoreWeb.RouteAuthorizerBase,
-            lazy_web_router: &TestWeb.router/0
-        end
       end
     end
   end

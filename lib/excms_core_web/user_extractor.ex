@@ -1,5 +1,5 @@
 defmodule ExcmsCoreWeb.UserExtractor do
-  alias ExcmsCoreWeb.UserExtractor.NilUser
+  @default ExcmsCoreWeb.UserExtractor.NilUser
 
   def extract(conn, opts \\ []) do
     apply(user_extractor(opts), :extract, [conn])
@@ -9,7 +9,7 @@ defmodule ExcmsCoreWeb.UserExtractor do
     Keyword.get(
       opts,
       :user_extractor,
-      Application.get_env(__MODULE__, :extractor, NilUser)
+      Application.get_env(__MODULE__, :extractor, @default)
     )
   end
 end

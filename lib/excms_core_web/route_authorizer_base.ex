@@ -1,18 +1,9 @@
 defmodule ExcmsCoreWeb.RouteAuthorizerBase do
   defmacro __using__(opts) do
-    lazy_web_router =
-      opts[:lazy_web_router] ||
-      raise ":lazy_web_router is expected to be given"
-    user_extractor =
-      opts[:user_extractor] ||
-      raise ":user_extractor is expected to be given"
+    lazy_web_router = opts[:lazy_web_router] || &ExcmsCoreWeb.router/0
+    user_extractor = opts[:user_extractor] || ExcmsCoreWeb.UserExtractor
 
     quote do
-      def can_conn?(conn, params \\ []) do
-        params = Keyword.put(params, :method, conn.method)
-        can_path?(conn, conn.request_path, params)
-      end
-
       def can_path?(conn, path, params \\ []) do
         method =
           Keyword.get(params, :method, :get)
