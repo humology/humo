@@ -1,13 +1,25 @@
 defmodule ExcmsCoreWeb.AuthorizeControllerHelpers do
   defmacro __using__(opts) do
     resource_module =
-      opts[:resource_module] || raise ":resource_module is expected to be given"
+      opts[:resource_module] ||
+      raise ":resource_module is expected to be given"
+
     resource_name =
       opts[:resource_name] || raise ":resource_name is expected to be given"
+
     authorizer =
       opts[:authorizer] || ExcmsCore.Authorizer
-    user_extractor =
-      opts[:user_extractor] || ExcmsCoreWeb.UserExtractor
+
+    authorization_extractor =
+      opts[:authorization_extractor] || ExcmsCoreWeb.AuthorizationExtractor
+
+    if Mix.env() != :test do
+      opts[:authorizer] &&
+        raise ":authorizer can be changed only in test env"
+
+      opts[:authorization_extractor] &&
+        raise ":authorization_extractor can be changed only in test env"
+    end
 
     quote do
       @type phoenix_action() :: String.t()
@@ -24,13 +36,13 @@ defmodule ExcmsCoreWeb.AuthorizeControllerHelpers do
       @spec authorize(Plug.Conn.t(), Plug.opts()) :: Plug.Conn.t()
       def authorize(conn, _opts) do
         phoenix_action = Phoenix.Controller.action_name(conn)
-        user = apply(unquote(user_extractor), :extract, [conn])
+        authorization =
+          unquote(authorization_extractor).extract(conn)
 
         authorized = required_permissions(phoenix_action, conn.assigns)
         |> List.wrap()
         |> Enum.all?(fn {action, resource_or_module} ->
-          unquote(authorizer)
-          |> apply(:can?, [user, action, resource_or_module])
+          unquote(authorizer).can?(authorization, action, resource_or_module)
         end)
 
         if authorized do

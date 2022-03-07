@@ -26,7 +26,9 @@ defmodule ExcmsCoreWeb.AuthorizeControllerHelpersTest do
     def can_actions(_user, _page), do: []
   end
 
-  defmodule TestUserExtractor do
+  defmodule AuthorizationExtractor do
+    @behaviour ExcmsCoreWeb.AuthorizationExtractor.Behaviour
+
     def extract(conn) do
       conn.assigns[:active_user]
     end
@@ -41,7 +43,7 @@ defmodule ExcmsCoreWeb.AuthorizeControllerHelpersTest do
       resource_module: Page,
       resource_name: :page,
       authorizer: SimpleAdminAuthorizer,
-      user_extractor: TestUserExtractor
+      authorization_extractor: AuthorizationExtractor
 
     def index(conn, _params), do: send_resp(conn, 200, "OK")
     def show(conn, _params), do: send_resp(conn, 200, "OK")
@@ -65,7 +67,7 @@ defmodule ExcmsCoreWeb.AuthorizeControllerHelpersTest do
       resource_module: Page,
       resource_name: :page,
       authorizer: SimpleAdminAuthorizer,
-      user_extractor: TestUserExtractor
+      authorization_extractor: AuthorizationExtractor
 
     def required_permissions(:publish, %{page: page}), do:
       [{"publish", page}, {"publish", Page}]

@@ -13,7 +13,9 @@ defmodule ExcmsCoreWeb.RouteAuthorizerBaseTest do
     end
   end
 
-  defmodule TestUserExtractor do
+  defmodule AuthorizationExtractor do
+    @behaviour ExcmsCoreWeb.AuthorizationExtractor.Behaviour
+
     def extract(conn) do
       conn.assigns[:active_user]
     end
@@ -64,7 +66,7 @@ defmodule ExcmsCoreWeb.RouteAuthorizerBaseTest do
   defmodule TestRouteAuthorizer do
     use ExcmsCoreWeb.RouteAuthorizerBase,
       lazy_web_router: &TestWeb.router/0,
-      user_extractor: TestUserExtractor
+      authorization_extractor: AuthorizationExtractor
   end
 
   setup %{conn: conn} do

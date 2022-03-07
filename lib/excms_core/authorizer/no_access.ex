@@ -7,10 +7,10 @@ defmodule ExcmsCore.Authorizer.NoAccess do
   """
 
   @impl true
-  def can_all(_user, _action, resource_module) do
+  def can_all(_authorization, _action, resource_module) do
     Repo.none(resource_module)
   end
 
   @impl true
-  def can_actions(_user, _resource_or_module), do: []
+  def can_actions(_authorization, _resource_or_module), do: []
 end

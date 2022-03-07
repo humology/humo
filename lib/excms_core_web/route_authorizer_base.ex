@@ -1,7 +1,9 @@
 defmodule ExcmsCoreWeb.RouteAuthorizerBase do
   defmacro __using__(opts) do
-    lazy_web_router = opts[:lazy_web_router] || &ExcmsCoreWeb.router/0
-    user_extractor = opts[:user_extractor] || ExcmsCoreWeb.UserExtractor
+    lazy_web_router =
+      opts[:lazy_web_router] || &ExcmsCoreWeb.router/0
+    authorization_extractor =
+      opts[:authorization_extractor] || ExcmsCoreWeb.AuthorizationExtractor
 
     quote do
       def can_path?(conn, path, params \\ []) do
@@ -9,11 +11,11 @@ defmodule ExcmsCoreWeb.RouteAuthorizerBase do
           Keyword.get(params, :method, :get)
           |> Plug.Router.Utils.normalize_method()
 
-        user = extract_user(conn)
+        authorization = extract_authorization(conn)
         router = get_router()
 
         reverse_controller(path, method, router)
-        |> controller_can?(user, params)
+        |> controller_can?(authorization, params)
         |> case do
           {:ok, can?} -> can?
           :error -> raise no_route_error(conn, path, method, router)
@@ -31,8 +33,8 @@ defmodule ExcmsCoreWeb.RouteAuthorizerBase do
         for x <- String.split(path, "/"), x != "", do: x
       end
 
-      defp extract_user(conn) do
-        apply(unquote(user_extractor), :extract, [conn])
+      defp extract_authorization(conn) do
+        unquote(authorization_extractor).extract(conn)
       end
 
       defp reverse_controller(path, method, router) do

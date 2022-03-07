@@ -28,7 +28,7 @@ defmodule ExcmsCore.Authorizer.AllAccessTest do
       :ok
     end
 
-    test "all pages available to user all actions" do
+    test "all pages available to user's all actions" do
       page = Repo.insert!(%Page{title: "Great News!"})
 
       for action <- ["create", "read", "update", "delete", "publish"], do:

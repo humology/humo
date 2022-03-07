@@ -38,3 +38,6 @@ config :excms_core, ExcmsCore.Warehouse,
 
 config :excms_core, ExcmsCore.Authorizer,
   authorizer: ExcmsCore.Authorizer.NoAccess
+
+config :excms_core, ExcmsCoreWeb.AuthorizationExtractor,
+  extractor: ExcmsCoreWeb.AuthorizationExtractor.NilAuthorization

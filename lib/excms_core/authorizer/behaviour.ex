@@ -1,38 +1,40 @@
 defmodule ExcmsCore.Authorizer.Behaviour do
   defmacro __using__(_opts) do
     quote do
-      @behaviour ExcmsCore.Authorizer.Behaviour
+      alias ExcmsCore.Authorizer.Behaviour
 
-      @type user() :: struct()
-      @type resource() :: struct()
-      @type resource_module() :: module()
-      @type resource_or_module() :: resource() | resource_module()
-      @type action() :: String.t()
+      @behaviour Behaviour
+
+      @type authorization() :: Behaviour.authorization()
+      @type resource() :: Behaviour.resource()
+      @type resource_module() :: Behaviour.resource_module()
+      @type resource_or_module() :: Behaviour.resource_or_module()
+      @type action() :: Behaviour.action()
 
       @doc """
-      Can user do action with provided resource record or module?
+      Can authorization do action with provided resource record or module?
       """
       @impl ExcmsCore.Authorizer.Behaviour
-      @spec can?(user(), action(), resource_or_module()) :: boolean()
-      def can?(user, action, resource_or_module) do
-        action in can_actions(user, resource_or_module)
+      @spec can?(authorization(), action(), resource_or_module()) :: boolean()
+      def can?(authorization, action, resource_or_module) do
+        action in can_actions(authorization, resource_or_module)
       end
 
       @doc """
-      Returns resource records user is authorized to
+      Returns authorized resource records
       """
       @impl ExcmsCore.Authorizer.Behaviour
-      @spec can_all(user(), action(), resource_module()) :: any()
-      def can_all(_user, _action, _resource_module) do
+      @spec can_all(authorization(), action(), resource_module()) :: any()
+      def can_all(_authorization, _action, _resource_module) do
         raise "Method is not implemented."
       end
 
       @doc """
-      Returns actions authorized to user with provided resource record or module
+      Returns authorized actions to provided resource record or module
       """
       @impl ExcmsCore.Authorizer.Behaviour
-      @callback can_actions(user(), resource_or_module()) :: list(action())
-      def can_actions(_user, _resource_or_module) do
+      @callback can_actions(authorization(), resource_or_module()) :: list(action())
+      def can_actions(_authorization, _resource_or_module) do
         raise "Method is not implemented."
       end
 
@@ -44,24 +46,24 @@ defmodule ExcmsCore.Authorizer.Behaviour do
     end
   end
 
-  @type user() :: struct()
+  @type authorization() :: struct()
   @type resource() :: struct()
   @type resource_module() :: module()
   @type resource_or_module() :: resource() | resource_module()
   @type action() :: String.t()
 
   @doc """
-  Returns user is authorized to do action with provided resource
+  Can authorization do action with provided resource record or module?
   """
-  @callback can?(user(), action(), resource_or_module()) :: boolean()
+  @callback can?(authorization(), action(), resource_or_module()) :: boolean()
 
   @doc """
-  Returns resource records user is authorized to
+  Returns authorized resource records
   """
-  @callback can_all(user(), action(), resource_module()) :: any()
+  @callback can_all(authorization(), action(), resource_module()) :: any()
 
   @doc """
-  Returns actions authorized to user with provided resource
+  Returns authorized actions to provided resource record or module
   """
-  @callback can_actions(user(), resource_or_module()) :: list(action())
+  @callback can_actions(authorization(), resource_or_module()) :: list(action())
 end
