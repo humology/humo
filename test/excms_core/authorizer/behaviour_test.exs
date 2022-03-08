@@ -174,7 +174,7 @@ defmodule ExcmsCore.Authorizer.BehaviourTest do
       """ |> Repo.query!()
 
       """
-      CREATE TABLE page(
+      CREATE TABLE pages(
         id SERIAL,
         title TEXT,
         published BOOLEAN,
