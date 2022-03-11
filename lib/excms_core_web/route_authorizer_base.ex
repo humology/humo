@@ -2,8 +2,23 @@ defmodule ExcmsCoreWeb.RouteAuthorizerBase do
   defmacro __using__(opts) do
     lazy_web_router =
       opts[:lazy_web_router] || &ExcmsCoreWeb.router/0
+
+    authorizer =
+      opts[:authorizer] || ExcmsCore.Authorizer
+
     authorization_extractor =
       opts[:authorization_extractor] || ExcmsCoreWeb.AuthorizationExtractor
+
+    if Mix.env() != :test do
+      opts[:lazy_web_router] &&
+        raise ":lazy_web_router can be changed only in test env"
+
+      opts[:authorizer] &&
+        raise ":authorizer can be changed only in test env"
+
+      opts[:authorization_extractor] &&
+        raise ":authorization_extractor can be changed only in test env"
+    end
 
     quote do
       def can_path?(conn, path, params \\ []) do
@@ -52,7 +67,14 @@ defmodule ExcmsCoreWeb.RouteAuthorizerBase do
           Keyword.drop(params, [:method])
           |> Map.new()
 
-        {:ok, apply(controller, :can?, [authorization, phoenix_action, params_map])}
+        can =
+          controller.required_permissions(phoenix_action, params_map)
+          |> List.wrap()
+          |> Enum.all?(fn {action, resource_or_module} ->
+            unquote(authorizer).can?(authorization, action, resource_or_module)
+          end)
+
+        {:ok, can}
       end
 
       defp controller_can?(_error, _authorization, _params) do

@@ -39,11 +39,12 @@ defmodule ExcmsCoreWeb.AuthorizeControllerHelpers do
         authorization =
           unquote(authorization_extractor).extract(conn)
 
-        authorized = required_permissions(phoenix_action, conn.assigns)
-        |> List.wrap()
-        |> Enum.all?(fn {action, resource_or_module} ->
-          unquote(authorizer).can?(authorization, action, resource_or_module)
-        end)
+        authorized =
+          required_permissions(phoenix_action, conn.assigns)
+          |> List.wrap()
+          |> Enum.all?(fn {action, resource_or_module} ->
+            unquote(authorizer).can?(authorization, action, resource_or_module)
+          end)
 
         if authorized do
           conn
