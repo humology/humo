@@ -22,7 +22,7 @@ defmodule ExcmsCoreWeb.AuthorizeControllerHelpers do
     end
 
     quote do
-      @type phoenix_action() :: String.t()
+      @type phoenix_action() :: atom()
       @type action() :: String.t()
       @type resource() :: struct()
       @type resource_module() :: module()

@@ -47,15 +47,15 @@ defmodule ExcmsCoreWeb.RouteAuthorizerBase do
         unquote(lazy_web_router).()
       end
 
-      defp controller_can?(%{plug: controller, plug_opts: phoenix_action}, user, params) do
+      defp controller_can?(%{plug: controller, plug_opts: phoenix_action}, authorization, params) do
         params_map =
           Keyword.drop(params, [:method])
           |> Map.new()
 
-        {:ok, apply(controller, :can?, [user, phoenix_action, params_map])}
+        {:ok, apply(controller, :can?, [authorization, phoenix_action, params_map])}
       end
 
-      defp controller_can?(_error, _user, _params) do
+      defp controller_can?(_error, _authorization, _params) do
         :error
       end
     end
