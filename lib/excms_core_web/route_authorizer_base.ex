@@ -21,16 +21,14 @@ defmodule ExcmsCoreWeb.RouteAuthorizerBase do
     end
 
     quote do
-      def can_path?(conn, path, params \\ []) do
-        method =
-          Keyword.get(params, :method, :get)
-          |> Plug.Router.Utils.normalize_method()
+      def can_path?(conn, path, method \\ :get) do
+        method = Plug.Router.Utils.normalize_method(method)
 
         authorization = extract_authorization(conn)
         router = get_router()
 
         reverse_controller(path, method, router)
-        |> controller_can?(authorization, params)
+        |> controller_can?(authorization, conn.assigns)
         |> case do
           {:ok, can?} -> can?
           :error -> raise no_route_error(conn, path, method, router)
@@ -62,13 +60,9 @@ defmodule ExcmsCoreWeb.RouteAuthorizerBase do
         unquote(lazy_web_router).()
       end
 
-      defp controller_can?(%{plug: controller, plug_opts: phoenix_action}, authorization, params) do
-        params_map =
-          Keyword.drop(params, [:method])
-          |> Map.new()
-
+      defp controller_can?(%{plug: controller, plug_opts: phoenix_action}, authorization, assigns) do
         can =
-          controller.required_permissions(phoenix_action, params_map)
+          controller.required_permissions(phoenix_action, assigns)
           |> List.wrap()
           |> Enum.all?(fn {action, resource_or_module} ->
             unquote(authorizer).can?(authorization, action, resource_or_module)

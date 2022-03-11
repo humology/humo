@@ -7,7 +7,7 @@ defmodule ExcmsCoreWeb.RouteAuthorizerTest do
       expected_message =
         "no route found for DELETE /not-exists (#{inspect ExcmsCoreWeb.router()})"
       assert_raise Phoenix.Router.NoRouteError, expected_message, fn ->
-        RouteAuthorizer.can_path?(conn, "/not-exists", [method: :delete])
+        RouteAuthorizer.can_path?(conn, "/not-exists", :delete)
       end
     end
   end

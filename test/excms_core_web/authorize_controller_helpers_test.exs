@@ -41,7 +41,7 @@ defmodule ExcmsCoreWeb.AuthorizeControllerHelpersTest do
 
     use ExcmsCoreWeb.AuthorizeControllerHelpers,
       resource_module: Page,
-      resource_name: :page,
+      resource_assign_key: :page,
       authorizer: SimpleAdminAuthorizer,
       authorization_extractor: AuthorizationExtractor
 
@@ -65,7 +65,7 @@ defmodule ExcmsCoreWeb.AuthorizeControllerHelpersTest do
 
     use ExcmsCoreWeb.AuthorizeControllerHelpers,
       resource_module: Page,
-      resource_name: :page,
+      resource_assign_key: :page,
       authorizer: SimpleAdminAuthorizer,
       authorization_extractor: AuthorizationExtractor
 
@@ -184,8 +184,8 @@ defmodule ExcmsCoreWeb.AuthorizeControllerHelpersTest do
       end
     end
 
-    test "requires resource_name" do
-      assert_raise RuntimeError, ":resource_name is expected to be given", fn ->
+    test "requires resource_assign_key" do
+      assert_raise RuntimeError, ":resource_assign_key is expected to be given", fn ->
         defmodule TestController do
           use ExcmsCoreWeb.AuthorizeControllerHelpers,
             resource_module: Page

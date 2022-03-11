@@ -3,9 +3,10 @@ defmodule ExcmsCoreWeb.AuthorizeViewHelpersBaseTest do
   use Phoenix.HTML
 
   defmodule TestRouteAuthorizer do
-    def can_path?(_conn, "/can", [key: :value]), do: true
-    def can_path?(_conn, "/can", [key: :value, method: :delete]), do: true
-    def can_path?(_conn, "/cannot", [key: :value]), do: false
+    def can_path?(conn, path, method \\ :get)
+    def can_path?(_conn, "/can", :get), do: true
+    def can_path?(_conn, "/can", :delete), do: true
+    def can_path?(_conn, "/cannot", :get), do: false
   end
 
   defmodule TestBase do
@@ -15,30 +16,25 @@ defmodule ExcmsCoreWeb.AuthorizeViewHelpersBaseTest do
 
   describe "can_link/3" do
     test "when text link pass authorization renders link", %{conn: conn} do
-      opts = [to: "/can", can_params: [key: :value]]
-      assert TestBase.can_link(conn, "Index", opts) ==
+      assert TestBase.can_link(conn, "Index", to: "/can") ==
         link("Index", to: "/can")
     end
 
     test "when image link pass authorization renders link", %{conn: conn} do
-      opts = [to: "/can", can_params: [key: :value]]
-      assert TestBase.can_link(conn, opts, do: raw("<img/>")) ==
+      assert TestBase.can_link(conn, [to: "/can"], do: raw("<img/>")) ==
         link(raw("<img/>"), to: "/can")
     end
 
     test "when text link fail authorization renders link", %{conn: conn} do
-      opts = [to: "/cannot", can_params: [key: :value]]
-      assert TestBase.can_link(conn, "Index", opts) == ""
+      assert TestBase.can_link(conn, "Index", to: "/cannot") == ""
     end
 
     test "when image link fail authorization renders link", %{conn: conn} do
-      opts = [to: "/cannot", can_params: [key: :value]]
-      assert TestBase.can_link(conn, opts, do: raw("<img/>")) == ""
+      assert TestBase.can_link(conn, [to: "/cannot"], do: raw("<img/>")) == ""
     end
 
     test "when delete link pass authorization renders link", %{conn: conn} do
-      opts = [to: "/can", method: :delete, can_params: [key: :value]]
-      assert TestBase.can_link(conn, "Index", opts) ==
+      assert TestBase.can_link(conn, "Index", to: "/can", method: :delete) ==
         link("Index", to: "/can", method: :delete)
     end
   end

@@ -91,37 +91,40 @@ defmodule ExcmsCoreWeb.RouteAuthorizerBaseTest do
     end
 
     test "admin user can read Page record", %{admin_conn: conn} do
-      assert TestRouteAuthorizer.can_path?(conn, "/pages/3", page: %Page{})
+      conn = assign(conn, :page, %Page{})
+      assert TestRouteAuthorizer.can_path?(conn, "/pages/3")
     end
 
     test "regular user can read Page record", %{user_conn: conn} do
-      refute TestRouteAuthorizer.can_path?(conn, "/pages/3", page: %Page{})
+      conn = assign(conn, :page, %Page{})
+      refute TestRouteAuthorizer.can_path?(conn, "/pages/3")
     end
 
     test "nil user cannot read Page record", %{conn: conn} do
-      refute TestRouteAuthorizer.can_path?(conn, "/pages/3", page: %Page{})
+      conn = assign(conn, :page, %Page{})
+      refute TestRouteAuthorizer.can_path?(conn, "/pages/3")
     end
 
     test "admin user can delete Page record", %{admin_conn: conn} do
-      params = [method: :delete, page: %Page{}]
-      assert TestRouteAuthorizer.can_path?(conn, "/pages-del/3", params)
+      conn = assign(conn, :page, %Page{})
+      assert TestRouteAuthorizer.can_path?(conn, "/pages-del/3", :delete)
     end
 
     test "regular user cannot delete Page record", %{user_conn: conn} do
-      params = [method: :delete, page: %Page{}]
-      refute TestRouteAuthorizer.can_path?(conn, "/pages-del/3", params)
+      conn = assign(conn, :page, %Page{})
+      refute TestRouteAuthorizer.can_path?(conn, "/pages-del/3", :delete)
     end
 
     test "nil user cannot delete Page record", %{conn: conn} do
-      params = [method: :delete, page: %Page{}]
-      refute TestRouteAuthorizer.can_path?(conn, "/pages-del/3", params)
+      conn = assign(conn, :page, %Page{})
+      refute TestRouteAuthorizer.can_path?(conn, "/pages-del/3", :delete)
     end
 
     test "not existing link raises NoRouteError", %{conn: conn} do
       expected_message =
         "no route found for DELETE /not-exists (#{inspect TestWebRouter})"
       assert_raise Phoenix.Router.NoRouteError, expected_message, fn ->
-        TestRouteAuthorizer.can_path?(conn, "/not-exists", method: :delete)
+        TestRouteAuthorizer.can_path?(conn, "/not-exists", :delete)
       end
     end
   end

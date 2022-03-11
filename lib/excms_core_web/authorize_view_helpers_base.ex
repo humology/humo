@@ -11,11 +11,9 @@ defmodule ExcmsCoreWeb.AuthorizeViewHelpersBase do
 
       def can_link(conn, text, opts) do
         path = Keyword.fetch!(opts, :to)
-        {can_params, opts} = Keyword.pop(opts, :can_params, [])
+        method = Keyword.get(opts, :method, :get)
 
-        can_params = Keyword.merge(can_params, Keyword.take(opts, [:method]))
-
-        if unquote(route_authorizer).can_path?(conn, path, can_params) do
+        if unquote(route_authorizer).can_path?(conn, path, method) do
           link(text, opts)
         else
           ""
