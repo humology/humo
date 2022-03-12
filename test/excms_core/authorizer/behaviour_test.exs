@@ -1,6 +1,5 @@
 defmodule ExcmsCore.Authorizer.BehaviourTest do
   use ExcmsCore.DataCase
-  alias ExcmsCore.Authorizer
 
   defmodule User do
     use Ecto.Schema
@@ -152,16 +151,6 @@ defmodule ExcmsCore.Authorizer.BehaviourTest do
         assert can?(%User{is_admin: false}, action, Page) ==
                (action != "unpublish")
     end
-
-    test "default authorizer denies action to resource record" do
-      for action <- ~w(create read update delete publish unpublish), do:
-        refute Authorizer.can?(%User{is_admin: true}, action, %Page{})
-    end
-
-    test "default authorizer denies action to resource module" do
-      for action <- ~w(create read update delete publish unpublish), do:
-        refute Authorizer.can?(%User{is_admin: true}, action, Page)
-    end
   end
 
   describe "can_all/3" do
@@ -258,13 +247,6 @@ defmodule ExcmsCore.Authorizer.BehaviourTest do
                |> Repo.all()
                |> Repo.preload(:owner) == [params.user1_draft_page]
     end
-
-    test "default authorizer returns empty list for all actions", params do
-      for action <- ["create", "read", "update", "delete", "publish"], do:
-        assert params.admin
-               |> Authorizer.can_all(action, Page)
-               |> Repo.all() == []
-    end
   end
 
   describe "can_actions/2" do
@@ -309,14 +291,6 @@ defmodule ExcmsCore.Authorizer.BehaviourTest do
     test "user cannot unpublish" do
       assert can_actions(%User{is_admin: false}, Page) ==
              ["create", "read", "update", "delete", "publish"]
-    end
-
-    test "default authorizer denies all actions to resource record" do
-      assert Authorizer.can_actions(%User{is_admin: true}, %Page{}) == []
-    end
-
-    test "default authorizer denies all actions to resource module" do
-      assert Authorizer.can_actions(%User{is_admin: true}, Page) == []
     end
   end
 end

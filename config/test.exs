@@ -18,5 +18,8 @@ config :excms_core, ExcmsCoreWeb.Endpoint,
   http: [port: 4002],
   server: false
 
+config :excms_core, ExcmsCore.Authorizer,
+  authorizer: ExcmsCore.Authorizer.Mock
+
 # Print only warnings and errors during test
 config :logger, level: :warn
