@@ -37,17 +37,7 @@ defmodule ExcmsCoreWeb.AuthorizeControllerHelpers do
       @spec authorize(Plug.Conn.t(), Plug.opts()) :: Plug.Conn.t()
       def authorize(conn, _opts) do
         phoenix_action = Phoenix.Controller.action_name(conn)
-        authorization =
-          unquote(authorization_extractor).extract(conn)
-
-        authorized =
-          required_permissions(phoenix_action, conn.assigns)
-          |> List.wrap()
-          |> Enum.all?(fn {action, resource_or_module} ->
-            unquote(authorizer).can?(authorization, action, resource_or_module)
-          end)
-
-        if authorized do
+        if can?(conn, phoenix_action) do
           conn
         else
           conn
@@ -57,14 +47,43 @@ defmodule ExcmsCoreWeb.AuthorizeControllerHelpers do
       end
 
       @doc """
-      Returns required permissions
+      Plug authorizes controller actions
+      If authorization fails forbidden error is returned
+      """
+      @spec can?(Plug.Conn.t(), phoenix_action()) :: boolean()
+      def can?(conn, phoenix_action) do
+        match_required_permissions?(conn, phoenix_action)
+      end
+
+      @doc """
+      Returns whether request matches requires permissions
+      Not overridable, available for use
+      """
+      @spec match_required_permissions?(Plug.Conn.t(), phoenix_action()) :: boolean()
+      def match_required_permissions?(conn, phoenix_action) do
+        authorization = unquote(authorization_extractor).extract(conn)
+
+        required_permissions(phoenix_action, conn.assigns)
+        |> List.wrap()
+        |> Enum.all?(fn {action, resource_or_module} ->
+          unquote(authorizer).can?(authorization, action, resource_or_module)
+        end)
+      end
+
+      @doc """
+      Returns required permission(s)
       """
       @spec required_permissions(phoenix_action(), map()) :: permission() | list(permission())
       def required_permissions(phoenix_action, assigns) do
         required_rest_permissions(phoenix_action, assigns)
       end
 
-      defp required_rest_permissions(phoenix_action, assigns) do
+      @doc """
+      Returns required permission(s)
+      Not overridable, available for use
+      """
+      @spec required_rest_permissions(phoenix_action(), map()) :: permission() | list(permission())
+      def required_rest_permissions(phoenix_action, assigns) do
         case phoenix_action do
           :index -> {"read", unquote(resource_module)}
           :show -> {"read", Map.fetch!(assigns, unquote(resource_assign_key))}
@@ -78,7 +97,7 @@ defmodule ExcmsCoreWeb.AuthorizeControllerHelpers do
 
       plug :authorize
 
-      defoverridable required_permissions: 2
+      defoverridable can?: 2, required_permissions: 2
     end
   end
 end

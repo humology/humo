@@ -32,6 +32,14 @@ defmodule ExcmsCoreWeb.RouteAuthorizerBaseTest do
   end
 
   defmodule PageController do
+    use ExcmsCoreWeb, :controller
+
+    use ExcmsCoreWeb.AuthorizeControllerHelpers,
+      resource_module: Page,
+      resource_assign_key: :page,
+      authorizer: SimpleAdminAuthorizer,
+      authorization_extractor: AuthorizationExtractor
+
     def required_permissions(phoenix_action, params) do
       case phoenix_action do
         :index -> {"read", Page}
@@ -41,6 +49,14 @@ defmodule ExcmsCoreWeb.RouteAuthorizerBaseTest do
   end
 
   defmodule PageDeleteController do
+    use ExcmsCoreWeb, :controller
+
+    use ExcmsCoreWeb.AuthorizeControllerHelpers,
+      resource_module: Page,
+      resource_assign_key: :page,
+      authorizer: SimpleAdminAuthorizer,
+      authorization_extractor: AuthorizationExtractor
+
     def required_permissions(phoenix_action, params) do
       case phoenix_action do
         :delete -> {"delete", params.page}
@@ -65,9 +81,7 @@ defmodule ExcmsCoreWeb.RouteAuthorizerBaseTest do
 
   defmodule TestRouteAuthorizer do
     use ExcmsCoreWeb.RouteAuthorizerBase,
-      lazy_web_router: &TestWeb.router/0,
-      authorizer: SimpleAdminAuthorizer,
-      authorization_extractor: AuthorizationExtractor
+      lazy_web_router: &TestWeb.router/0
   end
 
   setup %{conn: conn} do

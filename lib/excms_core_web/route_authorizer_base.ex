@@ -3,32 +3,18 @@ defmodule ExcmsCoreWeb.RouteAuthorizerBase do
     lazy_web_router =
       opts[:lazy_web_router] || &ExcmsCoreWeb.router/0
 
-    authorizer =
-      opts[:authorizer] || ExcmsCore.Authorizer
-
-    authorization_extractor =
-      opts[:authorization_extractor] || ExcmsCoreWeb.AuthorizationExtractor
-
     if Mix.env() != :test do
       opts[:lazy_web_router] &&
         raise ":lazy_web_router can be changed only in test env"
-
-      opts[:authorizer] &&
-        raise ":authorizer can be changed only in test env"
-
-      opts[:authorization_extractor] &&
-        raise ":authorization_extractor can be changed only in test env"
     end
 
     quote do
       def can_path?(conn, path, method \\ :get) do
         method = Plug.Router.Utils.normalize_method(method)
-
-        authorization = extract_authorization(conn)
         router = get_router()
 
         reverse_controller(path, method, router)
-        |> controller_can?(authorization, conn.assigns)
+        |> controller_can?(conn)
         |> case do
           {:ok, can?} -> can?
           :error -> raise no_route_error(conn, path, method, router)
@@ -46,10 +32,6 @@ defmodule ExcmsCoreWeb.RouteAuthorizerBase do
         for x <- String.split(path, "/"), x != "", do: x
       end
 
-      defp extract_authorization(conn) do
-        unquote(authorization_extractor).extract(conn)
-      end
-
       defp reverse_controller(path, method, router) do
         [path | _] = String.split(path, "?")
 
@@ -60,18 +42,11 @@ defmodule ExcmsCoreWeb.RouteAuthorizerBase do
         unquote(lazy_web_router).()
       end
 
-      defp controller_can?(%{plug: controller, plug_opts: phoenix_action}, authorization, assigns) do
-        can =
-          controller.required_permissions(phoenix_action, assigns)
-          |> List.wrap()
-          |> Enum.all?(fn {action, resource_or_module} ->
-            unquote(authorizer).can?(authorization, action, resource_or_module)
-          end)
-
-        {:ok, can}
+      defp controller_can?(%{plug: controller, plug_opts: phoenix_action}, conn) do
+        {:ok, controller.can?(conn, phoenix_action)}
       end
 
-      defp controller_can?(_error, _authorization, _params) do
+      defp controller_can?(_error, _conn) do
         :error
       end
     end
