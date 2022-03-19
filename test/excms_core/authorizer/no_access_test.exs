@@ -22,14 +22,19 @@ defmodule ExcmsCore.Authorizer.NoAccessTest do
   end
 
   describe "can?/3" do
-    test "when resource record is given, no action available to user" do
+    test "when %Page{} with any action is given, returns false" do
       for action <- ["create", "read", "update", "delete", "publish"], do:
-        refute NoAccess.can?(%User{}, action, %Page{}) == []
+        refute NoAccess.can?(%User{}, action, %Page{})
     end
 
-    test "when resource module is given, no action available to user" do
+    test "when {:list, Page} with any action is given, returns false" do
       for action <- ["create", "read", "update", "delete", "publish"], do:
-        refute NoAccess.can?(%User{}, action, Page) == []
+        refute NoAccess.can?(%User{}, action, {:list, Page})
+    end
+
+    test "when Page with any action is given, returns false" do
+      for action <- ["create", "read", "update", "delete", "publish"], do:
+        refute NoAccess.can?(%User{}, action, Page)
     end
   end
 
@@ -40,7 +45,7 @@ defmodule ExcmsCore.Authorizer.NoAccessTest do
       :ok
     end
 
-    test "no page available to user's action" do
+    test "when Page with any action is given, returns empty list" do
       Repo.insert!(%Page{title: "Great News!"})
 
       for action <- ["create", "read", "update", "delete", "publish"], do:
@@ -51,11 +56,15 @@ defmodule ExcmsCore.Authorizer.NoAccessTest do
   end
 
   describe "can_actions/2" do
-    test "when resource record is given, no action available to user" do
+    test "when %Page{} is given, returns no action" do
       assert NoAccess.can_actions(%User{}, %Page{}) == []
     end
 
-    test "when resource module is given, no action available to user" do
+    test "when {:list, Page} is given, returns no action" do
+      assert NoAccess.can_actions(%User{}, {:list, Page}) == []
+    end
+
+    test "when Page is given, returns no action" do
       assert NoAccess.can_actions(%User{}, Page) == []
     end
   end

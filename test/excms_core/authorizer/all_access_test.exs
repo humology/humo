@@ -21,6 +21,23 @@ defmodule ExcmsCore.Authorizer.AllAccessTest do
     end
   end
 
+  describe "can?/3" do
+    test "when %Page{} with any action is given, returns false" do
+      for action <- ["create", "read", "update", "delete", "publish"], do:
+        assert AllAccess.can?(%User{}, action, %Page{})
+    end
+
+    test "when {:list, Page} with any action is given, returns false" do
+      for action <- ["create", "read", "update", "delete", "publish"], do:
+        assert AllAccess.can?(%User{}, action, {:list, Page})
+    end
+
+    test "when Page with any action is given, returns false" do
+      for action <- ["create", "read", "update", "delete", "publish"], do:
+        assert AllAccess.can?(%User{}, action, Page)
+    end
+  end
+
   describe "can_all/3" do
     setup do
       Repo.query!("CREATE TABLE pages(title TEXT);")
@@ -39,12 +56,17 @@ defmodule ExcmsCore.Authorizer.AllAccessTest do
   end
 
   describe "can_actions/2" do
-    test "when resource record is given, returns all resource actions" do
+    test "when %Page{} is given, returns all resource actions" do
       assert AllAccess.can_actions(%User{}, %Page{}) ==
              ["create", "read", "update", "delete", "publish"]
     end
 
-    test "when resource module is given, returns all resource actions" do
+    test "when {:list, Page} is given, returns all resource actions" do
+      assert AllAccess.can_actions(%User{}, {:list, Page}) ==
+             ["create", "read", "update", "delete", "publish"]
+    end
+
+    test "when Page is given, returns all resource actions" do
       assert AllAccess.can_actions(%User{}, Page) ==
              ["create", "read", "update", "delete", "publish"]
     end

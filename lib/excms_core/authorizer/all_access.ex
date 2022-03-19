@@ -11,11 +11,15 @@ defmodule ExcmsCore.Authorizer.AllAccess do
   end
 
   @impl true
-  def can_actions(authorization, %{__struct__: resource_module}) do
-    can_actions(authorization, resource_module)
+  def can_actions(_authorization, %{__struct__: resource_module}) do
+    resource_actions(resource_module)
   end
 
-  @impl true
+  def can_actions(_authorization, {:list, resource_module})
+  when is_atom(resource_module) do
+    resource_actions(resource_module)
+  end
+
   def can_actions(_authorization, resource_module)
   when is_atom(resource_module) do
     resource_actions(resource_module)
