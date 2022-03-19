@@ -1,5 +1,5 @@
 defmodule ExcmsCoreWeb.RouteAuthorizerBaseTest do
-  use ExcmsCoreWeb.ConnCase
+  use ExcmsCoreWeb.ConnCase, async: true
 
   defmodule User do
     defstruct [is_admin: false]

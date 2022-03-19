@@ -1,5 +1,5 @@
 defmodule ExcmsCoreWeb.AuthorizeControllerHelpersTest do
-  use ExcmsCoreWeb.ConnCase
+  use ExcmsCoreWeb.ConnCase, async: true
   use RouterHelper
 
   defmodule User do

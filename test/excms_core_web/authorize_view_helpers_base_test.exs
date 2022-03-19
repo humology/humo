@@ -1,5 +1,5 @@
 defmodule ExcmsCoreWeb.AuthorizeViewHelpersBaseTest do
-  use ExcmsCoreWeb.ConnCase
+  use ExcmsCoreWeb.ConnCase, async: true
   use Phoenix.HTML
 
   defmodule TestRouteAuthorizer do

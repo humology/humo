@@ -1,5 +1,5 @@
 defmodule ExcmsCore.Authorizer.BehaviourTest do
-  use ExcmsCore.DataCase
+  use ExcmsCore.DataCase, async: true
 
   defmodule User do
     use Ecto.Schema

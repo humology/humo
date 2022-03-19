@@ -1,5 +1,5 @@
 defmodule ExcmsCoreWeb.AuthorizeViewHelpersTest do
-  use ExcmsCoreWeb.ConnCase
+  use ExcmsCoreWeb.ConnCase, async: true
   alias ExcmsCoreWeb.AuthorizeViewHelpers
 
   describe "can_link/3" do

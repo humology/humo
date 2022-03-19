@@ -1,5 +1,5 @@
 defmodule ExcmsCoreWeb.RouteAuthorizerTest do
-  use ExcmsCoreWeb.ConnCase
+  use ExcmsCoreWeb.ConnCase, async: true
   alias ExcmsCoreWeb.RouteAuthorizer
 
   describe "can_path?/3" do

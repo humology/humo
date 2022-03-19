@@ -1,5 +1,5 @@
 defmodule ExcmsCore.RepoTest do
-  use ExcmsCore.DataCase
+  use ExcmsCore.DataCase, async: true
   alias ExcmsCore.Repo
 
   defmodule User do

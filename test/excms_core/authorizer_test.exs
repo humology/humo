@@ -1,5 +1,5 @@
 defmodule ExcmsCore.AuthorizerTest do
-  use ExcmsCore.DataCase
+  use ExcmsCore.DataCase, async: true
   alias ExcmsCore.Authorizer
   alias ExcmsCore.Authorizer.Mock
   alias ExcmsCore.Authorizer.AllAccess
