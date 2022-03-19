@@ -24,9 +24,11 @@ defmodule ExcmsCoreWeb.RouteAuthorizerBaseTest do
   defmodule SimpleAdminAuthorizer do
     use ExcmsCore.Authorizer.Behaviour
 
+    def can_all(_, _, _), do: raise "Not tested"
+
     def can_actions(%User{is_admin: true}, %Page{}), do: ["read", "delete"]
 
-    def can_actions(%User{}, Page), do: ["read"]
+    def can_actions(%User{}, {:list, Page}), do: ["read"]
 
     def can_actions(_user, _page), do: []
   end
@@ -42,7 +44,7 @@ defmodule ExcmsCoreWeb.RouteAuthorizerBaseTest do
 
     def required_permissions(phoenix_action, params) do
       case phoenix_action do
-        :index -> {"read", Page}
+        :index -> {"read", {:list, Page}}
         :show -> {"read", params.page}
       end
     end

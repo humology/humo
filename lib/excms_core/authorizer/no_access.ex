@@ -12,5 +12,5 @@ defmodule ExcmsCore.Authorizer.NoAccess do
   end
 
   @impl true
-  def can_actions(_authorization, _resource_or_module), do: []
+  def can_actions(_authorization, _resource), do: []
 end

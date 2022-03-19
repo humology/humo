@@ -87,16 +87,16 @@ defmodule ExcmsCore.Authorizer.BehaviourTest do
     end
   end
 
-  defp can?(authorization, action, resource_or_module) do
-    SimpleAdminAuthorizer.can?(authorization, action, resource_or_module)
+  defp can?(authorization, action, resource) do
+    SimpleAdminAuthorizer.can?(authorization, action, resource)
   end
 
   defp can_all(authorization, action, resource_module) do
     SimpleAdminAuthorizer.can_all(authorization, action, resource_module)
   end
 
-  defp can_actions(authorization, resource_or_module) do
-    SimpleAdminAuthorizer.can_actions(authorization, resource_or_module)
+  defp can_actions(authorization, resource) do
+    SimpleAdminAuthorizer.can_actions(authorization, resource)
   end
 
   describe "can?/3" do

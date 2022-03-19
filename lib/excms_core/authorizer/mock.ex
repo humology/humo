@@ -21,13 +21,13 @@ defmodule ExcmsCore.Authorizer.Mock do
   end
 
   @impl true
-  def can_actions(authorization, resource_or_module) do
+  def can_actions(authorization, resource) do
     mock_can_actions = Process.get(@key, [])[:can_actions]
     unless mock_can_actions do
       raise """
       Please use with_mock and pass :can_actions function
       """
     end
-    mock_can_actions.(authorization, resource_or_module)
+    mock_can_actions.(authorization, resource)
   end
 end

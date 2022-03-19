@@ -17,11 +17,14 @@ defmodule ExcmsCoreWeb.AuthorizeControllerHelpersTest do
   defmodule SimpleAdminAuthorizer do
     use ExcmsCore.Authorizer.Behaviour
 
+    def can_all(_, _, _), do: raise "Not tested"
+
     def can_actions(%User{is_admin: true}, _page), do:
       ["create", "read", "update", "delete", "publish"]
 
-    def can_actions(%User{}, Page), do:
-      ["create", "read", "update", "delete", "publish"]
+    def can_actions(%User{}, Page), do: ["create"]
+
+    def can_actions(%User{}, {:list, Page}), do: ["read"]
 
     def can_actions(_user, _page), do: []
   end
@@ -136,7 +139,7 @@ defmodule ExcmsCoreWeb.AuthorizeControllerHelpersTest do
   describe "required_permissions/2" do
     test "index" do
       assert PageController.required_permissions(:index, %{}) ==
-        {"read", Page}
+        {"read", {:list, Page}}
     end
 
     test "show", %{page: page} do

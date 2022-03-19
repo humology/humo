@@ -24,11 +24,9 @@ defmodule ExcmsCoreWeb.AuthorizeControllerHelpers do
 
     quote do
       @type phoenix_action() :: atom()
-      @type action() :: String.t()
-      @type resource() :: struct()
-      @type resource_module() :: module()
-      @type resource_or_module() :: resource() | resource_module()
-      @type permission() :: {action(), resource_or_module()}
+      @type action() :: ExcmsCore.Authorizer.Behaviour.action()
+      @type resource() :: ExcmsCore.Authorizer.Behaviour.resource()
+      @type permission() :: {action(), resource()}
 
       @doc """
       Plug authorizes controller actions
@@ -65,8 +63,8 @@ defmodule ExcmsCoreWeb.AuthorizeControllerHelpers do
 
         required_permissions(phoenix_action, conn.assigns)
         |> List.wrap()
-        |> Enum.all?(fn {action, resource_or_module} ->
-          unquote(authorizer).can?(authorization, action, resource_or_module)
+        |> Enum.all?(fn {action, resource} ->
+          unquote(authorizer).can?(authorization, action, resource)
         end)
       end
 
@@ -85,7 +83,7 @@ defmodule ExcmsCoreWeb.AuthorizeControllerHelpers do
       @spec required_rest_permissions(phoenix_action(), map()) :: permission() | list(permission())
       def required_rest_permissions(phoenix_action, assigns) do
         case phoenix_action do
-          :index -> {"read", unquote(resource_module)}
+          :index -> {"read", {:list, unquote(resource_module)}}
           :show -> {"read", Map.fetch!(assigns, unquote(resource_assign_key))}
           :new -> {"create", unquote(resource_module)}
           :create -> {"create", unquote(resource_module)}

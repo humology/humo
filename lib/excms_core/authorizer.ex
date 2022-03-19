@@ -2,8 +2,8 @@ defmodule ExcmsCore.Authorizer do
   @behaviour ExcmsCore.Authorizer.Behaviour
 
   @impl true
-  def can?(authorization, action, resource_or_module) do
-    authorizer().can?(authorization, action, resource_or_module)
+  def can?(authorization, action, resource) do
+    authorizer().can?(authorization, action, resource)
   end
 
   @impl true
@@ -12,8 +12,8 @@ defmodule ExcmsCore.Authorizer do
   end
 
   @impl true
-  def can_actions(authorization, resource_or_module) do
-    authorizer().can_actions(authorization, resource_or_module)
+  def can_actions(authorization, resource) do
+    authorizer().can_actions(authorization, resource)
   end
 
   defp authorizer() do
