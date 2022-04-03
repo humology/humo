@@ -17,6 +17,6 @@ defmodule ExcmsCore.EctoResourceHelpersTest do
   end
 
   test "module exists" do
-    assert "users" = Warehouse.resource_to_helpers(User).name()
+    assert "users" = Warehouse.resource_helpers(User).name()
   end
 end

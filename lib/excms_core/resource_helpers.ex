@@ -14,24 +14,12 @@ defmodule ExcmsCore.ResourceHelpers do
       end
 
       @doc """
-      Returns localized title.
-      """
-      @spec title() :: String.t()
-      def title(), do: String.capitalize(name())
-
-      @doc """
-      Returns localized description.
-      """
-      @spec description() :: String.t()
-      def description(), do: "#{title()} has no description"
-
-      @doc """
       Returns list of actions
       """
       @spec actions() :: nonempty_list(action())
       def actions(), do: ["create", "read", "update", "delete"]
 
-      defoverridable name: 0, title: 0, description: 0, actions: 0
+      defoverridable name: 0, actions: 0
     end
   end
 
@@ -41,16 +29,6 @@ defmodule ExcmsCore.ResourceHelpers do
   Returns resource name.
   """
   @callback name() :: String.t()
-
-  @doc """
-  Returns localized title.
-  """
-  @callback title() :: String.t()
-
-  @doc """
-  Returns localized description.
-  """
-  @callback description() :: String.t()
 
   @doc """
   Returns list of actions

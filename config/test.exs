@@ -23,3 +23,8 @@ config :excms_core, ExcmsCore.Authorizer,
 
 # Print only warnings and errors during test
 config :logger, level: :warn
+
+config :excms_core, ExcmsCore.Warehouse,
+  excms_core: [
+    ExcmsCore.WarehouseTest.Page
+  ]

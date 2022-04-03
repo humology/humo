@@ -2,6 +2,7 @@ defmodule ExcmsCore.Authorizer.Behaviour do
   defmacro __using__(_opts) do
     quote do
       alias ExcmsCore.Authorizer.Behaviour
+      alias ExcmsCore.Warehouse
 
       @behaviour Behaviour
 
@@ -24,7 +25,7 @@ defmodule ExcmsCore.Authorizer.Behaviour do
       """
       @spec resource_actions(resource_module()) :: list(action())
       def resource_actions(resource_module) do
-        ExcmsCore.Warehouse.resource_to_helpers(resource_module).actions()
+        Warehouse.resource_helpers(resource_module).actions()
       end
 
       defoverridable can?: 3
@@ -33,7 +34,7 @@ defmodule ExcmsCore.Authorizer.Behaviour do
 
   @type authorization() :: struct()
   @type resource_record() :: struct()
-  @type resource_module() :: module()
+  @type resource_module() :: ExcmsCore.Warehouse.resource_module()
   @type resource() :: resource_record() | resource_module() | {:list, resource_module()}
   @type action() :: String.t()
 
