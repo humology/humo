@@ -1,4 +1,4 @@
-defmodule Mix.Tasks.Excms.Deps.Config.Gen do
+defmodule Mix.Tasks.Humo.Deps.Config.Gen do
   use Mix.Task
 
   @impl true
@@ -47,7 +47,7 @@ defmodule Mix.Tasks.Excms.Deps.Config.Gen do
     """
     import Config
 
-    config :excms_core, ExcmsCore,
+    config :humo, Humo,
       deps: #{formatted_deps},
       server_app: #{inspect(otp_app)}
 

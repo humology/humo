@@ -1,4 +1,4 @@
-defmodule Mix.Tasks.Excms.Assets.Gen do
+defmodule Mix.Tasks.Humo.Assets.Gen do
   use Mix.Task
 
   @impl true
@@ -38,10 +38,10 @@ defmodule Mix.Tasks.Excms.Assets.Gen do
   end
 
   def deps_assets(subpath, keep_subpath \\ false) do
-    server_app = ExcmsCore.server_app()
+    server_app = Humo.server_app()
 
     deps =
-      ExcmsCore.ordered_apps()
+      Humo.ordered_apps()
       |> Enum.reject(fn x -> x.app == server_app end)
       |> Enum.filter(fn %{path: path} ->
         [path, subpath]

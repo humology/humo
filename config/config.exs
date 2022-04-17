@@ -7,21 +7,21 @@
 # General application configuration
 import Config
 
-config :excms_core, ExcmsCore,
+config :humo, Humo,
   deps: [
-    %{app: :excms_core, path: "./"}
+    %{app: :humo, path: "./"}
   ],
-  server_app: :excms_core
+  server_app: :humo
 
 if Path.expand("../config/plugin.exs", __DIR__) |> File.exists?(), do:
   import_config "../config/plugin.exs"
 
 # Configures the endpoint
-config :excms_core, ExcmsCoreWeb.Endpoint,
+config :humo, HumoWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "jgjMNNV0mMjjqQVqsndA68SDM01N9gp1LwwV/pYZqrxECS7tbpj1ar8O9wifgh8O",
-  render_errors: [view: ExcmsCoreWeb.ErrorView, accepts: ~w(html json), layout: false],
-  pubsub_server: ExcmsCore.PubSub,
+  render_errors: [view: HumoWeb.ErrorView, accepts: ~w(html json), layout: false],
+  pubsub_server: Humo.PubSub,
   live_view: [signing_salt: "YsbwsVkA"]
 
 # Configure esbuild (the version is required)

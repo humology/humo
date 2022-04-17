@@ -1,10 +1,10 @@
-defmodule Mix.Tasks.Excms.Ecto.Migrate do
+defmodule Mix.Tasks.Humo.Ecto.Migrate do
   use Mix.Task
 
   @impl true
   def run(_args) do
     compile_deps()
-    ExcmsCore.migrate()
+    Humo.migrate()
   end
 
   defp compile_deps() do

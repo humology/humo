@@ -1,9 +1,9 @@
-defmodule ExcmsCore.MixProject do
+defmodule Humo.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :excms_core,
+      app: :humo,
       version: "0.1.0",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -20,7 +20,7 @@ defmodule ExcmsCore.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {ExcmsCore.Application, []},
+      mod: {Humo.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
   end
@@ -59,10 +59,10 @@ defmodule ExcmsCore.MixProject do
   defp aliases do
     [
       setup: ["deps.get", "ecto.setup", "assets.setup"],
-      "assets.setup": ["excms.assets.gen", "excms.npm.install"],
-      "ecto.setup": ["ecto.create", "excms.ecto.migrate", "run priv/repo/seeds.exs"],
+      "assets.setup": ["humo.assets.gen", "humo.npm.install"],
+      "ecto.setup": ["ecto.create", "humo.ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
-      test: ["ecto.create --quiet", "excms.ecto.migrate", "test"],
+      test: ["ecto.create --quiet", "humo.ecto.migrate", "test"],
       "assets.deploy": ["esbuild default --minify", "phx.digest"]
     ]
   end

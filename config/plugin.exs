@@ -1,16 +1,16 @@
 import Config
 
 # Configure Mix tasks and generators
-config :excms_core,
-  ecto_repos: [ExcmsCore.Repo]
+config :humo,
+  ecto_repos: [Humo.Repo]
 
-config :excms_core, ExcmsCore.Repo, migration_timestamps: [type: :utc_datetime_usec]
+config :humo, Humo.Repo, migration_timestamps: [type: :utc_datetime_usec]
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-config :excms_core, :plugins,
-  excms_core: %{
+config :humo, :plugins,
+  humo: %{
     title: "Core",
     dashboard_links: [
       # Example
@@ -24,20 +24,20 @@ config :excms_core, :plugins,
     ]
   }
 
-config :excms_core, ExcmsCoreWeb.PluginsRouter,
-  excms_core: %{
+config :humo, HumoWeb.PluginsRouter,
+  humo: %{
     routers: [],
-    dashboard_routers: [ExcmsCoreWeb.Routers.Dashboard]
+    dashboard_routers: [HumoWeb.Routers.Dashboard]
   }
 
-config :excms_core, ExcmsCoreWeb.BrowserPlugs,
-  excms_core: []
+config :humo, HumoWeb.BrowserPlugs,
+  humo: []
 
-config :excms_core, ExcmsCore.Warehouse,
-  excms_core: []
+config :humo, Humo.Warehouse,
+  humo: []
 
-config :excms_core, ExcmsCore.Authorizer,
-  authorizer: ExcmsCore.Authorizer.NoAccess
+config :humo, Humo.Authorizer,
+  authorizer: Humo.Authorizer.NoAccess
 
-config :excms_core, ExcmsCoreWeb.AuthorizationExtractor,
-  extractor: ExcmsCoreWeb.AuthorizationExtractor.NilAuthorization
+config :humo, HumoWeb.AuthorizationExtractor,
+  extractor: HumoWeb.AuthorizationExtractor.NilAuthorization
