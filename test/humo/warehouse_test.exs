@@ -41,6 +41,15 @@ defmodule Humo.WarehouseTest do
   end
 
   describe "validate_config/1" do
+    test "helpers module could not be loaded" do
+      defmodule Page0 do
+      end
+
+      assert_raise ArgumentError, fn ->
+        Warehouse.validate_config(fn -> [app: [Page0]] end)
+      end
+    end
+
     test "name/0 is not exported" do
       defmodule Page1 do
         defmodule Helpers do

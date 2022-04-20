@@ -41,6 +41,8 @@ defmodule Humo.Warehouse do
         resource <- app_resources do
       resource_helpers = resource_helpers(resource)
 
+      Code.ensure_loaded!(resource_helpers)
+
       unless function_exported?(resource_helpers, :name, 0), do:
         raise ArgumentError,
           """
