@@ -2,8 +2,19 @@ name: CI
 on: [push, pull_request]
 jobs:
   test-elixir:
-    name: mix test
+    name: mix test (Elixir ${{matrix.elixir}} | Erlang/OTP ${{matrix.otp}})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        include:
+          - elixir: 1.10.0
+            otp: 21.3.8.24
+          - elixir: 1.12.1
+            otp: 24.0.2
+          - elixir: 1.13.3
+            otp: 24.2.2
     services:
       db:
         image: postgres:latest
@@ -19,7 +30,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: erlef/setup-beam@v1
         with:
-          otp-version: '24.0.2'
-          elixir-version: '1.12.1'
+          otp-version: ${{matrix.otp}}
+          elixir-version: ${{matrix.elixir}}
       - run: mix deps.get
       - run: mix test
