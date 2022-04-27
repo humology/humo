@@ -19,7 +19,7 @@ defmodule Humo do
   end
 
   def ordered_apps(), do:
-    Keyword.fetch!(config(), :deps)
+    Keyword.fetch!(config(), :apps)
 
   def migrate() do
     {:ok, _, _} =

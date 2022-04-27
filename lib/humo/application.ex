@@ -14,23 +14,31 @@ defmodule Humo.Application do
       # {Humo.Worker, arg}
     ]
 
-    children = if Humo.is_server_app_module(__MODULE__) do
-      children ++ [
-        # Start the PubSub system
-        {Phoenix.PubSub, name: Humo.PubSub},
-        # Start the Telemetry supervisor
-        HumoWeb.Telemetry,
-        # Start the Endpoint (http/https)
-        HumoWeb.Endpoint
-      ]
-    else
-      children
-    end
+    assets_watcher =
+      if Application.fetch_env!(:humo, Humo)[:assets_watcher] do
+        [Humo.AssetsWatcher]
+      else
+        []
+      end
+
+    server =
+      if Humo.is_server_app_module(__MODULE__) do
+        [
+          # Start the PubSub system
+          {Phoenix.PubSub, name: Humo.PubSub},
+          # Start the Telemetry supervisor
+          HumoWeb.Telemetry,
+          # Start the Endpoint (http/https)
+          HumoWeb.Endpoint
+        ]
+      else
+        []
+      end
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Humo.Supervisor]
-    Supervisor.start_link(children, opts)
+    Supervisor.start_link(children ++ assets_watcher ++ server, opts)
   end
 
   # Tell Phoenix to update the endpoint configuration

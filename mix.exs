@@ -46,7 +46,8 @@ defmodule Humo.MixProject do
       {:phoenix_live_dashboard, "~> 0.6"},
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_poller, "~> 1.0"},
-      {:esbuild, "~> 0.3", runtime: Mix.env() == :dev}
+      {:esbuild, "~> 0.3", runtime: Mix.env() == :dev},
+      {:file_system, "~> 0.2.1 or ~> 0.3", only: [:test, :dev]}
     ]
   end
 
@@ -58,8 +59,7 @@ defmodule Humo.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get", "ecto.setup", "assets.setup"],
-      "assets.setup": ["humo.assets.gen", "humo.npm.install"],
+      setup: ["deps.get", "ecto.setup", "humo.assets.setup"],
       "ecto.setup": ["ecto.create", "humo.ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "humo.ecto.migrate", "test"],

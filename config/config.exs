@@ -8,7 +8,7 @@
 import Config
 
 config :humo, Humo,
-  deps: [
+  apps: [
     %{app: :humo, path: "./"}
   ],
   server_app: :humo
