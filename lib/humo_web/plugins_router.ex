@@ -49,9 +49,11 @@ defmodule HumoWeb.PluginsRouter do
   defp quote_routers(key) do
     @routers
     |> Enum.reject(fn {_, plugin_router} -> is_nil(plugin_router) end)
-    |> Enum.map(fn {_, plugin_router} ->
-      quote do
-        use unquote(plugin_router), unquote(key)
+    |> Enum.map(fn {plugin_app, plugin_router} ->
+      quote location: :keep do
+        scope "/", as: unquote(plugin_app) do
+          use unquote(plugin_router), unquote(key)
+        end
       end
     end)
   end
