@@ -1,6 +1,8 @@
 defmodule Humo.MixProject do
   use Mix.Project
 
+  @scm_url "https://github.com/humology/humo"
+
   def project do
     [
       app: :humo,
@@ -11,7 +13,17 @@ defmodule Humo.MixProject do
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
-      humo_plugin: true
+      package: [
+        maintainers: ["Kamil Shersheyev"],
+        licenses: ["Apache-2.0"],
+        links: %{"GitHub" => @scm_url},
+        files: ~w(assets lib priv mix.exs package.json LICENSE README.md .formatter.exs)
+      ],
+      source_url: @scm_url,
+      humo_plugin: true,
+      description: """
+      Humo framework core package.
+      """
     ]
   end
 
