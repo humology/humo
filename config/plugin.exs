@@ -25,10 +25,7 @@ config :humo, :plugins,
   }
 
 config :humo, HumoWeb.PluginsRouter,
-  humo: %{
-    routers: [],
-    dashboard_routers: [HumoWeb.Routers.Dashboard]
-  }
+  humo: HumoWeb.PluginRouter
 
 config :humo, HumoWeb.BrowserPlugs,
   humo: []

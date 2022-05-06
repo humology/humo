@@ -22,14 +22,14 @@ defmodule HumoWeb.PluginsRouter do
         pipe_through :browser
 
         unquote do
-          quote_routers(:routers)
+          quote_routers(:root)
         end
 
         scope "/humo", as: :dashboard do
           pipe_through :humo_dashboard
 
           unquote do
-            quote_routers(:dashboard_routers)
+            quote_routers(:dashboard)
           end
         end
       end
@@ -48,10 +48,10 @@ defmodule HumoWeb.PluginsRouter do
 
   defp quote_routers(key) do
     @routers
-    |> Enum.flat_map(fn {_, data} -> data[key] || [] end)
-    |> Enum.map(fn router ->
+    |> Enum.reject(fn {_, plugin_router} -> is_nil(plugin_router) end)
+    |> Enum.map(fn {_, plugin_router} ->
       quote do
-        use unquote(router)
+        use unquote(plugin_router), unquote(key)
       end
     end)
   end
