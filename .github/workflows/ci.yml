@@ -30,5 +30,6 @@ jobs:
         with:
           otp-version: ${{matrix.otp}}
           elixir-version: ${{matrix.elixir}}
+      - run: sudo apt-get install -y inotify-tools
       - run: mix deps.get
       - run: mix test
