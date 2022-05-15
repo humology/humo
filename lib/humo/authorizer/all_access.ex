@@ -11,7 +11,7 @@ defmodule Humo.Authorizer.AllAccess do
   end
 
   @impl true
-  def can_actions(_authorization, %{__struct__: resource_module}) do
+  def can_actions(_authorization, %resource_module{}) do
     resource_actions(resource_module)
   end
 
