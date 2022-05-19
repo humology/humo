@@ -7,12 +7,9 @@ defmodule HumoWeb.Endpoint do
   @session_options [
     store: :cookie,
     key: "_humo_key",
-    signing_salt: "oY2f30kw"
+    signing_salt: "oY2f30kw",
+    same_site: "Lax"
   ]
-
-  socket "/socket", HumoWeb.UserSocket,
-    websocket: true,
-    longpoll: false
 
   socket "/live", Phoenix.LiveView.Socket, websocket: [connect_info: [session: @session_options]]
 
