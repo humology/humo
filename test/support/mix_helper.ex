@@ -1,4 +1,3 @@
-
 defmodule MixHelper do
   @moduledoc """
   Source https://github.com/phoenixframework/phoenix/blob/master/installer/test/mix_helper.exs

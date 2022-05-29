@@ -15,7 +15,7 @@ defmodule HumoWeb.PluginsRouter do
         """
 
       pipeline :humo_dashboard do
-        plug :put_layout, {HumoWeb.LayoutView, "dashboard.html"}
+        plug :put_root_layout, {HumoWeb.LayoutView, "dashboard.html"}
       end
 
       scope "/" do

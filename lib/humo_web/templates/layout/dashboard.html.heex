@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <%= csrf_meta_tag() %>
+    <%= live_title_tag assigns[:page_title] || "Humo", suffix: " · Phoenix Framework" %>
+    <link phx-track-static rel="stylesheet" href={routes().static_path(@conn, "/assets/app.css")}/>
+    <script defer phx-track-static type="text/javascript" src={routes().static_path(@conn, "/assets/app.js")}></script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-md">
+        <%= link "Dashboard", to: routes().dashboard_humo_page_path(@conn, :index), class: "navbar-brand" %>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <%= for plugin <- dashboard_plugins_menu() do %>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <%= plugin.title %>
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <%= for link <- plugin.links do %>
+                    <%= if can_path?(@conn, link.path, link.method) do %>
+                      <li>
+                        <%= if link.method == :get do %>
+                          <%= link link.title, to: link.path, class: "dropdown-item" %>
+                        <% else %>
+                          <%= link link.title, to: link.path, method: link.method, class: "dropdown-item" %>
+                        <% end %>
+                      </li>
+                    <% end %>
+                  <% end %>
+                </ul>
+              </li>
+            <% end %>
+          </ul>
+          <ul class="navbar-nav mb-2 mb-lg-0">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                My Account
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <%= for link <- account_links() do %>
+                  <%= if can_path?(@conn, link.path, link.method) do %>
+                    <li>
+                      <%= if link.method == :get do %>
+                        <%= link link.title, to: link.path, class: "dropdown-item" %>
+                      <% else %>
+                        <%= link link.title, to: link.path, method: link.method, class: "dropdown-item" %>
+                      <% end %>
+                    </li>
+                  <% end %>
+                <% end %>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <%= @inner_content %>
+  </body>
+</html>

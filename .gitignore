@@ -24,6 +24,8 @@ humo-*.tar
 
 # In case you use Node.js/npm, you want to ignore these.
 npm-debug.log
+
+# The directory NPM downloads your dependencies sources to.
 /node_modules/
 
 # Since we are building assets from assets/,

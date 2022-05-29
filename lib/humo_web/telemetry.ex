@@ -31,11 +31,27 @@ defmodule HumoWeb.Telemetry do
       ),
 
       # Database Metrics
-      summary("humo.repo.query.total_time", unit: {:native, :millisecond}),
-      summary("humo.repo.query.decode_time", unit: {:native, :millisecond}),
-      summary("humo.repo.query.query_time", unit: {:native, :millisecond}),
-      summary("humo.repo.query.queue_time", unit: {:native, :millisecond}),
-      summary("humo.repo.query.idle_time", unit: {:native, :millisecond}),
+      summary("humo.repo.query.total_time",
+        unit: {:native, :millisecond},
+        description: "The sum of the other measurements"
+      ),
+      summary("humo.repo.query.decode_time",
+        unit: {:native, :millisecond},
+        description: "The time spent decoding the data received from the database"
+      ),
+      summary("humo.repo.query.query_time",
+        unit: {:native, :millisecond},
+        description: "The time spent executing the query"
+      ),
+      summary("humo.repo.query.queue_time",
+        unit: {:native, :millisecond},
+        description: "The time spent waiting for a database connection"
+      ),
+      summary("humo.repo.query.idle_time",
+        unit: {:native, :millisecond},
+        description:
+          "The time the connection spent waiting before being checked out for the query"
+      ),
 
       # VM Metrics
       summary("vm.memory.total", unit: {:byte, :kilobyte}),

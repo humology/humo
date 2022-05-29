@@ -7,38 +7,43 @@ defmodule Humo.Application do
 
   @impl true
   def start(_type, _args) do
-    children = [
-      # Start the Ecto repository
-      Humo.Repo,
-      # Start a worker by calling: Humo.Worker.start_link(arg)
-      # {Humo.Worker, arg}
-    ]
-
-    assets_watcher =
-      if Application.fetch_env!(:humo, Humo)[:assets_watcher] do
-        [Humo.AssetsWatcher]
-      else
-        []
-      end
-
-    server =
-      if Humo.is_server_app_module(__MODULE__) do
-        [
-          # Start the PubSub system
-          {Phoenix.PubSub, name: Humo.PubSub},
-          # Start the Telemetry supervisor
-          HumoWeb.Telemetry,
-          # Start the Endpoint (http/https)
-          HumoWeb.Endpoint
-        ]
-      else
-        []
-      end
+    children =
+      [
+        {
+          true,
+          [
+            # Start the Ecto repository
+            Humo.Repo,
+            # Start a worker by calling: Humo.Worker.start_link(arg)
+            # {Humo.Worker, arg}
+          ]
+        },
+        {
+          Humo.is_server_app_module(__MODULE__),
+          [
+            # Start the PubSub system
+            {Phoenix.PubSub, name: Humo.PubSub},
+            # Start the Telemetry supervisor
+            HumoWeb.Telemetry,
+            # Start the Endpoint (http/https)
+            HumoWeb.Endpoint
+          ]
+        },
+        {
+          assets_watcher_enabled?(),
+          [
+            # Watches assets and copies from /deps and /assets folder to /priv
+            Humo.AssetsWatcher
+          ]
+        }
+      ]
+      |> Keyword.get_values(true)
+      |> List.flatten()
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Humo.Supervisor]
-    Supervisor.start_link(children ++ assets_watcher ++ server, opts)
+    Supervisor.start_link(children, opts)
   end
 
   # Tell Phoenix to update the endpoint configuration
@@ -47,5 +52,9 @@ defmodule Humo.Application do
   def config_change(changed, _new, removed) do
     HumoWeb.Endpoint.config_change(changed, removed)
     :ok
+  end
+
+  defp assets_watcher_enabled?() do
+    Application.fetch_env!(:humo, Humo)[:assets_watcher]
   end
 end

@@ -1,5 +1,5 @@
 defmodule HumoWeb.PageControllerTest do
-  use HumoWeb.ConnCase, async: true
+  use HumoWeb.ConnCase
 
   test "GET /", %{conn: conn} do
     conn = get(conn, "/")

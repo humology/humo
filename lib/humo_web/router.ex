@@ -4,7 +4,8 @@ defmodule HumoWeb.Router do
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
-    plug :fetch_flash
+    plug :fetch_live_flash
+    plug :put_root_layout, {HumoWeb.LayoutView, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
 
@@ -40,6 +41,7 @@ defmodule HumoWeb.Router do
 
     scope "/" do
       pipe_through :browser
+
       live_dashboard "/dashboard", metrics: HumoWeb.Telemetry
     end
   end

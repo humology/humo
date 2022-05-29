@@ -8,23 +8,28 @@ import Config
 config :humo, Humo.Repo,
   username: "postgres",
   password: "postgres",
-  database: "humo_test#{System.get_env("MIX_TEST_PARTITION")}",
   hostname: "localhost",
-  pool: Ecto.Adapters.SQL.Sandbox
+  database: "humo_test#{System.get_env("MIX_TEST_PARTITION")}",
+  pool: Ecto.Adapters.SQL.Sandbox,
+  pool_size: 10
 
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
 config :humo, HumoWeb.Endpoint,
-  http: [port: 4002],
+  http: [ip: {127, 0, 0, 1}, port: 4002],
+  secret_key_base: "J6Z7+jGyrH1Rp1K7XfvpOxpsKd8qCFp8QT7Fn6623t2Ys/XyHl60BnpD4M31rivQ",
   server: false
-
-config :humo, Humo.Authorizer,
-  authorizer: Humo.Authorizer.Mock
 
 # Print only warnings and errors during test
 config :logger, level: :warn
+
+# Initialize plugs at runtime for faster test compilation
+config :phoenix, :plug_init_mode, :runtime
+
+config :humo, Humo.Authorizer, authorizer: Humo.Authorizer.Mock
 
 config :humo, Humo.Warehouse,
   humo: [
     Humo.WarehouseTest.Page
   ]
+

@@ -19,14 +19,13 @@ if Path.expand("../config/plugin.exs", __DIR__) |> File.exists?(), do:
 # Configures the endpoint
 config :humo, HumoWeb.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "jgjMNNV0mMjjqQVqsndA68SDM01N9gp1LwwV/pYZqrxECS7tbpj1ar8O9wifgh8O",
   render_errors: [view: HumoWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: Humo.PubSub,
   live_view: [signing_salt: "YsbwsVkA"]
 
 # Configure esbuild (the version is required)
 config :esbuild,
-  version: "0.14.0",
+  version: "0.14.29",
   default: [
     args:
       ~w(js/app.js --bundle --target=es2017 --outdir=../priv/static/assets --external:/fonts/* --external:/images/*),

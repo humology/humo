@@ -1,6 +1,11 @@
+# This file is responsible for configuring your plugin application
+#
+# This configuration can be partially overriden by plugin that has
+# this application as dependency
+
+# General application configuration
 import Config
 
-# Configure Mix tasks and generators
 config :humo,
   ecto_repos: [Humo.Repo]
 
