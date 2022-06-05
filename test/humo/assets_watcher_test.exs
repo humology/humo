@@ -29,7 +29,7 @@ defmodule Humo.AssetsWatcherTest do
       mkdir_write_file("assets/static/robots.txt", "robots.txt my_app")
 
       AssetsWatcher.start_link([])
-      Process.sleep(10)
+      Process.sleep(100)
 
       assert_file "priv/static/robots.txt", "robots.txt my_app"
     end)
@@ -41,7 +41,7 @@ defmodule Humo.AssetsWatcherTest do
       mkdir_write_file("assets/static/robots.txt", "robots.txt my_app")
 
       AssetsWatcher.start_link([])
-      Process.sleep(10)
+      Process.sleep(100)
 
       mkdir_write_file("assets/static/robots.txt", "robots.txt my_app 2")
       Process.sleep(600)
@@ -56,7 +56,7 @@ defmodule Humo.AssetsWatcherTest do
       mkdir_write_file("assets/static/robots.txt", "robots.txt my_app")
 
       AssetsWatcher.start_link([])
-      Process.sleep(10)
+      Process.sleep(100)
 
       mkdir_write_file("deps/core/assets/static/robots.txt", "robots.txt core 2")
       Process.sleep(600)
