@@ -1,7 +1,7 @@
 defmodule Humo.Repo do
   use Ecto.Repo,
     otp_app: :humo,
-    adapter: Ecto.Adapters.Postgres
+    adapter: Application.compile_env!(:humo, __MODULE__) |> Keyword.fetch!(:adapter)
 
   import Ecto.Query, warn: false
 

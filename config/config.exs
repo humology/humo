@@ -16,6 +16,10 @@ config :humo, Humo,
 if Path.expand("../config/plugin.exs", __DIR__) |> File.exists?(), do:
   import_config "../config/plugin.exs"
 
+# Configures Humo.Repo adapter
+config :humo, Humo.Repo,
+  adapter: Ecto.Adapters.Postgres
+
 # Configures the endpoint
 config :humo, HumoWeb.Endpoint,
   url: [host: "localhost"],
