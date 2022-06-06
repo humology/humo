@@ -11,9 +11,6 @@ config :humo,
 
 config :humo, Humo.Repo, migration_timestamps: [type: :utc_datetime_usec]
 
-# Use Jason for JSON parsing in Phoenix
-config :phoenix, :json_library, Jason
-
 config :humo, :plugins,
   humo: %{
     title: "Core",
