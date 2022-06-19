@@ -17,14 +17,11 @@ defmodule HumoWeb do
   and import those modules here.
   """
 
-  def router(), do:
-    Module.concat([server_app_web_namespace(), "Router"])
+  def router(), do: Module.concat([server_app_web_namespace(), "Router"])
 
-  def routes(), do:
-    Module.concat([server_app_web_namespace(), "Router", "Helpers"])
+  def routes(), do: Module.concat([server_app_web_namespace(), "Router", "Helpers"])
 
-  def endpoint(), do:
-    Module.concat([server_app_web_namespace(), "Endpoint"])
+  def endpoint(), do: Module.concat([server_app_web_namespace(), "Endpoint"])
 
   def is_server_app_web_module(module) when is_atom(module) do
     hd(Module.split(module)) == server_app_web_namespace()
@@ -34,7 +31,7 @@ defmodule HumoWeb do
     Humo.server_app()
     |> to_string()
     |> Macro.camelize()
-    |> then(&("#{&1}Web"))
+    |> then(&"#{&1}Web")
   end
 
   def controller_macro do

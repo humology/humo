@@ -3,11 +3,11 @@ defmodule HumoWeb.AuthorizeControllerHelpersTest do
   use RouterHelper
 
   defmodule User do
-    defstruct [is_admin: false]
+    defstruct is_admin: false
   end
 
   defmodule Page do
-    defstruct [id: nil]
+    defstruct id: nil
 
     defmodule Helpers do
       def actions(), do: ["create", "read", "update", "delete", "publish"]
@@ -17,10 +17,10 @@ defmodule HumoWeb.AuthorizeControllerHelpersTest do
   defmodule SimpleAdminAuthorizer do
     use Humo.Authorizer.Behaviour
 
-    def can_all(_, _, _), do: raise "Not tested"
+    def can_all(_, _, _), do: raise("Not tested")
 
-    def can_actions(%User{is_admin: true}, _page), do:
-      ["create", "read", "update", "delete", "publish"]
+    def can_actions(%User{is_admin: true}, _page),
+      do: ["create", "read", "update", "delete", "publish"]
 
     def can_actions(%User{}, Page), do: ["create"]
 
@@ -72,8 +72,7 @@ defmodule HumoWeb.AuthorizeControllerHelpersTest do
       authorizer: SimpleAdminAuthorizer,
       authorization_extractor: AuthorizationExtractor
 
-    def required_permissions(:publish, %{page: page}), do:
-      [{"publish", page}, {"publish", Page}]
+    def required_permissions(:publish, %{page: page}), do: [{"publish", page}, {"publish", Page}]
 
     def publish(conn, _params), do: send_resp(conn, 200, "OK")
 
@@ -86,7 +85,7 @@ defmodule HumoWeb.AuthorizeControllerHelpersTest do
     use Phoenix.Router
 
     resources "/pages", PageController
-    Phoenix.Router.post "/pages/:id/publish", PagePublishController, :publish
+    Phoenix.Router.post("/pages/:id/publish", PagePublishController, :publish)
   end
 
   setup do
@@ -104,21 +103,25 @@ defmodule HumoWeb.AuthorizeControllerHelpersTest do
       assert call(Router, :get, "/pages/new", admin_assigns).status == 200
       assert call(Router, :post, "/pages", admin_assigns).status == 200
       assert call(Router, :get, "/pages/5/edit", admin_assigns).status == 200
-      for method <- [:patch, :put], do:
-        assert call(Router, method, "/pages/5", admin_assigns).status == 200
+
+      for method <- [:patch, :put],
+          do: assert(call(Router, method, "/pages/5", admin_assigns).status == 200)
+
       assert call(Router, :delete, "/pages/5", admin_assigns).status == 200
       assert call(Router, :post, "/pages/5/publish", admin_assigns).status == 200
     end
 
     test "user can do Page module actions, but not record actions",
-        %{user_assigns: user_assigns} do
+         %{user_assigns: user_assigns} do
       assert call(Router, :get, "/pages", user_assigns).status == 200
       assert call(Router, :get, "/pages/5", user_assigns).status == 403
       assert call(Router, :get, "/pages/new", user_assigns).status == 200
       assert call(Router, :post, "/pages", user_assigns).status == 200
       assert call(Router, :get, "/pages/5/edit", user_assigns).status == 403
-      for method <- [:patch, :put], do:
-        assert call(Router, method, "/pages/5", user_assigns).status == 403
+
+      for method <- [:patch, :put],
+          do: assert(call(Router, method, "/pages/5", user_assigns).status == 403)
+
       assert call(Router, :delete, "/pages/5", user_assigns).status == 403
       assert call(Router, :post, "/pages/5/publish", user_assigns).status == 403
     end
@@ -129,8 +132,7 @@ defmodule HumoWeb.AuthorizeControllerHelpersTest do
       assert call(Router, :get, "/pages/new").status == 403
       assert call(Router, :post, "/pages").status == 403
       assert call(Router, :get, "/pages/5/edit").status == 403
-      for method <- [:patch, :put], do:
-        assert call(Router, method, "/pages/5").status == 403
+      for method <- [:patch, :put], do: assert(call(Router, method, "/pages/5").status == 403)
       assert call(Router, :delete, "/pages/5").status == 403
       assert call(Router, :post, "/pages/5/publish").status == 403
     end
@@ -139,42 +141,42 @@ defmodule HumoWeb.AuthorizeControllerHelpersTest do
   describe "required_permissions/2" do
     test "index" do
       assert PageController.required_permissions(:index, %{}) ==
-        {"read", {:list, Page}}
+               {"read", {:list, Page}}
     end
 
     test "show", %{page: page} do
       assert PageController.required_permissions(:show, %{page: page}) ==
-        {"read", page}
+               {"read", page}
     end
 
     test "new" do
       assert PageController.required_permissions(:new, %{}) ==
-        {"create", Page}
+               {"create", Page}
     end
 
     test "create" do
       assert PageController.required_permissions(:create, %{}) ==
-        {"create", Page}
+               {"create", Page}
     end
 
     test "edit", %{page: page} do
       assert PageController.required_permissions(:edit, %{page: page}) ==
-        {"update", page}
+               {"update", page}
     end
 
     test "update", %{page: page} do
       assert PageController.required_permissions(:update, %{page: page}) ==
-        {"update", page}
+               {"update", page}
     end
 
     test "delete", %{page: page} do
       assert PageController.required_permissions(:delete, %{page: page}) ==
-        {"delete", page}
+               {"delete", page}
     end
 
     test "publish", %{page: page} do
       assert PagePublishController.required_permissions(:publish, %{page: page}) ==
-        [{"publish", page}, {"publish", Page}]
+               [{"publish", page}, {"publish", Page}]
     end
   end
 

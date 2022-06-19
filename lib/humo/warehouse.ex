@@ -43,45 +43,63 @@ defmodule Humo.Warehouse do
 
       Code.ensure_loaded!(resource_helpers)
 
-      unless function_exported?(resource_helpers, :name, 0), do:
-        raise ArgumentError,
-          """
-          Application: #{inspect(app)}
-          #{inspect(resource_helpers)} expected exported function name/0
-          """
+      unless function_exported?(resource_helpers, :name, 0),
+        do:
+          raise(
+            ArgumentError,
+            """
+            Application: #{inspect(app)}
+            #{inspect(resource_helpers)} expected exported function name/0
+            """
+          )
 
       resource_name = resource_helpers.name()
       resource_name_prefix = "#{app}_"
-      unless String.starts_with?(resource_name, resource_name_prefix), do:
-        raise ArgumentError,
-          """
-          Application: #{inspect(app)}
-          #{inspect(resource_helpers)}.name() expected to start with #{inspect(resource_name_prefix)}, actual: #{inspect(resource_name)}
-          """
 
-      unless function_exported?(resource_helpers, :actions, 0), do:
-        raise ArgumentError,
-          """
-          Application: #{inspect(app)}
-          #{inspect(resource_helpers)} expected exported function actions/0
-          """
+      unless String.starts_with?(resource_name, resource_name_prefix),
+        do:
+          raise(
+            ArgumentError,
+            """
+            Application: #{inspect(app)}
+            #{inspect(resource_helpers)}.name() expected to start with #{inspect(resource_name_prefix)}, actual: #{inspect(resource_name)}
+            """
+          )
+
+      unless function_exported?(resource_helpers, :actions, 0),
+        do:
+          raise(
+            ArgumentError,
+            """
+            Application: #{inspect(app)}
+            #{inspect(resource_helpers)} expected exported function actions/0
+            """
+          )
 
       resource_actions = resource_helpers.actions()
 
-      if resource_actions == [], do:
-        raise ArgumentError,
-          """
-          Application: #{inspect(app)}
-          #{inspect(resource_helpers)}.actions() cannot be empty
-          """
-
-      for action <- resource_actions, do:
-        unless is_binary(action), do:
-          raise ArgumentError,
+      if resource_actions == [],
+        do:
+          raise(
+            ArgumentError,
             """
             Application: #{inspect(app)}
-            #{inspect(resource_helpers)} action #{inspect(action)} type expected to be binary
+            #{inspect(resource_helpers)}.actions() cannot be empty
             """
+          )
+
+      for action <- resource_actions,
+          do:
+            unless(is_binary(action),
+              do:
+                raise(
+                  ArgumentError,
+                  """
+                  Application: #{inspect(app)}
+                  #{inspect(resource_helpers)} action #{inspect(action)} type expected to be binary
+                  """
+                )
+            )
     end
 
     :ok

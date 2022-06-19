@@ -23,12 +23,12 @@ defmodule Humo.Authorizer.ReadAccess do
   end
 
   def can_actions(_authorization, {:list, resource_module})
-  when is_atom(resource_module) do
+      when is_atom(resource_module) do
     authorized_actions(resource_module)
   end
 
   def can_actions(_authorization, resource_module)
-  when is_atom(resource_module) do
+      when is_atom(resource_module) do
     authorized_actions(resource_module)
   end
 

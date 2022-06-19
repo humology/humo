@@ -37,8 +37,8 @@ defmodule Humo.Authorizer.ReadAccessTest do
     end
 
     test "when %Page{} with action != read is given, returns false" do
-      for action <- ["create", "update", "delete", "publish"], do:
-        refute ReadAccess.can?(%User{}, action, %Page{})
+      for action <- ["create", "update", "delete", "publish"],
+          do: refute(ReadAccess.can?(%User{}, action, %Page{}))
     end
 
     test "when {:list, Page} with read action is given, returns true" do
@@ -46,8 +46,8 @@ defmodule Humo.Authorizer.ReadAccessTest do
     end
 
     test "when {:list, Page} with action != read is given, returns false" do
-      for action <- ["create", "update", "delete", "publish"], do:
-        refute ReadAccess.can?(%User{}, action, {:list, Page})
+      for action <- ["create", "update", "delete", "publish"],
+          do: refute(ReadAccess.can?(%User{}, action, {:list, Page}))
     end
 
     test "when Page with read action is given, returns true" do
@@ -55,8 +55,8 @@ defmodule Humo.Authorizer.ReadAccessTest do
     end
 
     test "when Page with action != read is given, returns true, otherwise false" do
-      for action <- ["create", "update", "delete", "publish"], do:
-        refute ReadAccess.can?(%User{}, action, Page)
+      for action <- ["create", "update", "delete", "publish"],
+          do: refute(ReadAccess.can?(%User{}, action, Page))
     end
   end
 
@@ -75,10 +75,13 @@ defmodule Humo.Authorizer.ReadAccessTest do
     end
 
     test "user has no access to change pages" do
-      for action <- ["create", "update", "delete", "publish"], do:
-        assert %User{}
-               |> ReadAccess.can_all(action, Page)
-               |> Repo.all() == []
+      for action <- ["create", "update", "delete", "publish"],
+          do:
+            assert(
+              %User{}
+              |> ReadAccess.can_all(action, Page)
+              |> Repo.all() == []
+            )
     end
   end
 

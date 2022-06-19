@@ -2,11 +2,11 @@ defmodule HumoWeb.RouteAuthorizerBaseTest do
   use HumoWeb.ConnCase, async: true
 
   defmodule User do
-    defstruct [is_admin: false]
+    defstruct is_admin: false
   end
 
   defmodule Page do
-    defstruct [id: nil, title: nil]
+    defstruct id: nil, title: nil
 
     defmodule Helpers do
       def actions(), do: ["read", "delete"]
@@ -24,7 +24,7 @@ defmodule HumoWeb.RouteAuthorizerBaseTest do
   defmodule SimpleAdminAuthorizer do
     use Humo.Authorizer.Behaviour
 
-    def can_all(_, _, _), do: raise "Not tested"
+    def can_all(_, _, _), do: raise("Not tested")
 
     def can_actions(%User{is_admin: true}, %Page{}), do: ["read", "delete"]
 
@@ -137,8 +137,8 @@ defmodule HumoWeb.RouteAuthorizerBaseTest do
     end
 
     test "not existing link raises NoRouteError", %{conn: conn} do
-      expected_message =
-        "no route found for DELETE /not-exists (#{inspect TestWebRouter})"
+      expected_message = "no route found for DELETE /not-exists (#{inspect(TestWebRouter)})"
+
       assert_raise Phoenix.Router.NoRouteError, expected_message, fn ->
         TestRouteAuthorizer.can_path?(conn, "/not-exists", :delete)
       end

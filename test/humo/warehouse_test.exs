@@ -56,11 +56,10 @@ defmodule Humo.WarehouseTest do
         end
       end
 
-      expected_message =
-        """
-        Application: :app
-        Humo.WarehouseTest.Page1.Helpers expected exported function name/0
-        """
+      expected_message = """
+      Application: :app
+      Humo.WarehouseTest.Page1.Helpers expected exported function name/0
+      """
 
       assert_raise ArgumentError, expected_message, fn ->
         Warehouse.validate_config(fn -> [app: [Page1]] end)
@@ -74,11 +73,10 @@ defmodule Humo.WarehouseTest do
         end
       end
 
-      expected_message =
-        """
-        Application: :app
-        Humo.WarehouseTest.Page2.Helpers.name() expected to start with "app_", actual: "pages"
-        """
+      expected_message = """
+      Application: :app
+      Humo.WarehouseTest.Page2.Helpers.name() expected to start with "app_", actual: "pages"
+      """
 
       assert_raise ArgumentError, expected_message, fn ->
         Warehouse.validate_config(fn -> [app: [Page2]] end)
@@ -92,11 +90,10 @@ defmodule Humo.WarehouseTest do
         end
       end
 
-      expected_message =
-        """
-        Application: :app
-        Humo.WarehouseTest.Page3.Helpers expected exported function actions/0
-        """
+      expected_message = """
+      Application: :app
+      Humo.WarehouseTest.Page3.Helpers expected exported function actions/0
+      """
 
       assert_raise ArgumentError, expected_message, fn ->
         Warehouse.validate_config(fn -> [app: [Page3]] end)
@@ -111,11 +108,10 @@ defmodule Humo.WarehouseTest do
         end
       end
 
-      expected_message =
-        """
-        Application: :app
-        Humo.WarehouseTest.Page4.Helpers.actions() cannot be empty
-        """
+      expected_message = """
+      Application: :app
+      Humo.WarehouseTest.Page4.Helpers.actions() cannot be empty
+      """
 
       assert_raise ArgumentError, expected_message, fn ->
         Warehouse.validate_config(fn -> [app: [Page4]] end)
@@ -130,11 +126,10 @@ defmodule Humo.WarehouseTest do
         end
       end
 
-      expected_message =
-        """
-        Application: :app
-        Humo.WarehouseTest.Page5.Helpers action :update type expected to be binary
-        """
+      expected_message = """
+      Application: :app
+      Humo.WarehouseTest.Page5.Helpers action :update type expected to be binary
+      """
 
       assert_raise ArgumentError, expected_message, fn ->
         Warehouse.validate_config(fn -> [app: [Page5]] end)

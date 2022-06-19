@@ -11,15 +11,13 @@ defmodule Humo do
 
   require Logger
 
-  def server_app(), do:
-    Keyword.fetch!(config(), :server_app)
+  def server_app(), do: Keyword.fetch!(config(), :server_app)
 
   def is_server_app_module(module) when is_atom(module) do
     hd(Module.split(module)) == Macro.camelize(to_string(server_app()))
   end
 
-  def ordered_apps(), do:
-    Keyword.fetch!(config(), :apps)
+  def ordered_apps(), do: Keyword.fetch!(config(), :apps)
 
   def migrate() do
     {:ok, _, _} =
@@ -40,6 +38,5 @@ defmodule Humo do
     dirs
   end
 
-  defp config(), do:
-    Application.fetch_env!(:humo, __MODULE__)
+  defp config(), do: Application.fetch_env!(:humo, __MODULE__)
 end

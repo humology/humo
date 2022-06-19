@@ -6,13 +6,14 @@ defmodule HumoWeb.PluginsRouter do
 
   defmacro __using__(otp_app: @server_app) do
     quote do
-      if __MODULE__ != HumoWeb.router(), do:
-        raise """
-        Please set router name to #{HumoWeb.router()}
+      if __MODULE__ != HumoWeb.router(),
+        do:
+          raise("""
+          Please set router name to #{HumoWeb.router()}
 
-        defmodule #{HumoWeb.router()} do
-        ...
-        """
+          defmodule #{HumoWeb.router()} do
+          ...
+          """)
 
       pipeline :humo_dashboard do
         plug :put_root_layout, {HumoWeb.LayoutView, "dashboard.html"}
@@ -38,11 +39,12 @@ defmodule HumoWeb.PluginsRouter do
 
   defmacro __using__(_opts) do
     quote do
-      if HumoWeb.is_server_app_web_module(__MODULE__), do:
-        raise """
-        Please set correct otp_app
-        use HumoWeb.PluginsRouter, otp_app: :#{Humo.server_app()}
-        """
+      if HumoWeb.is_server_app_web_module(__MODULE__),
+        do:
+          raise("""
+          Please set correct otp_app
+          use HumoWeb.PluginsRouter, otp_app: :#{Humo.server_app()}
+          """)
     end
   end
 

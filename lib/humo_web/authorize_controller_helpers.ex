@@ -2,17 +2,15 @@ defmodule HumoWeb.AuthorizeControllerHelpers do
   defmacro __using__(opts) do
     resource_module =
       opts[:resource_module] ||
-      raise ":resource_module is expected to be given"
+        raise ":resource_module is expected to be given"
 
     resource_assign_key =
       opts[:resource_assign_key] ||
-      raise ":resource_assign_key is expected to be given"
+        raise ":resource_assign_key is expected to be given"
 
-    authorizer =
-      opts[:authorizer] || Humo.Authorizer
+    authorizer = opts[:authorizer] || Humo.Authorizer
 
-    authorization_extractor =
-      opts[:authorization_extractor] || HumoWeb.AuthorizationExtractor
+    authorization_extractor = opts[:authorization_extractor] || HumoWeb.AuthorizationExtractor
 
     if Mix.env() != :test do
       opts[:authorizer] &&
@@ -35,6 +33,7 @@ defmodule HumoWeb.AuthorizeControllerHelpers do
       @spec authorize(Plug.Conn.t(), Plug.opts()) :: Plug.Conn.t()
       def authorize(conn, _opts) do
         phoenix_action = Phoenix.Controller.action_name(conn)
+
         if can?(conn, phoenix_action) do
           conn
         else
@@ -80,7 +79,8 @@ defmodule HumoWeb.AuthorizeControllerHelpers do
       Returns required permission(s)
       Not overridable, available for use
       """
-      @spec required_rest_permissions(phoenix_action(), map()) :: permission() | list(permission())
+      @spec required_rest_permissions(phoenix_action(), map()) ::
+              permission() | list(permission())
       def required_rest_permissions(phoenix_action, assigns) do
         case phoenix_action do
           :index -> {"read", {:list, unquote(resource_module)}}

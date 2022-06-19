@@ -23,18 +23,18 @@ defmodule Humo.Authorizer.NoAccessTest do
 
   describe "can?/3" do
     test "when %Page{} with any action is given, returns false" do
-      for action <- ["create", "read", "update", "delete", "publish"], do:
-        refute NoAccess.can?(%User{}, action, %Page{})
+      for action <- ["create", "read", "update", "delete", "publish"],
+          do: refute(NoAccess.can?(%User{}, action, %Page{}))
     end
 
     test "when {:list, Page} with any action is given, returns false" do
-      for action <- ["create", "read", "update", "delete", "publish"], do:
-        refute NoAccess.can?(%User{}, action, {:list, Page})
+      for action <- ["create", "read", "update", "delete", "publish"],
+          do: refute(NoAccess.can?(%User{}, action, {:list, Page}))
     end
 
     test "when Page with any action is given, returns false" do
-      for action <- ["create", "read", "update", "delete", "publish"], do:
-        refute NoAccess.can?(%User{}, action, Page)
+      for action <- ["create", "read", "update", "delete", "publish"],
+          do: refute(NoAccess.can?(%User{}, action, Page))
     end
   end
 
@@ -48,10 +48,13 @@ defmodule Humo.Authorizer.NoAccessTest do
     test "when Page with any action is given, returns empty list" do
       Repo.insert!(%Page{title: "Great News!"})
 
-      for action <- ["create", "read", "update", "delete", "publish"], do:
-        assert %User{}
-               |> NoAccess.can_all(action, Page)
-               |> Repo.all() == []
+      for action <- ["create", "read", "update", "delete", "publish"],
+          do:
+            assert(
+              %User{}
+              |> NoAccess.can_all(action, Page)
+              |> Repo.all() == []
+            )
     end
   end
 

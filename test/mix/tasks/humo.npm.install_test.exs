@@ -14,14 +14,14 @@ defmodule Mix.Tasks.Humo.Npm.InstallTest do
   setup do
     old_config = Application.fetch_env!(:humo, Humo)
 
-    Application.put_env(:humo, Humo, [
+    Application.put_env(:humo, Humo,
       apps: [
         %{app: :core, path: "deps/core"},
         %{app: :users, path: "deps/users"},
         %{app: :my_app, path: "./"}
       ],
       server_app: :my_app
-    ])
+    )
 
     on_exit(fn ->
       Application.put_env(:humo, Humo, old_config)
@@ -39,8 +39,10 @@ defmodule Mix.Tasks.Humo.Npm.InstallTest do
 
       assert_received {:mix_shell, :info, ["Running task humo.npm.install"]}
 
-      assert_file "deps/core/node_modules/@popperjs/core/package.json",
-                  ~S("name": "@popperjs/core")
+      assert_file(
+        "deps/core/node_modules/@popperjs/core/package.json",
+        ~S("name": "@popperjs/core")
+      )
     end)
   end
 end

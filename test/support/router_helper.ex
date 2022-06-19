@@ -48,7 +48,7 @@ defmodule RouterHelper do
   end
 
   def action(controller, verb, action, params \\ nil) do
-    conn = conn(verb, "/", params) |> Plug.Conn.fetch_query_params
+    conn = conn(verb, "/", params) |> Plug.Conn.fetch_query_params()
     controller.call(conn, controller.init(action))
   end
 end

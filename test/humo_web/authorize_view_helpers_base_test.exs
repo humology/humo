@@ -17,12 +17,12 @@ defmodule HumoWeb.AuthorizeViewHelpersBaseTest do
   describe "can_link/3" do
     test "when text link pass authorization renders link", %{conn: conn} do
       assert TestBase.can_link(conn, "Index", to: "/can") ==
-        link("Index", to: "/can")
+               link("Index", to: "/can")
     end
 
     test "when image link pass authorization renders link", %{conn: conn} do
       assert TestBase.can_link(conn, [to: "/can"], do: raw("<img/>")) ==
-        link(raw("<img/>"), to: "/can")
+               link(raw("<img/>"), to: "/can")
     end
 
     test "when text link fail authorization renders link", %{conn: conn} do
@@ -35,7 +35,7 @@ defmodule HumoWeb.AuthorizeViewHelpersBaseTest do
 
     test "when delete link pass authorization renders link", %{conn: conn} do
       assert TestBase.can_link(conn, "Index", to: "/can", method: :delete) ==
-        link("Index", to: "/can", method: :delete)
+               link("Index", to: "/can", method: :delete)
     end
   end
 end

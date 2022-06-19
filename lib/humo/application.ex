@@ -13,7 +13,7 @@ defmodule Humo.Application do
           true,
           [
             # Start the Ecto repository
-            Humo.Repo,
+            Humo.Repo
             # Start a worker by calling: Humo.Worker.start_link(arg)
             # {Humo.Worker, arg}
           ]

@@ -14,8 +14,12 @@ defmodule Humo.AssetsWatcher do
   end
 
   def handle_continue(:init, state) do
-    {:ok, _} = FileSystem.start_link(
-      dirs: [Path.absname("")], name: :humo_assets_watcher)
+    {:ok, _} =
+      FileSystem.start_link(
+        dirs: [Path.absname("")],
+        name: :humo_assets_watcher
+      )
+
     FileSystem.subscribe(:humo_assets_watcher)
 
     Mix.Tasks.Humo.Assets.Copy.run([])
@@ -25,8 +29,7 @@ defmodule Humo.AssetsWatcher do
 
   def handle_info({:file_event, _pid, {path, _events}}, state) do
     if matches_any_assets_directory?(path, state.assets_dirs) do
-      if state.timer_id, do:
-        Process.cancel_timer(state.timer_id)
+      if state.timer_id, do: Process.cancel_timer(state.timer_id)
 
       timer_id = Process.send_after(self(), :assets_changed, @timeout)
 

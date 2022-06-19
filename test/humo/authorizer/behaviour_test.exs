@@ -51,7 +51,7 @@ defmodule Humo.Authorizer.BehaviourTest do
     def can_all(%User{id: user_id}, _action, Page) do
       from p in Page,
         where: p.owner_id == ^user_id,
-        where: not(p.published)
+        where: not p.published
     end
 
     @impl true
@@ -62,7 +62,8 @@ defmodule Humo.Authorizer.BehaviourTest do
     def can_actions(
           %User{id: user_id},
           %Page{id: page_id, owner_id: user_id, published: false}
-        ) when not is_nil(page_id) do
+        )
+        when not is_nil(page_id) do
       ["read", "update", "delete", "publish"]
     end
 
@@ -101,55 +102,70 @@ defmodule Humo.Authorizer.BehaviourTest do
 
   describe "can?/3" do
     test "when user is admin, user can do all resource actions" do
-      for action <- ~w(create read update delete publish unpublish), do:
-        assert can?(%User{is_admin: true}, action, %Page{})
+      for action <- ~w(create read update delete publish unpublish),
+          do: assert(can?(%User{is_admin: true}, action, %Page{}))
     end
 
     test "when user owns draft page, user can read and change" do
-      for action <- ~w(create read update delete publish), do:
-        assert can?(
-                 %User{id: 5},
-                 action,
-                 %Page{id: 1, owner_id: 5, published: false}
-               ) == (action != "create")
+      for action <- ~w(create read update delete publish),
+          do:
+            assert(
+              can?(
+                %User{id: 5},
+                action,
+                %Page{id: 1, owner_id: 5, published: false}
+              ) == (action != "create")
+            )
     end
 
     test "when page is new, user can create it" do
-      for action <- ~w(create read update delete publish), do:
-        assert can?(
-                 %User{id: 5},
-                 action,
-                 %Page{id: nil, owner_id: 5, published: false}
-               ) == (action == "create")
+      for action <- ~w(create read update delete publish),
+          do:
+            assert(
+              can?(
+                %User{id: 5},
+                action,
+                %Page{id: nil, owner_id: 5, published: false}
+              ) == (action == "create")
+            )
     end
 
     test "when user doesn't own published page, user can read it" do
-      for action <- ~w(create read update delete publish), do:
-        assert can?(
-                 %User{id: 5},
-                 action,
-                 %Page{id: 1, owner_id: 7, published: true}
-               ) == (action == "read")
+      for action <- ~w(create read update delete publish),
+          do:
+            assert(
+              can?(
+                %User{id: 5},
+                action,
+                %Page{id: 1, owner_id: 7, published: true}
+              ) == (action == "read")
+            )
     end
 
     test "when user doesn't own draft page, no action is available" do
-      for action <- ~w(create read update delete publish), do:
-        refute can?(
-                 %User{id: 5},
-                 action,
-                 %Page{id: 1, owner_id: 7, published: false}
-               )
+      for action <- ~w(create read update delete publish),
+          do:
+            refute(
+              can?(
+                %User{id: 5},
+                action,
+                %Page{id: 1, owner_id: 7, published: false}
+              )
+            )
     end
 
     test "admin can unpublish page" do
-      for action <- ~w(create read update delete publish unpublish), do:
-        assert can?(%User{is_admin: true}, action, Page)
+      for action <- ~w(create read update delete publish unpublish),
+          do: assert(can?(%User{is_admin: true}, action, Page))
     end
 
     test "user cannot unpublish page" do
-      for action <- ~w(create read update delete publish unpublish), do:
-        assert can?(%User{is_admin: false}, action, Page) ==
-               (action != "unpublish")
+      for action <- ~w(create read update delete publish unpublish),
+          do:
+            assert(
+              can?(%User{is_admin: false}, action, Page) ==
+                (action != "unpublish")
+            )
     end
   end
 
@@ -160,7 +176,8 @@ defmodule Humo.Authorizer.BehaviourTest do
         id SERIAL,
         is_admin BOOLEAN
       );
-      """ |> Repo.query!()
+      """
+      |> Repo.query!()
 
       """
       CREATE TABLE pages(
@@ -169,7 +186,8 @@ defmodule Humo.Authorizer.BehaviourTest do
         published BOOLEAN,
         owner_id INTEGER
       );
-      """ |> Repo.query!()
+      """
+      |> Repo.query!()
 
       admin = Repo.insert!(%User{is_admin: true})
       user1 = Repo.insert!(%User{is_admin: false})
@@ -180,28 +198,32 @@ defmodule Humo.Authorizer.BehaviourTest do
           title: "Greetings from User1",
           owner: user1,
           published: true
-        } |> Repo.insert!()
+        }
+        |> Repo.insert!()
 
       user1_draft_page =
         %Page{
           title: "Draft page from User1",
           owner: user1,
           published: false
-        } |> Repo.insert!()
+        }
+        |> Repo.insert!()
 
       user2_published_page =
         %Page{
           title: "Greetings from User2",
           owner: user2,
           published: true
-        } |> Repo.insert!()
+        }
+        |> Repo.insert!()
 
       user2_draft_page =
         %Page{
           title: "Draft page from User2",
           owner: user2,
           published: false
-        } |> Repo.insert!()
+        }
+        |> Repo.insert!()
 
       %{
         admin: admin,
@@ -215,17 +237,20 @@ defmodule Humo.Authorizer.BehaviourTest do
     end
 
     test "when user is admin, returns all pages for all actions", params do
-      for action <- ["create", "read", "update", "delete", "publish"], do:
-        assert params.admin
-               |> can_all(action, Page)
-               |> Repo.all()
-               |> Repo.preload(:owner) ==
-                  [
-                    params.user1_published_page,
-                    params.user1_draft_page,
-                    params.user2_published_page,
-                    params.user2_draft_page
-                  ]
+      for action <- ["create", "read", "update", "delete", "publish"],
+          do:
+            assert(
+              params.admin
+              |> can_all(action, Page)
+              |> Repo.all()
+              |> Repo.preload(:owner) ==
+                [
+                  params.user1_published_page,
+                  params.user1_draft_page,
+                  params.user2_published_page,
+                  params.user2_draft_page
+                ]
+            )
     end
 
     test "when read action, returns published or user owned pages", params do
@@ -233,26 +258,29 @@ defmodule Humo.Authorizer.BehaviourTest do
              |> can_all("read", Page)
              |> Repo.all()
              |> Repo.preload(:owner) ==
-                [
-                  params.user1_published_page,
-                  params.user1_draft_page,
-                  params.user2_published_page
-                ]
+               [
+                 params.user1_published_page,
+                 params.user1_draft_page,
+                 params.user2_published_page
+               ]
     end
 
     test "when change action, returns user owned draft pages", params do
-      for action <- ["update", "delete", "publish"], do:
-        assert params.user1
-               |> can_all(action, Page)
-               |> Repo.all()
-               |> Repo.preload(:owner) == [params.user1_draft_page]
+      for action <- ["update", "delete", "publish"],
+          do:
+            assert(
+              params.user1
+              |> can_all(action, Page)
+              |> Repo.all()
+              |> Repo.preload(:owner) == [params.user1_draft_page]
+            )
     end
   end
 
   describe "can_actions/2" do
     test "when user is admin, returns all resource actions" do
       assert can_actions(%User{is_admin: true}, %Page{}) ==
-             ["create", "read", "update", "delete", "publish", "unpublish"]
+               ["create", "read", "update", "delete", "publish", "unpublish"]
     end
 
     test "when user owns draft page, returns read and change actions" do
@@ -285,12 +313,12 @@ defmodule Humo.Authorizer.BehaviourTest do
 
     test "admin can do all actions" do
       assert can_actions(%User{is_admin: true}, Page) ==
-             ["create", "read", "update", "delete", "publish", "unpublish"]
+               ["create", "read", "update", "delete", "publish", "unpublish"]
     end
 
     test "user cannot unpublish" do
       assert can_actions(%User{is_admin: false}, Page) ==
-             ["create", "read", "update", "delete", "publish"]
+               ["create", "read", "update", "delete", "publish"]
     end
   end
 end

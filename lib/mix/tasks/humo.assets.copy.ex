@@ -8,7 +8,8 @@ defmodule Mix.Tasks.Humo.Assets.Copy do
     assets_wildcard = "assets/static/**/*"
 
     for %{path: path} <- Humo.ordered_apps(),
-        filepath <- Path.join(path, assets_wildcard) |> Path.wildcard(), into: %{} do
+        filepath <- Path.join(path, assets_wildcard) |> Path.wildcard(),
+        into: %{} do
       static_assets_path =
         Path.join(path, "assets/static")
         |> String.replace_prefix("./", "")

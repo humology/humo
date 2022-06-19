@@ -26,17 +26,13 @@ config :humo, :plugins,
     ]
   }
 
-config :humo, HumoWeb.PluginsRouter,
-  humo: HumoWeb.PluginRouter
+config :humo, HumoWeb.PluginsRouter, humo: HumoWeb.PluginRouter
 
-config :humo, HumoWeb.BrowserPlugs,
-  humo: []
+config :humo, HumoWeb.BrowserPlugs, humo: []
 
-config :humo, Humo.Warehouse,
-  humo: []
+config :humo, Humo.Warehouse, humo: []
 
-config :humo, Humo.Authorizer,
-  authorizer: Humo.Authorizer.NoAccess
+config :humo, Humo.Authorizer, authorizer: Humo.Authorizer.NoAccess
 
 config :humo, HumoWeb.AuthorizationExtractor,
   extractor: HumoWeb.AuthorizationExtractor.NilAuthorization

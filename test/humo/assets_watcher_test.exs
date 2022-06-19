@@ -12,13 +12,13 @@ defmodule Humo.AssetsWatcherTest do
   setup do
     old_config = Application.fetch_env!(:humo, Humo)
 
-    Application.put_env(:humo, Humo, [
+    Application.put_env(:humo, Humo,
       apps: [
         %{app: :core, path: "deps/core"},
         %{app: :my_app, path: "./"}
       ],
       server_app: :my_app
-    ])
+    )
 
     on_exit(fn -> Application.put_env(:humo, Humo, old_config) end)
   end
@@ -31,7 +31,7 @@ defmodule Humo.AssetsWatcherTest do
       AssetsWatcher.start_link([])
       Process.sleep(100)
 
-      assert_file "priv/static/robots.txt", "robots.txt my_app"
+      assert_file("priv/static/robots.txt", "robots.txt my_app")
     end)
   end
 
@@ -46,7 +46,7 @@ defmodule Humo.AssetsWatcherTest do
       mkdir_write_file("assets/static/robots.txt", "robots.txt my_app 2")
       Process.sleep(600)
 
-      assert_file "priv/static/robots.txt", "robots.txt my_app 2"
+      assert_file("priv/static/robots.txt", "robots.txt my_app 2")
     end)
   end
 
@@ -61,7 +61,7 @@ defmodule Humo.AssetsWatcherTest do
       mkdir_write_file("deps/core/assets/static/robots.txt", "robots.txt core 2")
       Process.sleep(600)
 
-      assert_file "priv/static/robots.txt", "robots.txt my_app"
+      assert_file("priv/static/robots.txt", "robots.txt my_app")
     end)
   end
 end

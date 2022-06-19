@@ -32,4 +32,3 @@ config :humo, Humo.Warehouse,
   humo: [
     Humo.WarehouseTest.Page
   ]
-

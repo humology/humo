@@ -14,14 +14,14 @@ defmodule Mix.Tasks.Humo.Assets.CopyTest do
   setup do
     old_config = Application.fetch_env!(:humo, Humo)
 
-    Application.put_env(:humo, Humo, [
+    Application.put_env(:humo, Humo,
       apps: [
         %{app: :core, path: "deps/core"},
         %{app: :users, path: "deps/users"},
         %{app: :my_app, path: "./"}
       ],
       server_app: :my_app
-    ])
+    )
 
     on_exit(fn ->
       Application.put_env(:humo, Humo, old_config)
@@ -41,9 +41,9 @@ defmodule Mix.Tasks.Humo.Assets.CopyTest do
       assert_received {:mix_shell, :info, ["* creating priv/static/some_file.txt"]}
       assert_received {:mix_shell, :info, ["* creating priv/static/another_file.txt"]}
 
-      assert_file "priv/static/robots.txt", "robots.txt core"
-      assert_file "priv/static/some_file.txt", "some_file.txt users"
-      assert_file "priv/static/another_file.txt", "another_file.txt my_app"
+      assert_file("priv/static/robots.txt", "robots.txt core")
+      assert_file("priv/static/some_file.txt", "some_file.txt users")
+      assert_file("priv/static/another_file.txt", "another_file.txt my_app")
     end)
   end
 
@@ -58,7 +58,7 @@ defmodule Mix.Tasks.Humo.Assets.CopyTest do
       assert_received {:mix_shell, :info, ["Running task humo.assets.copy"]}
       assert_received {:mix_shell, :info, ["* creating priv/static/some/path/robots.txt"]}
 
-      assert_file "priv/static/some/path/robots.txt", "robots.txt my_app"
+      assert_file("priv/static/some/path/robots.txt", "robots.txt my_app")
     end)
   end
 
@@ -72,7 +72,7 @@ defmodule Mix.Tasks.Humo.Assets.CopyTest do
       assert_received {:mix_shell, :info, ["Running task humo.assets.copy"]}
       assert_received {:mix_shell, :info, ["* creating priv/static/robots.txt"]}
 
-      assert_file "priv/static/robots.txt", "robots.txt my_app"
+      assert_file("priv/static/robots.txt", "robots.txt my_app")
     end)
   end
 
@@ -86,7 +86,7 @@ defmodule Mix.Tasks.Humo.Assets.CopyTest do
       assert_received {:mix_shell, :info, ["Running task humo.assets.copy"]}
       assert_received {:mix_shell, :info, ["* creating priv/static/robots.txt"]}
 
-      assert_file "priv/static/robots.txt", "robots.txt users"
+      assert_file("priv/static/robots.txt", "robots.txt users")
     end)
   end
 end

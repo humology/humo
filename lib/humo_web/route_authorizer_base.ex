@@ -1,7 +1,6 @@
 defmodule HumoWeb.RouteAuthorizerBase do
   defmacro __using__(opts) do
-    lazy_web_router =
-      opts[:lazy_web_router] || &HumoWeb.router/0
+    lazy_web_router = opts[:lazy_web_router] || (&HumoWeb.router/0)
 
     if Mix.env() != :test do
       opts[:lazy_web_router] &&
@@ -25,7 +24,8 @@ defmodule HumoWeb.RouteAuthorizerBase do
         [
           conn: %{conn | path_info: split_path(path), method: method},
           router: router
-        ] |> Phoenix.Router.NoRouteError.exception()
+        ]
+        |> Phoenix.Router.NoRouteError.exception()
       end
 
       defp split_path(path) do
