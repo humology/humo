@@ -5,9 +5,18 @@ defmodule Mix.Tasks.Humo.Npm.Install do
   def run(_args) do
     Mix.shell().info("Running task humo.npm.install")
 
-    for %{path: path} <- Humo.ordered_apps(),
+    server_app = Humo.server_app()
+
+    for %{app: app, path: path} <- Humo.ordered_apps(),
         File.exists?(Path.join([path, "package.json"])) do
-      System.cmd("npm", ["install", "--prefix", path, "--production"])
+      args =
+        if app == server_app do
+          ["install", "--prefix", path]
+        else
+          ["install", "--prefix", path, "--production"]
+        end
+
+      System.cmd("npm", args)
     end
   end
 end

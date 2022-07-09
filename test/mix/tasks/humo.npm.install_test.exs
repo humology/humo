@@ -35,6 +35,11 @@ defmodule Mix.Tasks.Humo.Npm.InstallTest do
         ~S({"dependencies": {"@popperjs/core": "^2.9.2"}})
       )
 
+      mkdir_write_file(
+        "./package.json",
+        ~S({"devDependencies": {"bootstrap": "^5.0.1"}})
+      )
+
       Install.run([])
 
       assert_received {:mix_shell, :info, ["Running task humo.npm.install"]}
@@ -42,6 +47,11 @@ defmodule Mix.Tasks.Humo.Npm.InstallTest do
       assert_file(
         "deps/core/node_modules/@popperjs/core/package.json",
         ~S("name": "@popperjs/core")
+      )
+
+      assert_file(
+        "node_modules/bootstrap/package.json",
+        ~S("name": "bootstrap")
       )
     end)
   end
