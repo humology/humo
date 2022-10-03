@@ -23,6 +23,8 @@ defmodule HumoWeb do
 
   def endpoint(), do: Module.concat([server_app_web_namespace(), "Endpoint"])
 
+  def layout_view(), do: Module.concat([server_app_web_namespace(), "LayoutView"])
+
   def is_server_app_web_module(module) when is_atom(module) do
     hd(Module.split(module)) == server_app_web_namespace()
   end
