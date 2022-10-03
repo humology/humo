@@ -1,9 +1,9 @@
-defmodule Mix.Tasks.Humo.Assets.Appjs.GenTest do
+defmodule Mix.Tasks.Humo.Assets.App.Js.GenTest do
   use ExUnit.Case, async: false
 
   import MixHelper
 
-  alias Mix.Tasks.Humo.Assets.Appjs.Gen
+  alias Mix.Tasks.Humo.Assets.App.Js.Gen
 
   setup_all do
     # Get Mix output sent to the current
@@ -28,7 +28,7 @@ defmodule Mix.Tasks.Humo.Assets.Appjs.GenTest do
     end)
   end
 
-  test "app.js file generated with dependencies that have package.json" do
+  test "generated app.js file imports dependencies with package.json" do
     in_tmp("mix_humo_assets_appjs_gen", fn ->
       mkdir_write_file("deps/core/package.json", "")
 
@@ -39,6 +39,30 @@ defmodule Mix.Tasks.Humo.Assets.Appjs.GenTest do
       assert_file(
         "assets/js/app.js",
         """
+        // Automatically generated
+        // Imports plugins with package.json file
+
+        import "core"
+        """
+      )
+    end)
+  end
+
+  test "generated app.js file imports dependencies with package.json and current app plugin.js" do
+    in_tmp("mix_humo_assets_appjs_gen", fn ->
+      mkdir_write_file("deps/core/package.json", "")
+      mkdir_write_file("assets/js/plugin.js", "")
+
+      Gen.run([])
+
+      assert_received {:mix_shell, :info, ["* creating assets/js/app.js"]}
+
+      assert_file(
+        "assets/js/app.js",
+        """
+        // Automatically generated
+        // Imports plugins with package.json file
+
         import "core"
         import "./plugin"
         """
