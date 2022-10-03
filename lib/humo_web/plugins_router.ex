@@ -1,7 +1,7 @@
 defmodule HumoWeb.PluginsRouter do
   @moduledoc false
 
-  @routers Application.compile_env!(:humo, __MODULE__)
+  @routers Application.compile_env(:humo, __MODULE__, [])
   @server_app Humo.server_app()
 
   defmacro __using__(otp_app: @server_app) do

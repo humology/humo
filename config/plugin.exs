@@ -26,8 +26,6 @@ config :humo, :plugins,
     ]
   }
 
-config :humo, HumoWeb.PluginsRouter, humo: HumoWeb.PluginRouter
-
 config :humo, HumoWeb.BrowserPlugs, humo: []
 
 config :humo, Humo.Warehouse, humo: []
