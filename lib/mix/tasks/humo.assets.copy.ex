@@ -10,9 +10,7 @@ defmodule Mix.Tasks.Humo.Assets.Copy do
     for %{path: path} <- Humo.ordered_apps(),
         filepath <- Path.join(path, assets_wildcard) |> Path.wildcard(),
         into: %{} do
-      static_assets_path =
-        Path.join(path, "assets/static")
-        |> String.replace_prefix("./", "")
+      static_assets_path = Humo.Path.normalize([path, "assets/static"])
 
       relative_filepath = Path.relative_to(filepath, static_assets_path)
 
