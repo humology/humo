@@ -1,4 +1,4 @@
-defmodule Mix.Tasks.Humo.Assets.App.Js.Gen do
+defmodule Mix.Tasks.Humo.Assets.AllPlugins.Js.Gen do
   use Mix.Task
 
   require Mix.Generator
@@ -13,7 +13,7 @@ defmodule Mix.Tasks.Humo.Assets.App.Js.Gen do
 
   @impl true
   def run(_args) do
-    Mix.shell().info("Running task humo.assets.app.js.gen")
+    Mix.shell().info("Running task humo.assets.all_plugins.js.gen")
 
     res =
       app_js_template(
@@ -21,7 +21,7 @@ defmodule Mix.Tasks.Humo.Assets.App.Js.Gen do
         app_has_plugin_js: File.exists?("assets/js/plugin.js")
       )
 
-    Mix.Generator.create_file("assets/js/app.js", res, force: true)
+    Mix.Generator.create_file("assets/js/all_plugins.js", res, force: true)
   end
 
   defp deps_with_package_json() do
