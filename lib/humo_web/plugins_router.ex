@@ -15,10 +15,6 @@ defmodule HumoWeb.PluginsRouter do
           ...
           """)
 
-      pipeline :humo_dashboard do
-        plug :put_root_layout, {HumoWeb.LayoutView, "dashboard.html"}
-      end
-
       scope "/" do
         pipe_through :browser
 
