@@ -1,3 +1,11 @@
+@import "all_plugins";
+
+// Default variable overrides
+//$body-bg: #e5f3ff;
+//$body-color: #fff;
+
+@import "@tabler/core/src/scss/tabler.scss";
+
 /* Alerts and form errors used by phx.new */
 .alert {
   padding: 15px;
