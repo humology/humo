@@ -75,7 +75,7 @@ defmodule Humo.MixProject do
       "ecto.setup": ["ecto.create", "humo.ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "humo.ecto.migrate", "test"],
-      "assets.deploy": ["cmd npm run deploy", "phx.digest"]
+      "assets.deploy": ["humo.assets.copy", "cmd npm run deploy", "phx.digest"]
     ]
   end
 end

@@ -28,13 +28,6 @@ defmodule Humo.Application do
             # Start the Endpoint (http/https)
             HumoWeb.Endpoint
           ]
-        },
-        {
-          assets_watcher_enabled?(),
-          [
-            # Watches assets and copies from /deps and /assets folder to /priv
-            Humo.AssetsWatcher
-          ]
         }
       ]
       |> Keyword.get_values(true)
@@ -52,9 +45,5 @@ defmodule Humo.Application do
   def config_change(changed, _new, removed) do
     HumoWeb.Endpoint.config_change(changed, removed)
     :ok
-  end
-
-  defp assets_watcher_enabled?() do
-    Application.fetch_env!(:humo, Humo)[:assets_watcher]
   end
 end

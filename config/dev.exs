@@ -25,7 +25,8 @@ config :humo, HumoWeb.Endpoint,
   debug_errors: true,
   secret_key_base: "6cd9gX8Dq7KbBGhbdN5EWiEr8tfy8+wTjEG5v+cxngtFL7RIvUKXspXj7J5TN13m",
   watchers: [
-    npm: ["run", "watch"]
+    npm: ["run", "watch"],
+    mix: ["humo.assets.watch"]
   ]
 
 # ## SSL Support
@@ -63,8 +64,6 @@ config :humo, HumoWeb.Endpoint,
       ~r"lib/humo_web/templates/.*(eex)$"
     ]
   ]
-
-config :humo, Humo, assets_watcher: true
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"
