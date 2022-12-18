@@ -9,7 +9,7 @@ defmodule HumoWeb.RouteAuthorizerBaseTest do
     defstruct id: nil, title: nil
 
     defmodule Helpers do
-      def actions(), do: ["read", "delete"]
+      def actions, do: ["read", "delete"]
     end
   end
 
@@ -78,7 +78,7 @@ defmodule HumoWeb.RouteAuthorizerBaseTest do
   end
 
   defmodule TestWeb do
-    def router(), do: TestWebRouter
+    def router, do: TestWebRouter
   end
 
   defmodule TestRouteAuthorizer do

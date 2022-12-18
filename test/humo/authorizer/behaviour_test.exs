@@ -21,7 +21,7 @@ defmodule Humo.Authorizer.BehaviourTest do
     defmodule Helpers do
       use Humo.ResourceHelpers
 
-      def actions(), do: ["create", "read", "update", "delete", "publish", "unpublish"]
+      def actions, do: ["create", "read", "update", "delete", "publish", "unpublish"]
     end
   end
 

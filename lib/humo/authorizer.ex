@@ -16,7 +16,7 @@ defmodule Humo.Authorizer do
     authorizer().can_actions(authorization, resource)
   end
 
-  defp authorizer() do
+  defp authorizer do
     Application.fetch_env!(:humo, __MODULE__)[:authorizer]
   end
 end

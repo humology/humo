@@ -1,8 +1,8 @@
 defmodule Humo.EctoResourceHelpersTest do
   use ExUnit.Case
   alias Humo.Warehouse
-  alias Humo.EctoResourceHelpers
-  doctest EctoResourceHelpers
+
+  doctest Humo.EctoResourceHelpers
 
   defmodule User do
     use Ecto.Schema

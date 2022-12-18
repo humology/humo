@@ -24,7 +24,7 @@ defmodule Mix.Tasks.Humo.Assets.AllPlugins.Js.Gen do
     Mix.Generator.create_file("assets/js/all_plugins.js", res, force: true)
   end
 
-  defp deps_with_package_json() do
+  defp deps_with_package_json do
     server_app = Humo.server_app()
 
     for %{app: app, path: path} <- Humo.ordered_apps(),

@@ -6,7 +6,7 @@ defmodule Humo.Warehouse do
   Returns all resources
   """
   @spec resources :: list(resource_module())
-  def resources() do
+  def resources do
     for {_app, app_resources} <- apps_resources(),
         resource <- app_resources do
       resource
@@ -25,7 +25,7 @@ defmodule Humo.Warehouse do
   Returns map of names to resources
   """
   @spec names_resources() :: %{String.t() => resource_module()}
-  def names_resources() do
+  def names_resources do
     for resource <- resources(), into: %{} do
       {resource_helpers(resource).name(), resource}
     end
@@ -105,7 +105,7 @@ defmodule Humo.Warehouse do
     :ok
   end
 
-  defp apps_resources() do
+  defp apps_resources do
     Application.fetch_env!(:humo, __MODULE__)
   end
 end

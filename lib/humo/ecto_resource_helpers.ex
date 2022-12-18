@@ -7,11 +7,11 @@ defmodule Humo.EctoResourceHelpers do
       Returns schema name.
       """
       @spec name() :: String.t()
-      def name() do
+      def name do
         get_resource_module().__schema__(:source)
       end
 
-      defp get_resource_module() do
+      defp get_resource_module do
         __MODULE__
         |> Atom.to_string()
         |> String.split(".")

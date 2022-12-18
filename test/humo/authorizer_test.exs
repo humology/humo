@@ -1,9 +1,7 @@
 defmodule Humo.AuthorizerTest do
   use Humo.DataCase, async: true
   alias Humo.Authorizer
-  alias Humo.Authorizer.Mock
-  alias Humo.Authorizer.AllAccess
-  alias Humo.Authorizer.NoAccess
+  alias Humo.Authorizer.{AllAccess, Mock, NoAccess}
 
   defmodule User do
     defstruct []
@@ -20,7 +18,7 @@ defmodule Humo.AuthorizerTest do
     defmodule Helpers do
       use Humo.ResourceHelpers
 
-      def actions(), do: ~w(create read update delete publish)
+      def actions, do: ~w(create read update delete publish)
     end
   end
 

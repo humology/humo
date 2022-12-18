@@ -24,7 +24,7 @@ defmodule Mix.Tasks.Humo.Assets.AllPlugins.Scss.Gen do
     Mix.Generator.create_file("assets/css/all_plugins.scss", res, force: true)
   end
 
-  defp plugin_scss_paths() do
+  defp plugin_scss_paths do
     server_app = Humo.server_app()
 
     for %{app: app, path: path} <- Humo.ordered_apps(),

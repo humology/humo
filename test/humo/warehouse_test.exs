@@ -1,7 +1,8 @@
 defmodule Humo.WarehouseTest do
   use ExUnit.Case
-  alias Humo.Warehouse
+
   alias Humo.EctoResourceHelpers
+  alias Humo.Warehouse
   doctest EctoResourceHelpers
 
   defmodule Page do
@@ -69,7 +70,7 @@ defmodule Humo.WarehouseTest do
     test "resource name expected to start with prefix \"app_\"" do
       defmodule Page2 do
         defmodule Helpers do
-          def name(), do: "pages"
+          def name, do: "pages"
         end
       end
 
@@ -86,7 +87,7 @@ defmodule Humo.WarehouseTest do
     test "actions/0 is not exported" do
       defmodule Page3 do
         defmodule Helpers do
-          def name(), do: "app_pages"
+          def name, do: "app_pages"
         end
       end
 
@@ -103,8 +104,8 @@ defmodule Humo.WarehouseTest do
     test "actions/0 cannot be empty" do
       defmodule Page4 do
         defmodule Helpers do
-          def name(), do: "app_pages"
-          def actions(), do: []
+          def name, do: "app_pages"
+          def actions, do: []
         end
       end
 
@@ -121,8 +122,8 @@ defmodule Humo.WarehouseTest do
     test "actions/0 action type is not binary" do
       defmodule Page5 do
         defmodule Helpers do
-          def name(), do: "app_pages"
-          def actions(), do: ["create", "read", :update]
+          def name, do: "app_pages"
+          def actions, do: ["create", "read", :update]
         end
       end
 
@@ -139,8 +140,8 @@ defmodule Humo.WarehouseTest do
     test "validation passed" do
       defmodule Page6 do
         defmodule Helpers do
-          def name(), do: "app_pages"
-          def actions(), do: ["create"]
+          def name, do: "app_pages"
+          def actions, do: ["create"]
         end
       end
 

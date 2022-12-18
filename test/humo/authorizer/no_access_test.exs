@@ -17,7 +17,7 @@ defmodule Humo.Authorizer.NoAccessTest do
     defmodule Helpers do
       use Humo.ResourceHelpers
 
-      def actions(), do: ["create", "read", "update", "delete", "publish"]
+      def actions, do: ["create", "read", "update", "delete", "publish"]
     end
   end
 

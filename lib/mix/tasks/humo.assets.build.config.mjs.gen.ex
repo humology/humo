@@ -26,13 +26,13 @@ defmodule Mix.Tasks.Humo.Assets.Build.Config.Mjs.Gen do
     Mix.Generator.create_file("assets/build.config.mjs", res, force: true)
   end
 
-  defp sass_load_paths() do
+  defp sass_load_paths do
     for %{path: path} <- Humo.ordered_apps() do
       Humo.Path.normalize(["../", path, "node_modules"])
     end
   end
 
-  defp node_paths() do
+  defp node_paths do
     for %{path: path} <- Humo.ordered_apps() do
       Humo.Path.normalize(["../", path, "../"])
     end

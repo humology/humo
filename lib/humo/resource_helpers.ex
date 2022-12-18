@@ -9,7 +9,7 @@ defmodule Humo.ResourceHelpers do
       Returns resource name.
       """
       @spec name() :: String.t()
-      def name() do
+      def name do
         raise "Method is not implemented."
       end
 
@@ -17,7 +17,7 @@ defmodule Humo.ResourceHelpers do
       Returns list of actions
       """
       @spec actions() :: nonempty_list(action())
-      def actions(), do: ["create", "read", "update", "delete"]
+      def actions, do: ["create", "read", "update", "delete"]
 
       defoverridable name: 0, actions: 0
     end

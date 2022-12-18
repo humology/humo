@@ -10,7 +10,7 @@ defmodule HumoWeb.AuthorizeControllerHelpersTest do
     defstruct id: nil
 
     defmodule Helpers do
-      def actions(), do: ["create", "read", "update", "delete", "publish"]
+      def actions, do: ["create", "read", "update", "delete", "publish"]
     end
   end
 

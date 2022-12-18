@@ -59,7 +59,8 @@ defmodule Humo.MixProject do
       {:gettext, "~> 0.18"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
-      {:file_system, "~> 0.2.1 or ~> 0.3"}
+      {:file_system, "~> 0.2.1 or ~> 0.3"},
+      {:credo, "~> 1.6", only: [:dev, :test], runtime: false}
     ]
   end
 

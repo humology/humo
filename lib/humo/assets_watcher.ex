@@ -3,6 +3,8 @@ defmodule Humo.AssetsWatcher do
 
   @timeout 500
 
+  alias Mix.Tasks.Humo.Assets.Copy
+
   def start_link(args) do
     GenServer.start_link(__MODULE__, args)
   end
@@ -22,7 +24,7 @@ defmodule Humo.AssetsWatcher do
 
     FileSystem.subscribe(:humo_assets_watcher)
 
-    Mix.Tasks.Humo.Assets.Copy.run([])
+    Copy.run([])
 
     {:noreply, state}
   end
@@ -44,12 +46,12 @@ defmodule Humo.AssetsWatcher do
   end
 
   def handle_info(:assets_changed, state) do
-    Mix.Tasks.Humo.Assets.Copy.run([])
+    Copy.run([])
 
     {:noreply, %{state | timer_id: nil}}
   end
 
-  defp get_assets_dirs() do
+  defp get_assets_dirs do
     for %{path: path} <- Humo.ordered_apps() do
       Path.absname(Path.join(path, "assets/static"))
     end

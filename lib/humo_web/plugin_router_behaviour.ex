@@ -10,7 +10,7 @@ defmodule HumoWeb.PluginRouterBehaviour do
       """
       @impl HumoWeb.PluginRouterBehaviour
       @spec root() :: Macro.t()
-      def root() do
+      def root do
         quote location: :keep do
         end
       end
@@ -20,7 +20,7 @@ defmodule HumoWeb.PluginRouterBehaviour do
       """
       @impl HumoWeb.PluginRouterBehaviour
       @spec dashboard() :: Macro.t()
-      def dashboard() do
+      def dashboard do
         quote location: :keep do
         end
       end

@@ -1,4 +1,7 @@
 defmodule HumoWeb.RouteAuthorizerBase do
+  alias Phoenix.Router.NoRouteError
+  alias Plug.Router.Utils
+
   defmacro __using__(opts) do
     lazy_web_router = opts[:lazy_web_router] || (&HumoWeb.router/0)
 
@@ -9,7 +12,7 @@ defmodule HumoWeb.RouteAuthorizerBase do
 
     quote do
       def can_path?(conn, path, method \\ :get) do
-        method = Plug.Router.Utils.normalize_method(method)
+        method = Utils.normalize_method(method)
         router = get_router()
 
         reverse_controller(path, method, router)
@@ -25,7 +28,7 @@ defmodule HumoWeb.RouteAuthorizerBase do
           conn: %{conn | path_info: split_path(path), method: method},
           router: router
         ]
-        |> Phoenix.Router.NoRouteError.exception()
+        |> NoRouteError.exception()
       end
 
       defp split_path(path) do
@@ -38,7 +41,7 @@ defmodule HumoWeb.RouteAuthorizerBase do
         Phoenix.Router.route_info(router, method, path, "")
       end
 
-      defp get_router() do
+      defp get_router do
         unquote(lazy_web_router).()
       end
 
