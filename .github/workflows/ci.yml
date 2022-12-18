@@ -3,7 +3,7 @@ on: [push, pull_request]
 jobs:
   test-elixir:
     name: mix test (Elixir ${{matrix.elixir}} | Erlang/OTP ${{matrix.otp}})
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
       max-parallel: 1
@@ -11,8 +11,8 @@ jobs:
         include:
           - elixir: 1.12.1
             otp: 24.0.2
-          - elixir: 1.13.3
-            otp: 24.2.2
+          - elixir: 1.14.2
+            otp: 25.2
     services:
       db:
         image: postgres:latest
