@@ -11,10 +11,10 @@ defmodule Humo do
 
   require Logger
 
-  def server_app, do: Keyword.fetch!(config(), :server_app)
+  def otp_app, do: Keyword.fetch!(config(), :otp_app)
 
-  def is_server_app_module(module) when is_atom(module) do
-    hd(Module.split(module)) == Macro.camelize(to_string(server_app()))
+  def is_otp_app_module(module) when is_atom(module) do
+    hd(Module.split(module)) == Macro.camelize(to_string(otp_app()))
   end
 
   def ordered_apps, do: Keyword.fetch!(config(), :apps)

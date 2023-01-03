@@ -25,10 +25,10 @@ defmodule Mix.Tasks.Humo.Assets.AllPlugins.Js.Gen do
   end
 
   defp deps_with_package_json do
-    server_app = Humo.server_app()
+    otp_app = Humo.otp_app()
 
     for %{app: app, path: path} <- Humo.ordered_apps(),
-        File.exists?(Path.join([path, "package.json"])) and app != server_app do
+        File.exists?(Path.join([path, "package.json"])) and app != otp_app do
       app
     end
   end

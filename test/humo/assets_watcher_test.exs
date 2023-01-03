@@ -17,7 +17,7 @@ defmodule Humo.AssetsWatcherTest do
         %{app: :core, path: "deps/core"},
         %{app: :my_app, path: "./"}
       ],
-      server_app: :my_app
+      otp_app: :my_app
     )
 
     on_exit(fn -> Application.put_env(:humo, Humo, old_config) end)

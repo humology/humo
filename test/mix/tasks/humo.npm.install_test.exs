@@ -20,7 +20,7 @@ defmodule Mix.Tasks.Humo.Npm.InstallTest do
         %{app: :users, path: "deps/users"},
         %{app: :my_app, path: "./"}
       ],
-      server_app: :my_app
+      otp_app: :my_app
     )
 
     on_exit(fn ->

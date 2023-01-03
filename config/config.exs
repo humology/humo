@@ -11,7 +11,7 @@ config :humo, Humo,
   apps: [
     %{app: :humo, path: "./"}
   ],
-  server_app: :humo
+  otp_app: :humo
 
 if Path.expand("../config/plugin.exs", __DIR__) |> File.exists?(),
   do: import_config("../config/plugin.exs")

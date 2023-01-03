@@ -25,11 +25,11 @@ defmodule Mix.Tasks.Humo.Assets.AllPlugins.Scss.Gen do
   end
 
   defp plugin_scss_paths do
-    server_app = Humo.server_app()
+    otp_app = Humo.otp_app()
 
     for %{app: app, path: path} <- Humo.ordered_apps(),
         path = Path.join([path, "assets/css/plugin.scss"]),
-        File.exists?(path) and app != server_app do
+        File.exists?(path) and app != otp_app do
       Humo.Path.normalize(["../../", path])
     end
   end

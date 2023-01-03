@@ -2,9 +2,9 @@ defmodule HumoWeb.BrowserPlugs do
   @moduledoc false
 
   @plugs Application.compile_env!(:humo, __MODULE__)
-  @server_app Humo.server_app()
+  @otp_app Humo.otp_app()
 
-  defmacro __using__(otp_app: @server_app) do
+  defmacro __using__(otp_app: @otp_app) do
     quote do
       if __MODULE__ != HumoWeb.router(),
         do:
@@ -28,11 +28,11 @@ defmodule HumoWeb.BrowserPlugs do
 
   defmacro __using__(_opts) do
     quote do
-      if HumoWeb.is_server_app_web_module(__MODULE__),
+      if HumoWeb.is_otp_app_web_module(__MODULE__),
         do:
           raise("""
           Please set correct otp_app
-          use HumoWeb.BrowserPlugs, otp_app: :#{Humo.server_app()}
+          use HumoWeb.BrowserPlugs, otp_app: :#{Humo.otp_app()}
           """)
     end
   end

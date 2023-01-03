@@ -17,20 +17,20 @@ defmodule HumoWeb do
   and import those modules here.
   """
 
-  def router, do: Module.concat([server_app_web_namespace(), "Router"])
+  def router, do: Module.concat([otp_app_web_namespace(), "Router"])
 
-  def routes, do: Module.concat([server_app_web_namespace(), "Router", "Helpers"])
+  def routes, do: Module.concat([otp_app_web_namespace(), "Router", "Helpers"])
 
-  def endpoint, do: Module.concat([server_app_web_namespace(), "Endpoint"])
+  def endpoint, do: Module.concat([otp_app_web_namespace(), "Endpoint"])
 
-  def layout_view, do: Module.concat([server_app_web_namespace(), "LayoutView"])
+  def layout_view, do: Module.concat([otp_app_web_namespace(), "LayoutView"])
 
-  def is_server_app_web_module(module) when is_atom(module) do
-    hd(Module.split(module)) == server_app_web_namespace()
+  def is_otp_app_web_module(module) when is_atom(module) do
+    hd(Module.split(module)) == otp_app_web_namespace()
   end
 
-  defp server_app_web_namespace do
-    Humo.server_app()
+  defp otp_app_web_namespace do
+    Humo.otp_app()
     |> to_string()
     |> Macro.camelize()
     |> then(&"#{&1}Web")

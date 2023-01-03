@@ -19,7 +19,7 @@ defmodule Humo.Application do
           ]
         },
         {
-          Humo.is_server_app_module(__MODULE__),
+          Humo.is_otp_app_module(__MODULE__),
           [
             # Start the PubSub system
             {Phoenix.PubSub, name: Humo.PubSub},
